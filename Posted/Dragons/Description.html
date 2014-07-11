@@ -1,0 +1,221 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1520"
+   target="_blank">SRM 147 DIV 1 - 500 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>
+    Divide food up among 6 hungry Dragons.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    001: /*
+    002: TopCoder
+    003: Single Round Match: 147
+    004: Division: 1
+    005: Level: 2
+    006: Points: 500
+    007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1520
+    008:  */
+    009:
+    010: import java.math.BigDecimal;
+    011:
+    012: public class Dragons {
+    013:
+    014:     // The side of the cube we'll be returning.
+    015:     private static final int SNAUGS_SIDE = 2;
+    016:
+    017:     public String snaug(int[] initialFood, int rounds) {
+    018:
+    019:         /*
+    020:         Any two sides are neighbors if their numbers do not add up to 7.
+    021:          */
+    022:         int[] neighbors = {1, 6, 2, 5, 3, 4};
+    023:
+    024:         // Copy the initialFood amounts into the currentRound.
+    025:         Fraction[] currentRound = new Fraction[6];
+    026:         for (int i = 0; i < currentRound.length; i++) {
+    027:             currentRound[i] = new Fraction(initialFood[i]);
+    028:         }
+    029:
+    030:         // Loop for the given number of rounds.
+    031:         for (int round = 1; round <= rounds; round++) {
+    032:
+    033:             // Create an array of fractions to hold the results.
+    034:             Fraction[] nextRound = new Fraction[6];
+    035:             for (int j = 0; j < nextRound.length; j++) {
+    036:                 nextRound[j] = new Fraction(0);
+    037:             }
+    038:
+    039:             // Loop through all size sides.
+    040:             for (int side = 0; side < 6; side++) {
+    041:
+    042:                 // Loop for all neighboring sides.
+    043:                 for (int neighbor = 0; neighbor < 6; neighbor++) {
+    044:
+    045:                     /*
+    046:                     The side is a neighbor if, and only if, side != neighbor,
+    047:                      and their two values in the neighbors array do not add
+    048:                      up to 7.
+    049:                      */
+    050:                     if ((neighbor == side) || (neighbors[side] +
+    051:                             neighbors[neighbor] == 7)) { continue; }
+    052:
+    053:                     // Add the neighbors value.
+    054:                     nextRound[side] = nextRound[side].add
+    055:                             (currentRound[neighbor]);
+    056:                 }
+    057:
+    058:                 // At the end of the round divide by 4 to get 1/4.
+    059:                 nextRound[side] = nextRound[side].div(4);
+    060:             }
+    061:
+    062:             // Set currentRound to prepare for the next loop.
+    063:             currentRound = nextRound;
+    064:         }
+    065:
+    066:         return currentRound[SNAUGS_SIDE].toString();
+    067:     }
+    068:
+    069:     /*
+    070:     This class handles all the fraction operations that we'll need.  The
+    071:     tests like to overflow even longs, so the internals are stored as
+    072:     BigDecimals.
+    073:      */
+    074:     public class Fraction {
+    075:
+    076:         // Used in several places, so let's just have one copy.
+    077:         final BigDecimal Zero = new BigDecimal(0);
+    078:
+    079:         BigDecimal numerator;
+    080:
+    081:         BigDecimal denominator;
+    082:
+    083:         Fraction(BigDecimal num, BigDecimal den) {
+    084:             this.numerator = num;
+    085:             this.denominator = den;
+    086:             reduce();
+    087:         }
+    088:
+    089:         Fraction(long num) {
+    090:             this.numerator = new BigDecimal(num);
+    091:             this.denominator = new BigDecimal(1);
+    092:         }
+    093:
+    094:         /*
+    095:         Adds another fraction to this fraction.  Return a new instance.
+    096:          */
+    097:         public Fraction add(Fraction f) {
+    098:
+    099:             BigDecimal num;
+    100:             BigDecimal den;
+    101:
+    102:             // If the denominators are equal, just add the numerators.
+    103:             if (this.denominator.equals(f.denominator)) {
+    104:                 den = this.denominator;
+    105:                 num = this.numerator.add(f.numerator);
+    106:
+    107:                 // Otherwise, cross-multiply.
+    108:             } else {
+    109:                 num = (this.denominator.multiply(f.numerator)).add(
+    110:                         (this.numerator.multiply(f.denominator)));
+    111:
+    112:                 den = (this.denominator).multiply(f.denominator);
+    113:             }
+    114:
+    115:             return new Fraction(num, den);
+    116:         }
+    117:
+    118:         /*
+    119:         Divides this fraction by an int.  Returns a new instance.
+    120:          */
+    121:         public Fraction div(int x) {
+    122:
+    123:             // Division is done by multiplying the denominator by x.
+    124:             return new Fraction(
+    125:                     this.numerator,
+    126:                     this.denominator.multiply(new BigDecimal(x))
+    127:             );
+    128:         }
+    129:
+    130:         public String toString() {
+    131:
+    132:             /*
+    133:             If the denominator divides the numerator evenly,
+    134:             return a whole number.
+    135:              */
+    136:             if ((this.numerator.remainder(this.denominator)).equals(Zero)) {
+    137:                 return "" + this.numerator.divide(this.denominator);
+    138:
+    139:                 // Otherwise, display as a fraction.
+    140:             } else {
+    141:                 return this.numerator + "/" + this.denominator;
+    142:             }
+    143:         }
+    144:
+    145:         /*
+    146:         Reduces the fraction by dividing the numerator and denominator by
+    147:         their greatest common multiple.
+    148:          */
+    149:         private void reduce() {
+    150:             BigDecimal gcm = greatestCommonMultiple(this.numerator,
+    151:                     this.denominator);
+    152:             this.numerator = this.numerator.divide(gcm);
+    153:             this.denominator = this.denominator.divide(gcm);
+    154:         }
+    155:
+    156:         // Returns the greatest common multiple of two numbers.
+    157:         private BigDecimal greatestCommonMultiple(BigDecimal x, BigDecimal y) {
+    158:             if (y.equals(Zero)) {
+    159:                 return x;
+    160:             } else {
+    161:                 return greatestCommonMultiple(y, x.remainder(y));
+    162:             }
+    163:         }
+    164:     }
+    165: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+<p>The algorithm for solving this problem is very easy. Each round, the
+    dragons steal 1/4 of the food available from each of their neighbors. The
+    sum becomes their food for the start of the next round. The real difficulty
+    lies in dealing with the fractions.</p>
+<p>I used an inner class Fraction to encapsulate all of the work that needs to
+    be done, including adding fractions, dividing, and printing them out in a
+    canonical form. The tricky part here is that the numerators and
+    denominators can get really big - like 61,572,651,155,457 /
+    17,592,186,044,416. After struggling with Longs that kept overflowing,
+    I switched all the internals of the Fraction class over to BigDecimals.</p>
+<p>Probably the most useful thing from the Fractions class is the
+    greatestCommonMultiple() method. This is a good method to save since
+    it comes up time and time again.</p>
+<p>I believe lines 22 and 51 provide a good way for determining the
+    neighbors on the cube. If you think of the cube as standard six-sided die
+    , then the sum of any two opposite sides is 7. 1 is opposite 6, 2 is
+    opposite 5, and 3 is opposite 4. Since the neighboring sides are any that
+    are not yourself, or your opposite, we can use this array to skip any
+    side / neighbor pairs where side ==
+    neighbor, or neighbors[side]+ neighbors[neighbor] == 7.</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
+        feedback you may have.</p>
+
+    <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-147-div-1-500-points.html"
+                                                target="_blank">here</a>.</p>
+
+    <p>For this, and other TopCoder solutions, please visit <a
+            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
+    </p>
+</div>

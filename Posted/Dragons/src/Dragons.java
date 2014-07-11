@@ -1,8 +1,10 @@
 /*
 TopCoder
-Single Round Match 147
-Division 1
-Level 2 - 500 Points
+Single Round Match: 147
+Division: 1
+Level: 2
+Points: 500
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1520
  */
 
 import java.math.BigDecimal;
@@ -159,5 +161,5 @@ public class Dragons {
                 return greatestCommonMultiple(y, x.remainder(y));
             }
         }
-    }   // End of Fraction class
+    }
 }
