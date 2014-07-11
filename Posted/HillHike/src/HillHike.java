@@ -1,3 +1,12 @@
+/*
+TopCoder
+Single Round Match: 145
+Division: 1
+Level: 3
+Points: 1000
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1158
+ */
+
 public class HillHike {
 
     private int maxDistance;
