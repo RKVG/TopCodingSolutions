@@ -1,0 +1,277 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1158">SRM
+    145 DIV 1 - 1000 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>
+    Determine the number of possible paths over a hill. At each step, you
+    may go up, down, or stay level. You must reach the maximum height and
+    a number of landmarks in between.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    001: public class HillHike {
+    002:
+    003:     private int maxDistance;
+    004:
+    005:     private int maxHeight;
+    006:
+    007:     private int[] landmarks;
+    008:
+    009:     private PathCache pathCache;
+    010:
+    011:     public long numPaths(int distance, int maxHeight, int[] landmarks) {
+    012:
+    013:         this.maxDistance = distance;
+    014:         this.maxHeight = maxHeight;
+    015:         this.landmarks = landmarks;
+    016:
+    017:         // Initialize a new PathCache to store values once they've been seen.
+    018:         pathCache = new PathCache(distance, maxHeight, landmarks.length);
+    019:
+    020:         /*
+    021:         The first move must be to distance=1, height=1 so we might as well
+    022:         start from there.
+    023:          */
+    024:         return getPaths(0, 0, 0, false);
+    025:     }
+    026:
+    027:     /*
+    028:     Calculates the number of paths starting from a point at distance,height.
+    029:     The number of paths also depends on how many landMarks haave been seen
+    030:     and whether or not the maximum height has been reached yet.
+    031:      */
+    032:     private long getPaths(int distance, int height, int landMarksSeen,
+    033:                           boolean maxHeightReached) {
+    034:
+    035:         // Check for going beyond height or distance
+    036:         if (distance > maxDistance) { return 0; }
+    037:         if ((height > maxHeight) || (height < 0)) { return 0; }
+    038:
+    039:         // Can't climb faster or descend faster than 1:1
+    040:         if (height > distance) { return 0; }
+    041:
+    042:         // Won't be able to get down in time
+    043:         if (height > (maxDistance - distance)) { return 0; }
+    044:
+    045:         // Can only have a height of 0 at the start and finish
+    046:         if ((height == 0) && (distance != 0) && (distance != maxDistance)) {
+    047:             return 0;
+    048:         }
+    049:
+    050:         /*
+    051:         If we've seen these values before, we'll use that instead of
+    052:         recalculating.
+    053:          */
+    054:         long numPaths = pathCache.getPath(distance, height, landMarksSeen,
+    055:                 maxHeightReached);
+    056:
+    057:         if (numPaths >= 0) { return numPaths; }
+    058:
+    059:         /*
+    060:         If we've reached maxDistance, and we've:
+    061:             Seen the maximum height
+    062:             Seen all of the landmarks
+    063:             and are now back down to height == 0
+    064:         Then we have a valid path, return 1
+    065:         Otherwise return 0
+    066:          */
+    067:         if (distance == maxDistance) {
+    068:             return (maxHeightReached && (height == 0) &&
+    069:                     (landMarksSeen == landmarks.length)) ? 1 : 0;
+    070:         }
+    071:
+    072:         // True if we've seen maxHeight in the past, or are at it now.
+    073:         boolean seenMaxHeight = maxHeightReached || (height == maxHeight);
+    074:
+    075:         int newLandMarksSeen = landMarksSeen;
+    076:
+    077:         /*
+    078:         If we haven't seen all the landmarks yet, and the current height
+    079:         equals the height of the next landMark, then increment the number
+    080:         of landMarks seen.
+    081:          */
+    082:         if (landMarksSeen < landmarks.length) {
+    083:             if (landmarks[landMarksSeen] == height) {
+    084:                 newLandMarksSeen++;
+    085:             }
+    086:         }
+    087:
+    088:         // Check how many paths if we go up from here.
+    089:         numPaths = getPaths(distance + 1, height + 1, newLandMarksSeen,
+    090:                 seenMaxHeight);
+    091:
+    092:         // Add how many paths if we stay level from here.
+    093:         numPaths += getPaths(distance + 1, height, newLandMarksSeen,
+    094:                 seenMaxHeight);
+    095:
+    096:         // Add how many paths if we descend from here.
+    097:         numPaths += getPaths(distance + 1, height - 1, newLandMarksSeen,
+    098:                 seenMaxHeight);
+    099:
+    100:         // Store this value so we don't have to recalculate it.
+    101:         pathCache.storePath(distance, height, landMarksSeen,
+    102:                 seenMaxHeight, numPaths);
+    103:
+    104:         return numPaths;
+    105:     }
+    106:
+    107:     /*
+    108:       Stores the paths that have already been calculated,
+    109:       so that we don't have to calculate them again.
+    110:     */
+    111:     class PathCache {
+    112:
+    113:         /*
+    114:         The number of paths from a given point to the finish is determined by
+    115:          the distance to the point, it's height, how many landMarks have been
+    116:           seen up to that point, and if the highest elevations has been
+    117:           reached yet.  This multi-dimensions array stores the number of
+    118:           paths given each of these combinations.
+    119:          */
+    120:         private final long[][][][] pathsFound;
+    121:
+    122:         PathCache(int maxDistance, int maxHeight, int numLandMarks) {
+    123:
+    124:             pathsFound = new long[maxDistance + 1][maxHeight + 1]
+    125:                     [numLandMarks + 1][2];
+    126:
+    127:             // Initialize all values in pathsFound to -1
+    128:             for (int i = 0; i <= maxDistance; i++) {
+    129:                 for (int j = 0; j <= maxHeight; j++) {
+    130:                     for (int k = 0; k <= numLandMarks; k++) {
+    131:                         for (int m = 0; m < 2; m++) {
+    132:                             pathsFound[i][j][k][m] = -1;
+    133:                         }
+    134:                     }
+    135:                 }
+    136:             }
+    137:         }
+    138:
+    139:         /*
+    140:         Stores the number of paths for the given parameters.
+    141:          */
+    142:         void storePath(int distance, int height, int landMarksSeen,
+    143:                        boolean maxHeightReached, long numPaths) {
+    144:
+    145:             pathsFound[distance][height][landMarksSeen]
+    146:                     [maxHeightReached ? 1 : 0] = numPaths;
+    147:         }
+    148:
+    149:         /*
+    150:        Returns the number of paths given the input conditions, or
+    151:        -1 if they haven't been calculated yet.
+    152:         */
+    153:         long getPath(int distance, int height, int landMarksSeen,
+    154:                      boolean maxHeightReached) {
+    155:
+    156:             return pathsFound[distance][height][landMarksSeen]
+    157:                     [maxHeightReached ? 1 : 0];
+    158:         }
+    159:     }
+    160: }
+
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+<p>There are two important concepts on display here. The first is
+    determining the number of paths to the finish given a set of parameters.
+    The second is storing those values so that they do not need to be
+    recalculated over and over. You can get by on small input sets without
+    storing the calculated values, but you will fail at least one of the tests
+    due to the 2 second time limit.</p>
+<p>The general approach goes like this: The number of paths to the finish
+    equals the number of successful paths if the next point is a climb, plus the
+    number of paths if the next point is the same height, plus the number of
+    paths if the next point is a descent. We'll recursively call
+    getPaths() on each of these three points and add them together. At each
+    point, if our current height equals the maximum height, then we'll set
+    maxHeightReached to true. Also, if our current height equals the
+    height of the next landmark, then we'll check that off and begin looking for
+    the next landmark. When we reach the finish (distance == maxDistance),
+    then we'll check to see if all the conditions have been met.</p>
+<p>First, look at the getPaths() method beginning on line 32. Lines 36-48
+    perform some rudimentary checks to see if it's even possible to
+    reach the finish given the input. If we're already past the maximum
+    distance, gone over the maximum height, too high given the forward distance,
+    cannot possibly get back down to a height of zero in the remaining distance,
+    of if our height is zero and we're not at either the start or finish; then
+    the are no possible paths - return 0.</p>
+<p>Once we've passed all of these checks, lines 54-57 determine if
+    we've already calculated the number of paths given these inputs. If we
+    have, then just return that number and we skip the trouble of recalculating.
+    It's important that we check the out of bounds conditions in the
+    previous paragraph first, as this will prevent
+    ArrayIndexOutOfBoundsExceptions. This can happen if for example, we
+    check for a height above the maximum height.</p>
+<p>On line 57, we'll get back a -1 if the path from here has not you been
+    calculated.</p>
+<p>Lines 67-71 check to see if we've reach the end and have met
+    all the conditions. We've reached the maximum height at least once.
+    We've passed through all the landmarks, and we've reached distance ==
+    maxDistance at height == 0. If all these are true, then return 1 -
+    otherwise, return 0. If we haven't reached maxDistance yet, then we'll
+    continue on and calculate the number of paths from here.</p>
+<p>On Line 73, we set seenMaxHeight to be true if we've been at maxHeight
+    previously, or are at it now.</p>
+<p>Lines 82-86 check the height of the next expected landMark.
+    If we're at the height of that next land mark, then we increment
+    newLandMarksSeen. That way we'll begin looking for the next land mark
+    height - or if newLandMarksSeen equals the number of land marks, then we
+    know we've seen all of them.</p>
+<p>Lines 89-101 recursively call getPaths() using the next distance,
+    and points that are higher then, equal to, and lower than the current point.
+    The sum of all these paths becomes the number of paths from the
+    current point to the finish. We'll store that value at line 101 so
+    that it does not need to be calculated again.</p>
+<p>With this setup, we can call getPaths() from the first point 0,0 and it will
+    calculate all possible paths from the start to the finish that meet the
+    constraints of the problem.</p>
+<p>The inner class PathCache at line 111 stores the number of paths given the
+    inputs. This technique is know as memoization and it comes in very
+    handy in this case. By storing values that we've seen before, we can
+    eliminate the need to calculate the same subtrees over and over again.</p>
+<p>On line 120, a 4 dimensional array is created. This allows any possible
+    combination of distance, height, number of land marks seen, and max height
+    seen to be mapped to a long - which is the number of paths from that point.
+    Initially these are all set to -1, so a value of 0 or more denotes a
+    number that has already been calculated.</p>
+<p>The distance and height dimensions are 1 unit larger than the need to be, bu
+    t this prevents having to do some -1 calculations in other places. The
+    size of the numLandMarks dimension must be one larger than the number of
+    landmarks to protect against the case where the number of landmarks is zero.
+    We always want at least one unit here. The final dimension maps
+    to the boolean maxHeightReached. Here true gets location 1 and false
+    is location 0.</p>
+<p>If you're unconvinced about the need to store the previously calculated
+    paths, please try this: Run test 4 from the topcoder arena with the
+    code as is. For me, it took about 7ms to complete. Now comment
+    out lines 58 and 59 and replace them with "return -1". This
+    essentially forces every path to be calculated as if it weren't cached.
+    My time is now... we'll it's been running for more than 10 minutes, so
+    I'll let you know when it completes.</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
+        feedback you may have.</p>
+
+    <p>Please post any questions or comments <a
+            href="http://blog.topcodingsolutions.net/2014/06/srm-145-div-1-1000-points.html"
+            target="_blank">here</a>.</p>
+
+    <p>For this, and other TopCoder solutions, please visit <a
+            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
+    </p>
+</div>
