@@ -1,0 +1,227 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1206"
+   target="_blank">SRM 147 DIV 1 - 1000 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>
+    Given a set of constraints, determine the minimum number of stripes needed
+    to create flags using various colors.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    001: /*
+    002: TopCoder
+    003: Single Round Match: 147
+    004: Division: 1
+    005: Level: 3
+    006: Points: 1000
+    007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1206
+    008:  */
+    009:
+    010: import java.util.HashMap;
+    011: import java.util.HashSet;
+    012: import java.util.Map;
+    013: import java.util.Set;
+    014:
+    015: public class Flags {
+    016:
+    017:     /*
+    018:     Checks to see if there is at least one color that allows two neighbors.
+    019:      */
+    020:     private static boolean isLinearGrowth(Map<Integer,
+    021:             Set<Integer>> contributes) {
+    022:
+    023:         for (int color : contributes.keySet()) {
+    024:             if (contributes.get(color).size() > 1) {
+    025:                 return false;
+    026:             }
+    027:         }
+    028:
+    029:         return true;
+    030:     }
+    031:
+    032:     public long numStripes(String numFlags, String[] forbidden) {
+    033:
+    034:         int numColors = forbidden.length;
+    035:
+    036:         long numFlagsNeeded = Long.parseLong(numFlags);
+    037:
+    038:         /*
+    039:         Maps each ending stripe color with to a set of next stripe colors
+    040:          */
+    041:         Map<Integer, Set<Integer>> contributes = new HashMap<>();
+    042:
+    043:         for (int color = 0; color < numColors; color++) {
+    044:
+    045:             // Get the forbidden colors for this color and add them to a set.
+    046:             String[] forbiddenForColor = forbidden[color].split(" ");
+    047:             Set<Integer> forbiddenForColorSet = new HashSet<>();
+    048:             for (String s : forbiddenForColor) {
+    049:                 forbiddenForColorSet.add(Integer.parseInt(s));
+    050:             }
+    051:
+    052:             /*
+    053:             Create a set that contains all the allowed colors.  That is,
+    054:             the colors not in the forbidden colors set.
+    055:              */
+    056:             Set<Integer> availableForNextColor = new HashSet<>();
+    057:             for (int nextColor = 0; nextColor < numColors; nextColor++) {
+    058:                 if (!forbiddenForColorSet.contains(nextColor)) {
+    059:                     availableForNextColor.add(nextColor);
+    060:                 }
+    061:             }
+    062:
+    063:             // Store the color index along with its allowed next colors.
+    064:             contributes.put(color, availableForNextColor);
+    065:         }
+    066:
+    067:         /*
+    068:         Do we have at least one color that can have more than one neighbor.
+    069:         If not, then the number of flags grows linearly with the number of
+    070:         stripes and we'll do some division to figure out the anser.
+    071:          */
+    072:         if (isLinearGrowth(contributes)) {
+    073:             int divisor = 0;
+    074:             int subtract = 0;
+    075:             for (int color = 0; color < numColors; color++) {
+    076:                 if (contributes.get(color).size() == 0) { subtract++; }
+    077:                 if (contributes.get(color).size() == 1) { divisor++; }
+    078:             }
+    079:             if (divisor == 0) {
+    080:                 return -1;  // Impossible to make number of flags.
+    081:             }
+    082:             return (numFlagsNeeded / divisor) - (subtract / 2); // ??
+    083:         }
+    084:
+    085:         // A map to hold how many patterns end with each color.
+    086:         Map<Integer, Long> endsWithCount = new HashMap<>();
+    087:
+    088:         // Start of with flags ending in each of the colors
+    089:         for (int i = 0; i < numColors; i++) {
+    090:             endsWithCount.put(i, 1L);
+    091:         }
+    092:
+    093:         long numFlagsFound = numColors;
+    094:         long numStripes = 1;
+    095:
+    096:         /*
+    097:         Loop until we have the number of flags needed.  With each iterations,
+    098:          we look at the last color, and how many neighboring colors it will
+    099:          contribute to the next round.
+    100:          */
+    101:         while (numFlagsFound < numFlagsNeeded) {
+    102:             numStripes++;
+    103:
+    104:             /*
+    105:              Map holds the number of patterns that end with each color at the
+    106:              end of the round.  Starts each color at 0.
+    107:               */
+    108:             Map<Integer, Long> newEndsWithCount = new HashMap<>();
+    109:             for (int color = 0; color < numColors; color++) {
+    110:                 newEndsWithCount.put(color, 0L);
+    111:             }
+    112:
+    113:             /*
+    114:             For each color, look at how many neighbors it can have,
+    115:             then increments the number of flags ending with each neighboring
+    116:             color by the number of the current color elements.  For example,
+    117:             if the current round has 10 flags whose pattern ends with color
+    118:             0, and color 0 allows 1, 2, and 3; then in the next round,
+    119:             patterns ending in 1, 2, and 3 will appear 10 (more) times.
+    120:              */
+    121:             for (int color = 0; color < numColors; color++) {
+    122:                 for (int nextColor : contributes.get(color)) {
+    123:                     long toAdd = endsWithCount.get(color);
+    124:                     newEndsWithCount.put(nextColor, toAdd + newEndsWithCount
+    125:                             .get(nextColor));
+    126:                     numFlagsFound += toAdd;
+    127:
+    128:                     // Return as soon as possible.
+    129:                     if (numFlagsFound >= numFlagsNeeded) { return numStripes; }
+    130:                 }
+    131:             }
+    132:
+    133:             // Set current round to the next.
+    134:             endsWithCount = newEndsWithCount;
+    135:         }
+    136:
+    137:         return numStripes;
+    138:     }
+    139: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+<p>Start with N flags each with 1 stripe (solid colors). Then each time we add a
+    stripe, we'll look at the current color, and for each possible neighboring
+    color, we'll create a flag of that color. So, if we have three colors (0, 1,
+    2) and the only constraint is that the same color cannot be next to each
+    other, then we'll get:</p>
+<table border="1">
+    <tbody>
+    <tr>
+        <th>Stripes</th>
+        <th>Flags</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>0, 1, 2</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>01, 02, 10, 12, 20, 21</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>010, 012, 020, 021, 101, 102, 120, 121, 201, 202, 210, 212</td>
+    </tr>
+    <tr>
+        <td>...</td>
+        <td>...</td>
+    </tr>
+    </tbody>
+</table>
+<p>For each flag ending in 0, we create one ending in 01 and 02. Same goes for
+    those ending in 1 and 2.</p>
+<p>Line 41 creates a Map named "contributes", while lines 45-65 initialize it.
+    Each key in the map is a color, and the value is a Set containing all the
+    colors that may neighbor it. In each round, the ending color will contribute
+    each of these colors to the next round.</p>
+<p>On Line 86 a Map called endsWithCount is created. This holds a key for
+    each color, and the value is the number of flags in that round that end with
+    that color. When combined with the contributes map, we can see how many
+    flags end with each color, and how many will end with each color in the next
+    round.</p>
+<p>What makes this problem difficult is the cases where all of the colors
+    allow only one neighbor. Here, each additional stripe creates at most N
+    additions flags, where N is the number of colors. The number of flags
+    created grows linearly (instead of exponentially), and when some of the test
+    cases expect 10 quadrillion flags, it could take a while. To handle this
+    case, the check at line 72 is performed. If isLinearGrowth() returns true,
+    then we abandon trying to determine the number of flags by iterating
+    through each additional stripe, and instead use division to arrive at the
+    answer.</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
+        feedback you may have.</p>
+
+    <p>Please post any questions or comments <a
+            href="http://blog.topcodingsolutions.net/2014/07/srm-147-div-1-1000-points.html"
+            target="_blank">here</a>.</p>
+
+    <p>For this, and other TopCoder solutions, please visit <a
+            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
+    </p>
+</div>

@@ -1,8 +1,10 @@
 /*
 TopCoder
-Single Round Match 147
-Division 1
-Level 3 - 1000 Points
+Single Round Match: 147
+Division: 1
+Level: 3
+Points: 1000
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1206
  */
 
 import java.util.HashMap;
