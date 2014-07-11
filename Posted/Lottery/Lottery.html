@@ -1,0 +1,275 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1659"
+   target="_blank">SRM 144 DIV 1 - 550 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>Calculate the number of possible outcomes for a number of lottery games.
+    Each game is defined by the amount of possible numbers to choose from, the
+    amount of numbers that must be chooses, whether those numbers must be
+    unique, and whether those numbers must be in non-descending order.</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    001: /*
+    002: TopCoder
+    003: Single Round Match: 144
+    004: Division: 1
+    005: Level: 2
+    006: Points: 550
+    007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1659
+    008:  */
+    009:
+    010: import java.util.ArrayList;
+    011: import java.util.Collections;
+    012: import java.util.List;
+    013:
+    014: public class Lottery {
+    015:
+    016:     /*
+    017:     Reads each String from rules, creates a new LotteryGame out of it,
+    018:     sorts the games, and returns the sorted list of names.
+    019:      */
+    020:     public String[] sortByOdds(String[] rules) {
+    021:
+    022:         List<LotteryGame> games = new ArrayList<>();
+    023:
+    024:         /*
+    025:         Read each of the input Strings, create a LotteryGame object out of
+    026:         them, and add them to the games array.
+    027:          */
+    028:         for (String s : rules) {
+    029:             games.add(CreateGame(s));
+    030:         }
+    031:
+    032:         Collections.sort(games);
+    033:
+    034:         /*
+    035:         Create the return array, copy the now sorted games into it, and return.
+    036:          */
+    037:         String[] names = new String[games.size()];
+    038:
+    039:         int i = 0;
+    040:         for (LotteryGame g : games) {
+    041:             names[i++] = g.getName();
+    042:         }
+    043:
+    044:         return names;
+    045:     }
+    046:
+    047:     /*
+    048:     Parses the input String and returns a new LotteryGame object.
+    049:      */
+    050:     private LotteryGame CreateGame(String s) {
+    051:
+    052:         // Split the string on the space char.
+    053:         String[] nameAndOptions = s.split(":");
+    054:
+    055:         String name = nameAndOptions[0];
+    056:
+    057:         String[] options = nameAndOptions[1].split(" ");
+    058:
+    059:         int choices = Integer.valueOf(options[1]);
+    060:         int blanks = Integer.valueOf(options[2]);
+    061:
+    062:         boolean sorted = "T".equals(options[3]);
+    063:         boolean unique = "T".equals(options[4]);
+    064:
+    065:         return new LotteryGame(name, choices, blanks, sorted, unique);
+    066:     }
+    067:
+    068:     /*
+    069:     An inner class that represents each type of game.
+    070:     It encapsulates the details of calculating the number of possible
+    071:     combinations, and implements Comparable to make the sorting easy.
+    072:      */
+    073:     class LotteryGame implements Comparable<LotteryGame> {
+    074:
+    075:         final String name;
+    076:
+    077:         final long combinations;
+    078:
+    079:         /*
+    080:         Calculates the number of combinations (permutations?) upon object
+    081:         creation.
+    082:          */
+    083:         LotteryGame(String name, int choices, int blanks, boolean sorted,
+    084:                     boolean unique) {
+    085:
+    086:             this.name = name;
+    087:
+    088:             /*
+    089:            There are four different ways to compute the number of
+    090:            combinations base on the values of unique and sorted.  The first
+    091:            three you should recognize from discrete math classes.  The last
+    092:            case (!unique && sorted) I don't fully understand.
+    093:             */
+    094:             if (unique && sorted) {
+    095:                 combinations = choose(choices, blanks);
+    096:             } else if (unique) {
+    097:                 combinations = choose(choices, blanks) * factorial(blanks);
+    098:             } else if (!sorted) {
+    099:                 combinations = power(choices, blanks);
+    100:             } else {
+    101:                 combinations = choose(choices + blanks - 1, blanks);
+    102:             }
+    103:         }
+    104:
+    105:         /*
+    106:         Implements (m choose n) = m! / ((m-n)! * n!)
+    107:          */
+    108:         long choose(int choices, int blanks) {
+    109:             return factorial(choices, blanks) / factorial(blanks);
+    110:         }
+    111:
+    112:         public long factorial(int n) {
+    113:             return factorial(n, n);
+    114:         }
+    115:
+    116:         /*
+    117:         Doing large factorials runs the risk of overflows.  This allows us to
+    118:          calculate, for example, 100! / 98! without having to multiply it all
+    119:           out.
+    120:          */
+    121:         long factorial(int n, int stopAfter) {
+    122:
+    123:             long result = (long) n;
+    124:
+    125:             for (long i = (n - 1); i > (n - stopAfter); i--) {
+    126:                 result *= i;
+    127:             }
+    128:
+    129:             return result;
+    130:         }
+    131:
+    132:         /*
+    133:         Does the same thing as Math.pow() but this uses longs instead of
+    134:         doubles.
+    135:          */
+    136:         long power(int base, int exp) {
+    137:
+    138:             if (exp == 0) { return 1L; }
+    139:
+    140:             // I don't ever expect this, but just in case.
+    141:             if (exp < 0) {
+    142:                 throw new IllegalArgumentException("" + exp);
+    143:             }
+    144:
+    145:             long result = base;
+    146:
+    147:             for (int i = 1; i < exp; i++) {
+    148:                 result *= (long) base;
+    149:             }
+    150:
+    151:             return result;
+    152:         }
+    153:
+    154:         long getCombinations() {
+    155:             return this.combinations;
+    156:         }
+    157:
+    158:         String getName() {
+    159:             return this.name;
+    160:         }
+    161:
+    162:         /*
+    163:         Sort based on the number of possible combinations.  The more possible
+    164:          combinations, the harder the game is to win.
+    165:          If two games have the same number of combinations,
+    166:          then sort based on their name.
+    167:          */
+    168:         public int compareTo(LotteryGame other) {
+    169:
+    170:             if (this.combinations < other.getCombinations()) {
+    171:                 return -1;
+    172:             } else if (this.combinations > other.getCombinations()) {
+    173:                 return 1;
+    174:             } else {
+    175:                 return this.name.compareTo(other.getName());
+    176:             }
+    177:         }
+    178:     }
+    179: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+<p>There's basically three parts to this problem:</p>
+<ol>
+    <li>Parsing each String into a lottery game.</li>
+    <li>Determining how many possible combinations* each game has.</li>
+    <li>Sorting and returning the results.</li>
+</ol>
+
+<p><sup>*</sup>I'll use "combinations" through the code and comments, even
+    though
+    "permutations" may be more appropriate in some cases.</p>
+<p>By far the toughest part is determining the number of possible combinations
+    there are given the various options. So, I put it off as long as I
+    could.</p>
+<p>The CreateGame() method on line 50 takes care of reading each String and
+    creating a LotteryGame object out of it. There is nothing difficult
+    here. One split of the String on the ':' character separates the name
+    of the game from it's options. A second split, on the options half
+    using the space character breaks out all the options. With that, I had
+    everything I needed.</p>
+<p>I chose to make the LotteryGame implement the Comparable interface so that
+    I could use Collections.sort() (line 32) to put all the games in order.
+    compareTo() (line 168) handles all the details of the sorting.</p>
+<p>Now, there was nothing left to do but calculate the number of
+    combinations.</p>
+<p>The first three cases were pretty easy:</p>
+<p>Let m = the number of numbers to choose from - choices, and n = the number
+    of numbers that must be chosen - blanks.</p>
+<ul>
+    <li>If the numbers are unique and sorted, then the possible combinations = m
+        choose n.
+    </li>
+    <li>If the numbers do not need to be sorted, then we can multiple the (m
+        choose n) by n!
+    </li>
+    <li>And easiest of all - if they are not unique, and not required to be
+        sorted, then it's just m^n.
+    </li>
+</ul>
+<p>If any of these are difficult, then I recommend checking out the
+    <a href="https://www.khanacademy.org/math/probability/probability-and-combinatorics-topic">Probability
+        and Combinatorics series on the Kahn Academy site</a>.
+</p>
+
+<p>I didn't get how to calculate the number of combinations for a sorted but not
+    unique game (line 101) until I checked out the TopCoder forums. I still
+    don't think I could explain it. choose(choices+ blanks - 1, blanks) works,
+    so I'll
+    leave it at that.</p>
+<p>As a final note, lines 108-152 implement the choose, factorial, and power
+    functions. Power is available in the Math package, but it takes and
+    return doubles. Rather than deal with converting longs to doubles and back,
+    it seemed easier to re-write it.</p>
+<p>I don't know if choose and factorial are in any standard libraries. Also,
+    I needed to customize the factorial function so in cases where large
+    factorials were being divided by other large factorials (i.e. 100! /
+    98!), I could simplify that to just 100 * 99. Computing 100! would probably
+    cause an overflow.</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
+        feedback you may have.</p>
+
+    <p>Please post any questions or comments <a
+            href="http://blog.topcodingsolutions.net/2014/06/srm-144-div-1-550-points.html"
+            target="_blank">here</a>.</p>
+
+    <p>For this, and other TopCoder solutions, please visit <a
+            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
+    </p>
+
+</div>
