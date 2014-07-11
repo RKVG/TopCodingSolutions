@@ -1,3 +1,12 @@
+/*
+TopCoder
+Single Round Match: 145
+Division: 1
+Level: 1
+Points: 250 Points
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1677&rd=4530
+ */
+
 public class Bonuses {
 
     public int[] getDivision(int[] points) {
