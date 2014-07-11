@@ -1,3 +1,12 @@
+/*
+TopCoder
+Single Round Match: 146
+Division: 1
+Level: 3
+Points: 800
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1605
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +121,6 @@ public class Roundabout {
 
     // Queue is ready to enter if there is a car at the front.
     private static boolean readyToEnter(List<Character> q) {
-
         return !(q.isEmpty() || (q.get(0) == SPACE));
     }
 
