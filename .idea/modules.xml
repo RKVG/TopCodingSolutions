@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/BigBurger/BigBurger.iml" filepath="$PROJECT_DIR$/PassingNotPosted/BigBurger/BigBurger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/BinaryCode/BinaryCode.iml" filepath="$PROJECT_DIR$/Posted/BinaryCode/BinaryCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Birthday/Birthday.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Birthday/Birthday.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Bonuses/Bonuses.iml" filepath="$PROJECT_DIR$/Posted/Bonuses/Bonuses.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/BridgeCrossing/BridgeCrossing.iml" filepath="$PROJECT_DIR$/Posted/BridgeCrossing/BridgeCrossing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/CCipher/CCipher.iml" filepath="$PROJECT_DIR$/Posted/CCipher/CCipher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/CeyKaps/CeyKaps.iml" filepath="$PROJECT_DIR$/Posted/CeyKaps/CeyKaps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CircleGame/CircleGame.iml" filepath="$PROJECT_DIR$/CircleGame/CircleGame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/DivisorDigits/DivisorDigits.iml" filepath="$PROJECT_DIR$/Posted/DivisorDigits/DivisorDigits.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Dragons/Dragons.iml" filepath="$PROJECT_DIR$/Posted/Dragons/Dragons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/ExerciseMachine/ExerciseMachine.iml" filepath="$PROJECT_DIR$/Posted/ExerciseMachine/ExerciseMachine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/FixedPointTheorem/FixedPointTheorem.iml" filepath="$PROJECT_DIR$/PassingNotPosted/FixedPointTheorem/FixedPointTheorem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Flags/Flags.iml" filepath="$PROJECT_DIR$/Posted/Flags/Flags.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/FormatAmt/FormatAmt.iml" filepath="$PROJECT_DIR$/PassingNotPosted/FormatAmt/FormatAmt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/GoldenChain/GoldenChain.iml" filepath="$PROJECT_DIR$/Posted/GoldenChain/GoldenChain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/HillHike/HillHike.iml" filepath="$PROJECT_DIR$/Posted/HillHike/HillHike.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/ImageDithering/ImageDithering.iml" filepath="$PROJECT_DIR$/Posted/ImageDithering/ImageDithering.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/InterestingDigits/InterestingDigits.iml" filepath="$PROJECT_DIR$/PassingNotPosted/InterestingDigits/InterestingDigits.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Inventory/Inventory.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Inventory/Inventory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/LeaguePicks/LeaguePicks.iml" filepath="$PROJECT_DIR$/PassingNotPosted/LeaguePicks/LeaguePicks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/LongWordsDiv2/LongWordsDiv2.iml" filepath="$PROJECT_DIR$/PassingNotPosted/LongWordsDiv2/LongWordsDiv2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Lottery/Lottery.iml" filepath="$PROJECT_DIR$/Posted/Lottery/Lottery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/MNS/MNS.iml" filepath="$PROJECT_DIR$/Posted/MNS/MNS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Masterbrain/Masterbrain.iml" filepath="$PROJECT_DIR$/Posted/Masterbrain/Masterbrain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/MostProfitable/MostProfitable.iml" filepath="$PROJECT_DIR$/PassingNotPosted/MostProfitable/MostProfitable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Unsolved/PenLift/PenLift.iml" filepath="$PROJECT_DIR$/Unsolved/PenLift/PenLift.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/PeopleCircle/PeopleCircle.iml" filepath="$PROJECT_DIR$/Posted/PeopleCircle/PeopleCircle.iml" group="Posted" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/PowerOutage/PowerOutage.iml" filepath="$PROJECT_DIR$/PassingNotPosted/PowerOutage/PowerOutage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/PrefixCode/PrefixCode.iml" filepath="$PROJECT_DIR$/PassingNotPosted/PrefixCode/PrefixCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Pricing/Pricing.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Pricing/Pricing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/RectangularGrid/RectangularGrid.iml" filepath="$PROJECT_DIR$/Posted/RectangularGrid/RectangularGrid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Roundabout/Roundabout.iml" filepath="$PROJECT_DIR$/Posted/Roundabout/Roundabout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/Time/Time.iml" filepath="$PROJECT_DIR$/Posted/Time/Time.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Top Coder.iml" filepath="$PROJECT_DIR$/Top Coder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/VendingMachine/VendingMachine.iml" filepath="$PROJECT_DIR$/Posted/VendingMachine/VendingMachine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/WidgetRepairs/WidgetRepairs.iml" filepath="$PROJECT_DIR$/PassingNotPosted/WidgetRepairs/WidgetRepairs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/WritingWords/WritingWords.iml" filepath="$PROJECT_DIR$/PassingNotPosted/WritingWords/WritingWords.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/YahtzeeScore/YahtzeeScore.iml" filepath="$PROJECT_DIR$/Posted/YahtzeeScore/YahtzeeScore.iml" />
+    </modules>
+  </component>
+</project>
+

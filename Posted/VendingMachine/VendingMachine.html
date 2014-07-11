@@ -1,0 +1,195 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1130" target="_blank">SRM 145 DIV 2 - 1100 points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+Simulate a vending machine.
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+001: /*
+002: TopCoder
+003: Single Round Match: 145
+004: Division: 2
+005: Level: 3
+006: Points: 1100
+007: Description: http://community.topcoder.com/stat?c=problem_statement&amp;pm=1130
+008:  */
+009: 
+010: public class VendingMachine {
+011: 
+012:     // Number of minutes before the machine rotates to the most expensive
+013:     // column.
+014:     private static final int TIME_TO_RESET = 5;
+015: 
+016:     // The number of moves that the machine has made
+017:     private int moves = 0;
+018: 
+019:     // The column currently facing forward.
+020:     private int currentCol = 0;
+021: 
+022:     private int numColumns;
+023: 
+024:     private int numShelves;
+025: 
+026:     // The vending machine is modeled as 2 dimensional array [shelves][columns]
+027:     private int[][] machine;
+028: 
+029:     private int timeOfLastPurchase = 0;
+030: 
+031:     /*
+032:     Simulate to use of the vending machines motor.
+033:     Prices is an array of Strings, each String is a space separate list of
+034:     integers.  Each array item represents a shelf, while each item in the
+035:     String represents the price of an item at that column.purchases are in
+036:     the format of shelf,column:time
+037:      */
+038:     public int motorUse(String[] prices, String[] purchases) {
+039: 
+040:         // Determine the number of shelves and columns.
+041:         numShelves = prices.length;
+042:         numColumns = prices[0].split(" ").length;
+043: 
+044:         machine = new int[numShelves][numColumns];
+045: 
+046:         // Initialize the machine
+047:         for (int shelf = 0; shelf < numShelves; shelf++) {
+048: 
+049:             // split the String by spaces into an array of prices.
+050:             String[] itemArray = prices[shelf].split(" ");
+051:             for (int column = 0; column < numColumns; column++) {
+052:                 machine[shelf][column] = Integer.parseInt(itemArray[column]);
+053:             }
+054:         }
+055: 
+056:         // Start with the most expensive column facing forward.
+057:         rotateToMostExpensive();
+058: 
+059:         /*
+060:         We'll throw an exception if the user attempts to buy an item that has
+061:          already been bought.
+062:         Catch the exception, and return -1.
+063:          */
+064:         try {
+065: 
+066:             // Process each of the purchases.
+067:             for (String p : purchases) {
+068:                 processPurchase(p);
+069:             }
+070: 
+071:             // Return to the most expensive column before finishing.
+072:             rotateToMostExpensive();
+073:         } catch (IllegalStateException e) {
+074:             return -1;
+075:         }
+076: 
+077:         return moves;
+078:     }
+079: 
+080:     /*
+081:     Calculates the most expensive column in the vending machine, and then
+082:     rotates to that column.
+083:      */
+084:     private void rotateToMostExpensive() {
+085:         int col = getMostExpensiveCol();
+086:         rotateTo(col);
+087:     }
+088: 
+089:     /*
+090:     Calculates the most expensive column in the vending machine.
+091:      */
+092:     private int getMostExpensiveCol() {
+093: 
+094:         // The value of the most expensive column we've seen so far.
+095:         int mostExpensiveColVal = 0;
+096: 
+097:         // The index of the most expensive column seen so far.
+098:         int mostExpensiveColNum = 0;
+099: 
+100:         for (int column = 0; column < numColumns; column++) {
+101: 
+102:             int valOfColumn = 0;
+103:             for (int shelf = 0; shelf < numShelves; shelf++) {
+104:                 valOfColumn += machine[shelf][column];
+105:             }
+106:             if (valOfColumn > mostExpensiveColVal) {
+107:                 mostExpensiveColNum = column;
+108:                 mostExpensiveColVal = valOfColumn;
+109:             }
+110:         }
+111: 
+112:         return mostExpensiveColNum;
+113:     }
+114: 
+115:     /*
+116:     Rotates the vending machine to the given column.
+117:     Increments the number of motor moves required to get there.
+118:     The move may be either clock-wise or counter-clockwise.
+119:      */
+120:     private void rotateTo(int dest) {
+121: 
+122:         /*
+123:         Determine how many moves it will take if we rotate left,
+124:         then how many moves it will take to rotate right.
+125:          */
+126:         int rotL = Math.abs(dest - currentCol);
+127:         int rotR = numColumns - rotL;
+128: 
+129:         // Increase the number of moves the motor makes by the smaller of the
+130:         // two.
+131:         moves += (rotL < rotR) ? rotL : rotR;
+132: 
+133:         // Set the current column to the destination.
+134:         currentCol = dest;
+135:     }
+136: 
+137:     private void processPurchase(String purchase) {
+138: 
+139:         /*
+140:         Parse the purchase string by breaking it into its shelf, column,
+141:         and time components.
+142:          */
+143:         String[] purchaseArr = purchase.split("(,)|(:)");  // A handy regex.
+144:         int shelf = Integer.parseInt(purchaseArr[0]);
+145:         int column = Integer.parseInt(purchaseArr[1]);
+146:         int time = Integer.parseInt(purchaseArr[2]);
+147: 
+148:         // If more than 5 minutes have elapses, rotate to the most expensive
+149:         // column first.
+150:         if ((time - timeOfLastPurchase) >= TIME_TO_RESET) {
+151:             rotateToMostExpensive();
+152:         }
+153: 
+154:         // Rotate to the purchase column.
+155:         rotateTo(column);
+156: 
+157:         // Probably not the right type of exception to throw, but it'll work.
+158:         if (machine[shelf][column] == 0) {
+159:             throw new IllegalStateException("Item Already Purchased! Shelf="
+160:                     + shelf + " Column=" + column);
+161:         }
+162: 
+163:         // Mark the slot as gone.
+164:         machine[shelf][column] = 0;
+165: 
+166:         // Update the time of last purchase.
+167:         timeOfLastPurchase = time;
+168:     }
+169: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>For an 1100 point problem, this one was actually pretty straight forward. It does not require the use of any complicated algorithms or data structures. There's really only two places where you might get tripped up.</p>
+<p>The first is the rotateTo() method on line 120. Be careful and make sure that your are always rotating the shortest distance, whether that be to the right, or to the left. One lines 126 and 127, I calculate both rotL and rotR (rotL = rotate Left, rotR = rotate Right). rotL is the absolute value of the difference between the destination column and the current column.</p>
+<p>We then use the value of rotL to calculate rotR. The two must add up to the total number of columns in the machine, so rotR = numColumns - rotL.</p>
+<p>Looking back, I guess right and left don't really matter. Think of it as rotate one direction, and rotate the opposite direction.</p>
+<p>Getting this part right is half the battle. It's worth it to write some unit tests and write it out on paper to ensure that it's giving you the correct values.</p>
+<p>The second part that may prove difficult is in parsing the purchases String. Here knowing how to use regular expressions can be very handy. The purchase Sting has the format "&lt;shelf&gt;,&lt;column&gt;:&lt;time&gt;". Line 143 splits the String on either a ',' or a ':' character.</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/06/srm-145-div-2-1100-points.html" target="_blank">here</a>.</p>
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+</div>

@@ -1,0 +1,192 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1744" target="_blank">SRM 148 DIV 2 - 1000 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+Given a list of numbers, determines how many ways the can be arranged to form a magic square.
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+001: /*
+002: TopCoder
+003: Single Round Match: 148
+004: Division: 2
+005: Level 3:
+006: Points: 1000
+007: 
+008: Single Round Match: 148
+009: Division: 1
+010: Level: 2
+011: Points: 450
+012:  */
+013: 
+014: import java.util.ArrayList;
+015: import java.util.HashSet;
+016: import java.util.List;
+017: import java.util.Set;
+018: 
+019: public class MNS {
+020: 
+021:     /*
+022:     Given the indexes for squares 1,2,3, 4,and 5 - determine the number
+023:     of magic squares that can be formed from the remaining numbers.
+024:      */
+025:     private static Set<Long> generateMagicSquare(int[] numbers, int sq1,
+026:                                                  int sq2, int sq3, int sq4,
+027:                                                  int sq5) {
+028: 
+029:         Set<Long> retSet = new HashSet<Long>();
+030: 
+031:         // Set the values for squares 1,2,3,4, and 5
+032:         int sq1Val = numbers[sq1];
+033:         int sq2Val = numbers[sq2];
+034:         int sq3Val = numbers[sq3];
+035:         int sq4Val = numbers[sq4];
+036:         int sq5Val = numbers[sq5];
+037: 
+038:         /*
+039:         All the numbers that were not assigned to the five squares above are
+040:         available to be used in squares 3,6,7,8 and 9.
+041:          */
+042:         List<Integer> availableMaster = new ArrayList<Integer>();
+043:         for (int i = 0; i < numbers.length; i++) {
+044:             if ((i != sq1) && (i != sq2) && (i != sq3)
+045:                     && (i != sq4) && (i != sq5)) {
+046:                 availableMaster.add(numbers[i]);
+047:             }
+048:         }
+049: 
+050:         // Determine the value of the magic square.
+051:         int msNum = sq1Val + sq2Val + sq3Val;
+052: 
+053:         /*
+054:         Loop through all the available numbers setting square 6 equal to
+055:         their value.
+056:          */
+057:         for (int sq6Val : availableMaster) {
+058: 
+059:             if ((sq4Val + sq5Val + sq6Val) != msNum) { continue; }
+060: 
+061:             // copy availableMaster into a new variable for this loop.
+062:             List<Integer> availableCurrent = new ArrayList<Integer>();
+063:             availableCurrent.addAll(availableMaster);
+064: 
+065:             // Square 7 = magic square value - 1 - 4
+066:             int sq7Val = msNum - sq1Val - sq4Val;
+067:             if (availableCurrent.contains(sq7Val)) {
+068:                 availableCurrent.remove(new Integer(sq7Val));
+069:             } else {
+070:                 continue;
+071:             }
+072: 
+073:             // Square 8 = magic square value - 2 - 5
+074:             int sq8Val = msNum - sq2Val - sq5Val;
+075:             if (availableCurrent.contains(sq8Val)) {
+076:                 availableCurrent.remove(new Integer(sq8Val));
+077:             } else {
+078:                 continue;
+079:             }
+080: 
+081:             /*
+082:             Square 9 = magic square value - 3 - 6.
+083:             If availableCurrent contains that value,
+084:             then we have a valid magic square.  We'll compute a key for it to
+085:              prevent duplicates, and add it to the result set.
+086:              */
+087:             int sq9Val = msNum - sq3Val - sq6Val;
+088:             if (availableCurrent.contains(sq9Val)) {
+089:                 retSet.add(
+090:                         msValue(sq1Val, sq2Val, sq3Val, sq4Val, sq5Val, sq6Val,
+091:                                 sq7Val, sq8Val, sq9Val)
+092:                 );
+093:             } else {
+094:                 continue;
+095:             }
+096:         }
+097: 
+098:         return retSet;
+099:     }
+100: 
+101:     /*
+102:     Generates a unique key for each possible magic square.
+103:      */
+104:     private static long msValue(long sq1Val, long sq2Val, long sq3Val,
+105:                                 long sq4Val, long sq5Val,
+106:                                 long sq6Val, long sq7Val, long sq8Val,
+107:                                 long sq9Val) {
+108: 
+109:         long val = 0L;
+110: 
+111:         val = (val * 10L) + sq1Val;
+112:         val = (val * 10L) + sq2Val;
+113:         val = (val * 10L) + sq3Val;
+114:         val = (val * 10L) + sq4Val;
+115:         val = (val * 10L) + sq5Val;
+116:         val = (val * 10L) + sq6Val;
+117:         val = (val * 10L) + sq7Val;
+118:         val = (val * 10L) + sq8Val;
+119:         val = (val * 10L) + sq9Val;
+120: 
+121:         return val;
+122:     }
+123: 
+124:     public int combos(int[] numbers) {
+125: 
+126:         /*
+127:         Contains a identifier for each magic square that we generate.  Since
+128:         it's a Set, there will be no duplicates.
+129:          */
+130:         Set<Long> results = new HashSet<Long>();
+131: 
+132:         /*
+133:         Loop through all possible values for squares 1,2,3,4,
+134:         and 5.
+135:         From these, the values of all other square can be determined.
+136:         i.e. square 6 = square 4 + square 5.
+137:         square 8 = square 2 + square 5. etc.
+138:          */
+139:         for (int sq1 = 0; sq1 < numbers.length; sq1++) {
+140: 
+141:             for (int sq2 = 0; sq2 < numbers.length; sq2++) {
+142:                 if (sq2 == sq1) { continue; }
+143: 
+144:                 for (int sq3 = 0; sq3 < numbers.length; sq3++) {
+145:                     if ((sq3 == sq2) || (sq3 == sq1)) { continue; }
+146: 
+147:                     for (int sq4 = 0; sq4 < numbers.length; sq4++) {
+148:                         if ((sq4 == sq3) || (sq4 == sq2) || (sq4 == sq1)) {
+149:                             continue;
+150:                         }
+151: 
+152:                         for (int sq5 = 0; sq5 < numbers.length; sq5++) {
+153:                             if ((sq5 == sq4) || (sq5 == sq3) || (sq5 == sq2)
+154:                                     || (sq5 == sq1)) { continue; }
+155: 
+156:                             results.addAll(
+157:                                     generateMagicSquare(numbers, sq1, sq2,
+158:                                             sq3, sq4, sq5)
+159:                             );
+160:                         }
+161:                     }
+162:                 }
+163:             }
+164:         }
+165: 
+166:         return results.size();
+167:     }
+168: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>A magic square is a two dimensional grid of numbers where every row and column add up to the same amount. In this problem, the grid is always 3x3. If we number the positions as such:</p>
+<p>Then, by knowing the values of squares 1, 2, 3, 4, and 5 - we can determine what all the remaining squares must be. Square 1+ Square 2+ Square 3 = the value of the magic square - call this msNum. Therefore, Square 6 =msNum- Square 4 - Square 5. Square 7 =msNum- Square 1 - Square 2, etc.</p>
+<p>This solutions uses a brute force approach. Lines 139-164 loop through all possible values for squares 1,2,3,4, and 5. For each combination, it calls generateMagicSquare() which creates as many magic squares as possible using the remaining numbers. The if-statements immediately following each for (i.e. line 43) ensure that the same index do not get used multiple times.</p>
+<p>generateMagicSquare() creates as many magic squares as possible, given the fixed squares provided and the set of numbers from which to choose. It creates a new list called availableMaster that holds all the number that were not assigned to those fixed squares, and then uses a copy of that named availableCurrent for each iteration through the loop at line 57. The loop attempts to fill in legal values for squares 6, 7, 8, and 9. If that's possible, then we have a good magic square.</p>
+<p>The method msValue() on line 104 creates a unique identifier for each possible magic square. It does this by simply assigning each number in the square to a tens place and returns a long. So if the square was the example given at the very top of this notes sections, the result would be: 123456789. Since this identifier is added to a Set (line 89-91) it ensures that we don't count duplicates.</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-148-div-2-1000-points.html" target="_blank">here</a>.</p>
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+</div>
