@@ -11,38 +11,33 @@ import java.util.ArrayList;
 
 public class PowerOutage {
 
-    public static void main(String[] args) {
+    private static final int MAX_JUNCTIONS = 50;
 
-        int[] fromJunction = new int[]{0};
-        int[] toJunction = new int[]{1};
-        int[] ductLength = new int[]{10};
-        int l = new PowerOutage().estimateTimeOut(fromJunction, toJunction,
-                ductLength);
-        System.out.println(l);
-    }
-
-    private static int getSumOfLengths(int[] lengths) {
-
-        int total = 0;
-
-        for (int i : lengths) { total += i; }
-
-        return total;
-    }
-
+    /* Each tunnel will need to be traversed twice, once on the way out and
+    then again on the way back.  However, if we save the longest tunnel for
+    last, then the power can go back on before we return along the longest
+    path.  Therefore the estimate time out is 2 * the sum of all the lenghts,
+     minus the longest length.
+     */
     public int estimateTimeOut(int[] fromJunction, int[] toJunction,
                                int[] ductLength) {
 
-        int sumOfLengths = getSumOfLengths(ductLength);
+        int sumOfLengths = 0;
+        for (int i : ductLength) sumOfLengths += i;
+
         int longestLength = getLongestLength(fromJunction, toJunction,
                 ductLength);
 
         return (2 * sumOfLengths) - longestLength;
     }
 
+    /*
+    Creates a graph representing the tunnels and junctions.  Then calls
+    getMaxLength() to determine the longest path.
+     */
     private int getLongestLength(int[] from, int[] to, int[] length) {
 
-        EdgeWeightedDigraph graph = new EdgeWeightedDigraph(50);
+        EdgeWeightedDigraph graph = new EdgeWeightedDigraph(MAX_JUNCTIONS);
 
         for (int i = 0; i < from.length; i++) {
             graph.addEdge(new DirectedEdge(from[i], to[i], length[i]));
@@ -51,6 +46,10 @@ public class PowerOutage {
         return getMaxLength(graph, 0);
     }
 
+    /*
+    Uses recursion to return the length of the longest path beginning at the
+    source.
+     */
     private int getMaxLength(EdgeWeightedDigraph graph, int source) {
 
         int max = 0;
@@ -63,6 +62,9 @@ public class PowerOutage {
         return max;
     }
 
+    /*
+    Holds a to and from junction, and the weight(distance) between them
+     */
     class DirectedEdge {
 
         final int from;
@@ -78,6 +80,9 @@ public class PowerOutage {
         }
     }
 
+    /*
+    A slimmed down Edge-Weighted Directed Graph.
+     */
     class EdgeWeightedDigraph {
 
         private final ArrayList[] adjLists;
