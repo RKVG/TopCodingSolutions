@@ -5,7 +5,32 @@ public class NumberGuessing {
     public static Set<Integer> getPossibleGuesses(int range, int[] guesses,
                                                   int numLeft) {
 
-        return null;
+        Set<Integer> possibleGuesses = new HashSet<Integer>();
+
+        if (numLeft == 0)  {
+            if (guesses.length == 0)  {
+                possibleGuesses.add(1);
+                return possibleGuesses;
+            } else  {
+                if (guesses[0] > 1)  {
+                    possibleGuesses.add(guesses[0] - 1);
+                }
+
+                for (int g : guesses)  {
+                    if (g < range) possibleGuesses.add(g + 1);
+                }
+            }
+        } else {
+            for (int i=1; i<=range; i++)  {
+                possibleGuesses.add(i);
+            }
+        }
+
+        for (int i : guesses)  {
+            possibleGuesses.remove(i);
+        }
+
+        return possibleGuesses;
     }
 
     /*
@@ -15,7 +40,7 @@ public class NumberGuessing {
     public GuessAndResult makeBestGuess(int range, int[] guesses,
                                         int guess, int numLeft) {
 
-        if (numLeft > 0) { return new GuessAndResult(guesses, guess); }
+        if (numLeft < 0) { return new GuessAndResult(guesses, guess); }
 
         int maxYield = 0;
         int maxYieldingGuess = 0;
@@ -36,7 +61,8 @@ public class NumberGuessing {
                     ((yield == maxYield) &&
                             (possibleGuess < maxYieldingGuess))) {
                 maxYield = yield;
-                maxYieldingArray = Arrays.copyOf(afterTry, afterTry.length);
+//                maxYieldingArray = Arrays.copyOf(afterTry, afterTry.length);
+                maxYieldingArray = afterTry;
                 maxYieldingGuess = possibleGuess;
             }
         }
@@ -79,11 +105,7 @@ public class NumberGuessing {
         int maxYield = 0;
         int maxYieldingGuess = -1;
 
-        for (int i=1; i<range; i++) {
-
-            for (int j=0; j<guesses.length; j++)  {
-                if (guesses[j] == i) continue;
-            }
+        for (int i : getPossibleGuesses(range, guesses, numLeft))  {
 
             int[] beforeTry = Arrays.copyOf(guesses, guesses.length + 1);
             beforeTry[beforeTry.length - 1] = i;
@@ -104,9 +126,9 @@ public class NumberGuessing {
 
     private class GuessAndResult {
 
-        int[] result;
+        final int[] result;
 
-        int guess;
+        final int guess;
 
         GuessAndResult(int[] result, int guess) {
             this.result = result;
