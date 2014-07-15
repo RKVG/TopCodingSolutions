@@ -5,6 +5,7 @@ public class NumberGuessing {
     public static Set<Integer> getPossibleGuesses(int range, int[] guesses,
                                                   int numLeft) {
 
+        return null;
     }
 
     /*
