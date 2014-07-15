@@ -35,10 +35,10 @@ Determine which digits in a number evenly divide the number.
 26:         for (char c : digits) {
 27: 
 28:             // Convert the character into an int
-29:             int i = Integer.valueOf(c);
+29:             int i = Integer.valueOf(c) - '0';
 30: 
 31:             // Don't try to divide by 0.
-32:             if (i == 0) return 0;
+32:             if (i == 0) { continue };
 33: 
 34:             if ((number % i) == 0) {
 35:                 count++;

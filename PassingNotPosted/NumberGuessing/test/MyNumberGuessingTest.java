@@ -1,4 +1,3 @@
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Set;
@@ -11,7 +10,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class MyNumberGuessingTest {
 
-    @Ignore
     @Test
     public void test_best_0() {
         int[] guesses = new int[]{1, 500};
@@ -107,7 +105,7 @@ public class MyNumberGuessingTest {
     public void test_getPossibleGuesses_1()  {
         int[] guesses = new int[] {};
         Set<Integer> possibleGuesses = NumberGuessing.getPossibleGuesses
-                (1000, guesses, 2);
+                (1000, guesses, false);
         assertTrue(possibleGuesses.contains(750));
     }
 }

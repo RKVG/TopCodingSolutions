@@ -16,7 +16,8 @@ public class NumberGuessingTest {
 		int range = 1000000;
 		int[] guesses = new int[] {};
 		int numLeft = 1;
-		assertEquals(500000, new NumberGuessing().bestGuess(range, guesses, numLeft));
+		assertEquals(500000, new NumberGuessing().bestGuess(range, guesses,
+                numLeft));
 	}
 
 	@Test
@@ -34,4 +35,5 @@ public class NumberGuessingTest {
 		int numLeft = 1;
 		assertEquals(26, new NumberGuessing().bestGuess(range, guesses, numLeft));
 	}
+
 }

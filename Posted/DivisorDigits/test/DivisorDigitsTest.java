@@ -27,4 +27,10 @@ public class DivisorDigitsTest {
         int number = 730000000;
         assertEquals(0, new DivisorDigits().howMany(number));
     }
+
+    @Test
+    public void test4() {
+        int number = 102938475;
+        assertEquals(3, new DivisorDigits().howMany(number));
+    }
 }

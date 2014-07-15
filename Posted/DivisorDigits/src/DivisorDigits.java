@@ -26,10 +26,10 @@ public class DivisorDigits {
         for (char c : digits) {
 
             // Convert the character into an int
-            int i = (int) c;
+            int i = Integer.valueOf(c) - '0';
 
             // Don't try to divide by 0.
-            if (i == 0) { return 0; }
+            if (i == 0) { continue; }
 
             if ((number % i) == 0) {
                 count++;
