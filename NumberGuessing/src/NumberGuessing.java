@@ -1,99 +1,118 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class NumberGuessing {
 
-    public static List<Integer> getPossibleGuesses(int range, int[] guesses,
-                                                   int numLeft) {
+    public static Set<Integer> getPossibleGuesses(int range, int[] guesses,
+                                                  int numLeft) {
 
-        List<Integer> possible = new ArrayList<>();
+    }
 
-        if (numLeft > 0) {
-            possible.add(1);
+    /*
+    Makes the best guess possible, and contains a new array of guesses that
+    contains that best guess.
+     */
+    public GuessAndResult makeBestGuess(int range, int[] guesses,
+                                        int guess, int numLeft) {
 
-            if (guesses.length > 0) {
-                possible.add(guesses[0] - 1);
-            }
+        if (numLeft > 0) { return new GuessAndResult(guesses, guess); }
 
-            for (int i : guesses) {
-                if ((i + 1) <= range) {
-                    possible.add(i + 1);
-                }
-            }
-        } else {
+        int maxYield = 0;
+        int maxYieldingGuess = 0;
+        int[] maxYieldingArray = guesses;
 
-            if (guesses.length > 0) {
-                possible.add(guesses[0] - 1);
-                possible.add(guesses[guesses.length - 1] + 1);
-            }
+        Set<Integer> possibleGuesses = getPossibleGuesses(range, guesses,
+                numLeft);
 
-            for (int i = 1; i < guesses.length; i++) {
-                possible.add((guesses[i - 1] + guesses[i]) / 2);
+        for (int possibleGuess : possibleGuesses) {
+            int[] beforeTry = Arrays.copyOf(guesses, guesses.length + 1);
+            beforeTry[beforeTry.length - 1] = possibleGuess;
+            Arrays.sort(beforeTry);
+            int[] afterTry = makeBestGuess(range, beforeTry,
+                    possibleGuess, numLeft - 1).result;
+            int yield = calculateYield(possibleGuess, afterTry, range);
+
+            if ((yield > maxYield) ||
+                    ((yield == maxYield) &&
+                            (possibleGuess < maxYieldingGuess))) {
+                maxYield = yield;
+                maxYieldingArray = Arrays.copyOf(afterTry, afterTry.length);
+                maxYieldingGuess = possibleGuess;
             }
         }
+        return new GuessAndResult(maxYieldingArray, maxYieldingGuess);
+    }
 
-        Collections.sort(possible);
-        return possible;
+    public int calculateYield(int guess, int[] guesses, int range) {
+
+        int yield;
+
+        int i = 0;
+        while (guesses[i] != guess) {
+            i++;
+        }
+
+        int hi;
+        int lo;
+
+        // This guess is the lowest.
+        if (i == 0) {
+            yield = guess + ((guesses[i + 1] - guess - 1) / 2);
+
+            // This guess is the highest.
+        } else if (i == (guesses.length - 1)) {
+            yield = (range - guess + 1) + ((guess - guesses[i - 1] - 1) / 2);
+
+            // Somewhere in between.
+        } else {
+            yield = (((guesses[i + 1] - guess - 1) / 2)
+                    + 1 +
+                    ((guess - guesses[i - 1] - 1) / 2));
+        }
+
+        return yield;
     }
 
     public int bestGuess(int range, int[] guesses, int numLeft) {
-
-        int[] afterGuesses = makeBestGuess(range, guesses, numLeft);
-
-        for (int i = 0; i < guesses.length; i++) {
-            if (afterGuesses[i] != guesses[i]) { return afterGuesses[i]; }
-        }
-
-        return afterGuesses[afterGuesses.length - 1];
-    }
-
-    private int calcYield(int[] guesses, int guess, int range) {
-
-        int lowerNeighbor = 0;
-        int higherNeighbor;
-
-        int g = 0;
-        while (guesses[g] < guess)  {
-            lowerNeighbor = guesses[g];
-            g++;
-        }
-        if (g == guesses.length)  {
-            higherNeighbor = range;
-        } else {
-            higherNeighbor = guesses[g];
-        }
-
-        return ((higherNeighbor - lowerNeighbor) + 1) / 2;
-
-
-    }
-
-    public int[] makeBestGuess(int range, int[] guesses, int numLeft) {
+        Arrays.sort(guesses);
 
         int maxYield = 0;
-        int maxYieldGuess = 0;
+        int maxYieldingGuess = -1;
 
-        if (numLeft < 0) { return guesses; }
+        for (int i=1; i<range; i++) {
 
-        for (Integer guess : getPossibleGuesses(range, guesses, numLeft)) {
-            int[] tryGuess = Arrays.copyOf(guesses, guesses.length + 1);
-            tryGuess[tryGuess.length - 1] = guess;
-            Arrays.sort(tryGuess);
-            tryGuess = makeBestGuess(range, tryGuess, numLeft - 1);
-            int yield = calcYield(tryGuess, guess, range);
+            for (int j=0; j<guesses.length; j++)  {
+                if (guesses[j] == i) continue;
+            }
 
-            if (yield > maxYield) {
+            int[] beforeTry = Arrays.copyOf(guesses, guesses.length + 1);
+            beforeTry[beforeTry.length - 1] = i;
+            Arrays.sort(beforeTry);
+            int[] afterTry = makeBestGuess(range, beforeTry,
+                    i, numLeft-1).result;
+            int yield = calculateYield(i, afterTry, range);
+
+            if ((yield > maxYield) ||
+                    ((yield == maxYield) &&
+                            (i < maxYieldingGuess))) {
                 maxYield = yield;
-                maxYieldGuess = guess;
+                maxYieldingGuess = i;
             }
         }
+        return maxYieldingGuess;
+    }
 
-        int[] tryGuess = Arrays.copyOf(guesses, guesses.length + 1);
-        tryGuess[tryGuess.length - 1] = maxYieldGuess;
-        Arrays.sort(tryGuess);
-        tryGuess = makeBestGuess(range, tryGuess, numLeft - 1);
-        return tryGuess;
+    private class GuessAndResult {
+
+        int[] result;
+
+        int guess;
+
+        GuessAndResult(int[] result, int guess) {
+            this.result = result;
+            this.guess = guess;
+        }
     }
 }
+
+
+
