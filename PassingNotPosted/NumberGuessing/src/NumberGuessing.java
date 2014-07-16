@@ -1,3 +1,12 @@
+/*
+TopCoder
+Single Round Match: 148
+Division: 1
+Level: 3
+Points: 1100
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1747
+ */
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
