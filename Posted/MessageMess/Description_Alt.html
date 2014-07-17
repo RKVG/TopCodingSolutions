@@ -1,0 +1,175 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1331">SRM
+    149 DIV 1 - 500 Points</a>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>
+    Given a dictionary determine the possible word combinations that may be
+    in a message.
+</p>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    001: /*
+    002: TopCoder
+    003: Single Round Match: 149
+    004: Division: 1
+    005: Level: 2
+    006: Points: 500
+    007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1331.
+    008:  */
+    009:
+    010: import java.util.HashSet;
+    011: import java.util.Set;
+    012:
+    013: public class MessageMess2 {
+    014:
+    015:     public String restore(String[] dictionary, String message) {
+    016:
+    017:         LetterNode dictionaryRoot = createDictionaryTree(dictionary);
+    018:
+    019:         Set<String> wordsFound = findWords(dictionaryRoot, message);
+    020:
+    021:         if ((wordsFound == null) || (wordsFound.size() < 1)) {
+    022:             return "IMPOSSIBLE!";
+    023:         } else if (wordsFound.size() > 1) {
+    024:             return "AMBIGUOUS!";
+    025:         } else {
+    026:             for (String s : wordsFound) {
+    027:                 return s;
+    028:             }
+    029:         }
+    030:
+    031:         return null;
+    032:     }
+    033:
+    034:     /*
+    035:      * Creates a tree of Letter Nodes.  Each node contains a Map of letters
+    036:      * with pointers to additional LetterNodes.  Each word in the dictionary
+    037:      * can be created by following a path from the root to a leaf.
+    038:      */
+    039:     private LetterNode createDictionaryTree(String[] words) {
+    040:
+    041:         LetterNode root = new LetterNode();
+    042:
+    043:         for (String s : words) {
+    044:
+    045:             // Start each new word from the root.
+    046:             LetterNode n = root;
+    047:
+    048:             /*
+    049:              * If the current letter node does not yet have any followers of
+    050:              * the letter 'c', then create a new node below here,
+    051:              * and add it to the followers map with 'c' as the key.
+    052:              */
+    053:             for (Character c : s.toCharArray()) {
+    054:                 if (n.getFollower(c) == null) {
+    055:                     n.setFollower(c, new LetterNode());
+    056:                 }
+    057:
+    058:                 // Otherwise, just following the existing node.
+    059:                 n = n.getFollower(c);
+    060:             }
+    061:
+    062:             // If we're at the end of a word, mark it.
+    063:             n.isEndPoint = true;
+    064:         }
+    065:
+    066:         return root;
+    067:     }
+    068:
+    069:     /*
+    070:      * Attemps to find words in the dictionary by following their path
+    071:      * through the dictionary tree.
+    072:      */
+    073:     private Set<String> findWords(LetterNode root, String message) {
+    074:
+    075:         Set<String> wordsFound = new HashSet<>();
+    076:         LetterNode n = root;
+    077:
+    078:         char[] characters = message.toCharArray();
+    079:
+    080:         for (int i = 0; i < characters.length; i++) {
+    081:
+    082:             /*
+    083:              * If the LetterNode is designated as an EndPoint then we've
+    084:              * reached the end of a word.  Recursively call findWords with
+    085:              * the remainder of the message.  Also, continue down the tree at
+    086:              * we may be able to match a longer word instead.
+    087:              */
+    088:             if (n.isEndPoint) {
+    089:                 String newMessage = message.substring(i);
+    090:
+    091:                 /*
+    092:                  * Get all the words that could be formed by the remainder of
+    093:                  * the message, and add them on to the end of this message.
+    094:                  */
+    095:                 Set<String> s2 = findWords(root, newMessage);
+    096:
+    097:                 if (s2 != null) {
+    098:                     for (String s : s2) {
+    099:                         wordsFound.add(message.substring(0, i) + " " + s);
+    100:                     }
+    101:                 }
+    102:             }
+    103:
+    104:             // If we're able to follow the dictionary tree deeper, than do so.
+    105:             if (n.getFollower(characters[i]) == null) {
+    106:                 return wordsFound;
+    107:             }
+    108:
+    109:             n = n.getFollower(characters[i]);
+    110:         }
+    111:
+    112:         if (n.isEndPoint) {
+    113:             wordsFound.add(message);
+    114:             return wordsFound;
+    115:         }
+    116:
+    117:         return null;
+    118:     }
+    119:
+    120:     /*
+    121:      * A node in the dictionary tree.  Notes wehter it marks the end of a
+    122:      * word, and also contains all the letters that follow to form longer
+    123:      * words.
+    124:      */
+    125:     class LetterNode {
+    126:
+    127:         boolean isEndPoint = false;
+    128:
+    129:         LetterNode[] followers = new LetterNode[26];
+    130:
+    131:         void setFollower(Character c, LetterNode n) {
+    132:             followers[c - 'A'] = n;
+    133:         }
+    134:
+    135:         LetterNode getFollower(Character c) {
+    136:             return followers[c - 'A'];
+    137:         }
+    138:     }
+    139: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+<p>
+    An alternative solution to MessageMess.
+</p>
+
+<p>
+    This runs quite a bit slower with some inputs.
+</p>
+
+<p>
+    <a href="/srm/div1/149/500">Back to the original</a>
+</p>
+
+</div>

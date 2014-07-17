@@ -37,7 +37,7 @@
 +   D2/1    FormatAmt
 +   D2/2 D1/1    BigBurger
 +   D2/3    Pricing
--   D1/2    MessageMess
++   D1/2    MessageMess
 -   D1/3    GForce
 
 148:
@@ -45,7 +45,7 @@ P   D2/1    DivDigits
 P   D2/2    CeyKaps
 P   D2/3 D1/2   MNS
 +   D1/1    CircleGame
-+   D1/3    NumberGuessing
+P   D1/3    NumberGuessing
 
 147:
 P   D2/1    CCipher
@@ -69,11 +69,11 @@ P   D1/1    Bonuses
 P   D1/3    HillHike
 
 144:
-P   D2/1    Time
+P   D2/1        Time
 P   D2/2 D1/1   BinaryCode
-P   D2/3    PowerOutage
-P   D1/2    Lottery
-X   D1/3    PenLift
+P   D2/3        PowerOutage
+P   D1/2        Lottery
+X   D1/3        PenLift
 
 
 

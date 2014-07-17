@@ -10,7 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/Posted/CCipher/CCipher.iml" filepath="$PROJECT_DIR$/Posted/CCipher/CCipher.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/CeyKaps/CeyKaps.iml" filepath="$PROJECT_DIR$/Posted/CeyKaps/CeyKaps.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/CircleGame/CircleGame.iml" filepath="$PROJECT_DIR$/PassingNotPosted/CircleGame/CircleGame.iml" />
-      <module fileurl="file://$PROJECT_DIR$/CodeChef/CodeChef.iml" filepath="$PROJECT_DIR$/CodeChef/CodeChef.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/CodeChef/CodeChef.iml" filepath="$PROJECT_DIR$/Posted/CodeChef/CodeChef.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/DivisorDigits/DivisorDigits.iml" filepath="$PROJECT_DIR$/Posted/DivisorDigits/DivisorDigits.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/Dragons/Dragons.iml" filepath="$PROJECT_DIR$/Posted/Dragons/Dragons.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/ExerciseMachine/ExerciseMachine.iml" filepath="$PROJECT_DIR$/Posted/ExerciseMachine/ExerciseMachine.iml" />
@@ -27,14 +27,15 @@
       <module fileurl="file://$PROJECT_DIR$/Posted/Lottery/Lottery.iml" filepath="$PROJECT_DIR$/Posted/Lottery/Lottery.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/MNS/MNS.iml" filepath="$PROJECT_DIR$/Posted/MNS/MNS.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Masterbrain/Masterbrain.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Masterbrain/Masterbrain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/MessageMess/MessageMess.iml" filepath="$PROJECT_DIR$/Posted/MessageMess/MessageMess.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/MostProfitable/MostProfitable.iml" filepath="$PROJECT_DIR$/PassingNotPosted/MostProfitable/MostProfitable.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/NumberGuessing/NumberGuessing.iml" filepath="$PROJECT_DIR$/PassingNotPosted/NumberGuessing/NumberGuessing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Posted/NumberGuessing/NumberGuessing.iml" filepath="$PROJECT_DIR$/Posted/NumberGuessing/NumberGuessing.iml" />
       <module fileurl="file://$PROJECT_DIR$/Unsolved/PenLift/PenLift.iml" filepath="$PROJECT_DIR$/Unsolved/PenLift/PenLift.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/PeopleCircle/PeopleCircle.iml" filepath="$PROJECT_DIR$/Posted/PeopleCircle/PeopleCircle.iml" group="Posted" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/PowerOutage/PowerOutage.iml" filepath="$PROJECT_DIR$/PassingNotPosted/PowerOutage/PowerOutage.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/PrefixCode/PrefixCode.iml" filepath="$PROJECT_DIR$/PassingNotPosted/PrefixCode/PrefixCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Pricing/Pricing.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Pricing/Pricing.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ProfitCalculator/ProfitCalculator.iml" filepath="$PROJECT_DIR$/ProfitCalculator/ProfitCalculator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/ProfitCalculator/ProfitCalculator.iml" filepath="$PROJECT_DIR$/PassingNotPosted/ProfitCalculator/ProfitCalculator.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/RectangularGrid/RectangularGrid.iml" filepath="$PROJECT_DIR$/Posted/RectangularGrid/RectangularGrid.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/Roundabout/Roundabout.iml" filepath="$PROJECT_DIR$/Posted/Roundabout/Roundabout.iml" />
       <module fileurl="file://$PROJECT_DIR$/Posted/Time/Time.iml" filepath="$PROJECT_DIR$/Posted/Time/Time.iml" />

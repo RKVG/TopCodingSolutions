@@ -1,0 +1,173 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1331">SRM
+    149 DIV 1 - 500 Points</a>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>
+    Given a dictionary determine the possible word combinations that may be
+    in a message.
+</p>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    01: /*
+    02: TopCoder
+    03: Single Round Match: 149
+    04: Division: 1
+    05: Level: 2
+    06: Points: 500
+    07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1331
+    08:  */
+    09:
+    10: public class MessageMess {
+    11:
+    12:     public String restore(String[] dictionary, String message) {
+    13:
+    14:         /*
+    15:          * Holds the number of ways the message can be recreated up to a given
+    16:          * point.  numOfSolutions[0] = 1, represents the one starting state.
+    17:          * numOfSolutions[x] is the number of ways the substring beginning
+    18:          * with the first x characters of the message can be reached.
+    19:          */
+    20:         int[] numOfSolutions = new int[message.length() + 1];
+    21:         numOfSolutions[0] = 1;
+    22:
+    23:         /*
+    24:          *  Holds the restored string from the message recreated up to a
+    25:          *  given point.
+    26:          *  If no solutions exists to get to that character x,
+    27:          *  then solutions[x] holds IMPOSSIBLE!.
+    28:          *  If two or more solutions are found that lead to character x,
+    29:          *  then solutions[x] holds "AMBIGUOUS!".
+    30:          */
+    31:         String[] solutions = new String[message.length() + 1];
+    32:
+    33:         // Initialize the array.
+    34:         solutions[0] = "";
+    35:         for (int i = 1; i < solutions.length; i++) {
+    36:             solutions[i] = "IMPOSSIBLE!";
+    37:         }
+    38:
+    39:         // Loop through each position in the message.
+    40:         for (int position = 0; position < message.length(); position++) {
+    41:
+    42:             // Only process if positon can be reached once unambiguously.
+    43:             if (numOfSolutions[position] == 1) {
+    44:
+    45:                 for (String word : dictionary) {
+    46:
+    47:                     // The size the message would be if word were tacked on.
+    48:                     int newSize = position + word.length();
+    49:
+    50:                     /*
+    51:                      * If adding this dictionary word to our current
+    52:                      * position would take us beyond the length of the
+    53:                      * message; or, the dictionary word does not match the
+    54:                      * next sequence in the message, then skip it.
+    55:                      */
+    56:                     if ((newSize <= message.length()) &&
+    57:                             (word.equals(message.substring(position,
+    58:                                     newSize)))) {
+    59:
+    60:                         /*
+    61:                          * Set the number of ways to reach the new size to
+    62:                          * either 1 or 2 - depending on if it was 0 or 1
+    63:                          * before.  If it's now 2, mark it as ambiguous.
+    64:                          */
+    65:
+    66:                         if (numOfSolutions[newSize] == 0) {
+    67:                             numOfSolutions[newSize] = 1;
+    68:                             solutions[newSize] = solutions[position] + " " +
+    69:                                     word;
+    70:                         } else {
+    71:                             numOfSolutions[newSize] = 2;
+    72:                             solutions[newSize] = "AMBIGUOUS!";
+    73:                         }
+    74:                     }
+    75:                 }
+    76:             }
+    77:         }
+    78:
+    79:         return solutions[solutions.length - 1].trim();
+    80:     }
+    81: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+<p>
+    In my first attempt at this problem, I used a solution involving tries.
+    Everything went smoothly, it passed all my tests on the first
+    attempt. I submitted to the TopCoder arena, and it passed all their tests -
+    except test #27. There's a 2 second time limit, and my code took about two
+    and a half minutes to pass. Time to scrap the code, and use a better
+    algorithm. If your interested, code for the first attempt is available
+    <a href="https://www.topcodingsolutions.net/srm/div1/149/500alt">here.</a>
+</p>
+
+<p>
+    The second attempt uses dynamic programming and is a huge
+    improvement performance wise. Test #27 now runs in 0.008 seconds!
+</p>
+
+<p>
+    It begins by initializing two arrays: numOfSolutions[] and solutions[].
+    numOfSolutions[x] contains the number of ways that position x in the
+    message can reached starting from the beginning. So, if my dictionary
+    contains {"H", "I", "HI"}, and the message is "HIT" - there are two ways
+    to arrive at the letter T. Either start with H, then use I; or just
+    start with HI.
+    The goal is numOfSolutions[numOfSolutions.length - 1] = 1. That is - there
+    is one, and only one, way to reach the end of the message.
+</p>
+
+<p>
+    The second array solutions[] contains the decoded message that
+    led up to that point. Each position is initialized to "IMPOSSIBLE!".
+    The first time a position is reached, solutions[x] gets set to the
+    decoded message at that point. If the position is reached again via
+    another path, then solutions[x] is set to "AMBIGUOUS!".
+</p>
+
+<p>
+    Then, it's just a matter of looping through each character in the
+    message. If there was no way to reach that character, or if that
+    character has been reach by more than one path, then we'll skip
+    it - leaving it as either IMPOSSIBLE! or AMBIGUOUS!.
+</p>
+
+<p>
+    If there is one path to that character, then we try appending each
+    dictionary word to our current position. If adding the dictionary word does
+    not take us beyond the end of the message, and it matches the next
+    sequence of characters, then we'll mark the end of the new combined message
+    as having 1 solution if it had 0 before, or 2 if it had 1 before.
+    There's no need to keep incrementing the solution count beyond 2. If the
+    solution count becomes 2, the solution is marked as AMBIGUOS!.
+</p>
+
+<p>
+    Upon reaching the return statement, the solutions array will contain
+    either IMPOSSIBLE!, AMBIGUOUS!, or a valid solution for every substring of
+    the message that starts at the beginning.  So, it's just a matter of
+    returning the last value, and not forgetting to trim off the final space.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
+        feedback you may have.</p>
+
+    <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-149-div-1-500-points.html"
+                                                target="_blank">here</a>.</p>
+
+    <p>For this, and other TopCoder solutions, please visit <a
+            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
+    </p>
+</div>
