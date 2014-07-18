@@ -1,3 +1,12 @@
+/*
+TopCoder
+Single Round Match: 146
+Division: 1
+Level: 2
+Points: 600
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1541
+ */
+
 public class Masterbrain {
 
     /*
@@ -6,8 +15,7 @@ public class Masterbrain {
     Loop through each of the guess/result pairs for the solution checking to
     see if one, and only one, does not match up.
      */
-    private static boolean goodSolution(String solution,
-                                        String[] guesses,
+    private static boolean goodSolution(String solution, String[] guesses,
                                         String[] results) {
 
         boolean lied = false;
@@ -42,42 +50,48 @@ public class Masterbrain {
         boolean[] usedWhite = new boolean[guess.length()];
 
         // Check if numBlack matches
-        int correctPosition = 0;
+        int numInCorrectPosition = 0;
+
         for (int i = 0; i < guess.length(); i++) {
             if (guess.charAt(i) == solution.charAt(i)) {
-                correctPosition++;
+                numInCorrectPosition++;
                 usedBlack[i] = true;
             }
         }
 
         // If numBlack does not match, no point in checking the white pegs.
-        if (correctPosition != numBlack) { return false; }
+        if (numInCorrectPosition != numBlack) {
+            return false;
+        }
 
         // Check if numWhite matches
-        int outOfPosition = 0;
+        int numOutOfPositon = 0;
         for (int i = 0; i < guess.length(); i++) {
 
             /*
             If we're looking at a position that has already been assigned a
             black peg, then continue.
              */
-            if (usedBlack[i]) { continue; }
+            if (usedBlack[i]) {
+                continue;
+            }
 
             for (int j = 0; j < guess.length(); j++) {
 
                 // Again, skip over assigned pegs.
-                if (usedBlack[j]) { continue; }
+                if (usedBlack[j]) {
+                    continue;
+                }
 
-                if ((guess.charAt(i) == solution.charAt(j)) &&
-                        !usedWhite[j]) {
-                    outOfPosition++;
+                if ((guess.charAt(i) == solution.charAt(j)) && !usedWhite[j]) {
+                    numOutOfPositon++;
                     usedWhite[j] = true;
                     break;  // Skip to next i, not j.
                 }
             }
         }
 
-        return outOfPosition == numWhite;
+        return numOutOfPositon == numWhite;
     }
 
     public int possibleSecrets(String[] guesses, String[] results) {

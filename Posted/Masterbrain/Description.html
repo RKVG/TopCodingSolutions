@@ -1,0 +1,188 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Problem:
+</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1541">
+    SRM 146 DIV 1 - 600 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Overview:
+</div>
+<p>
+    Simulate a classic board game with a slight twist.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Java Source:
+</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    001: /*
+    002: TopCoder
+    003: Single Round Match: 146
+    004: Division: 1
+    005: Level: 2
+    006: Points: 600
+    007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1541
+    008:  */
+    009:
+    010: public class Masterbrain {
+    011:
+    012:     /*
+    013:     A good solution is one in which all the results match the corresponding
+    014:     guesses - except for 1.
+    015:     Loop through each of the guess/result pairs for the solution checking to
+    016:     see if one, and only one, does not match up.
+    017:      */
+    018:     private static boolean goodSolution(String solution, String[] guesses,
+    019:                                         String[] results) {
+    020:
+    021:         boolean lied = false;
+    022:
+    023:         for (int i = 0; i < guesses.length; i++) {
+    024:
+    025:             // Always a single digit, and always in the same spot.
+    026:             int numBlack = Integer.parseInt("" + results[i].charAt(0));
+    027:             int numWhite = Integer.parseInt("" + results[i].charAt(3));
+    028:
+    029:             if (!resultMatches(guesses[i], solution, numBlack, numWhite)) {
+    030:                 if (lied) {
+    031:                     return false;  // That's two lies - return false.
+    032:                 } else {
+    033:                     lied = true; // First lie.
+    034:                 }
+    035:             }
+    036:         }
+    037:
+    038:         return lied;
+    039:     }
+    040:
+    041:     /*
+    042:     Compares the guess with the solutions, and returns whether or not the
+    043:     number of black and white pegs matches up.
+    044:      */
+    045:     private static boolean resultMatches(String guess, String solution,
+    046:                                          int numBlack, int numWhite) {
+    047:
+    048:         // Used to keep tracks of which pegs have already been assigned.
+    049:         boolean[] usedBlack = new boolean[guess.length()];
+    050:         boolean[] usedWhite = new boolean[guess.length()];
+    051:
+    052:         // Check if numBlack matches
+    053:         int numInCorrectPosition = 0;
+    054:
+    055:         for (int i = 0; i < guess.length(); i++) {
+    056:             if (guess.charAt(i) == solution.charAt(i)) {
+    057:                 numInCorrectPosition++;
+    058:                 usedBlack[i] = true;
+    059:             }
+    060:         }
+    061:
+    062:         // If numBlack does not match, no point in checking the white pegs.
+    063:         if (numInCorrectPosition != numBlack) {
+    064:             return false;
+    065:         }
+    066:
+    067:         // Check if numWhite matches
+    068:         int numOutOfPositon = 0;
+    069:         for (int i = 0; i < guess.length(); i++) {
+    070:
+    071:             /*
+    072:             If we're looking at a position that has already been assigned a
+    073:             black peg, then continue.
+    074:              */
+    075:             if (usedBlack[i]) {
+    076:                 continue;
+    077:             }
+    078:
+    079:             for (int j = 0; j < guess.length(); j++) {
+    080:
+    081:                 // Again, skip over assigned pegs.
+    082:                 if (usedBlack[j]) {
+    083:                     continue;
+    084:                 }
+    085:
+    086:                 if ((guess.charAt(i) == solution.charAt(j)) && !usedWhite[j]) {
+    087:                     numOutOfPositon++;
+    088:                     usedWhite[j] = true;
+    089:                     break;  // Skip to next i, not j.
+    090:                 }
+    091:             }
+    092:         }
+    093:
+    094:         return numOutOfPositon == numWhite;
+    095:     }
+    096:
+    097:     public int possibleSecrets(String[] guesses, String[] results) {
+    098:
+    099:         int count = 0;
+    100:
+    101:         /*
+    102:         Generate all possible solutions.  For each solution,
+    103:         if it meets the criteria of a good solution, then increment count.
+    104:         When done, return count.
+    105:          */
+    106:         for (char h = '1'; h < '8'; h++) {
+    107:             for (char i = '1'; i < '8'; i++) {
+    108:                 for (char j = '1'; j < '8'; j++) {
+    109:                     for (char k = '1'; k < '8'; k++) {
+    110:                         String solution = "" + h + i + j + k;
+    111:                         if (goodSolution(solution, guesses, results)) {
+    112:                             count++;
+    113:                         }
+    114:                     }
+    115:                 }
+    116:             }
+    117:         }
+    118:
+    119:         return count;
+    120:     }
+    121: }
+
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
+    Notes:
+</div>
+
+<p>
+    possibleSecrets() generates all possible secret codes. There's only 7 * 7 *
+    7 * 7 = 2,401 of them, so it's not that many. For each of the possible
+    code, it calls goodSolution() to see if the solution, guesses, and
+    results agree. If so, the count is increased. When done, count will contain
+    the number of solutions that satisfy the game's criteria.
+</p>
+
+<p>
+    goodSolution() loops through all the guess/response pairs for the given
+    solution, and determines if they satisfy the rules of the game. That is,
+    one, and only one, result does not agree with the given guess and
+    solution. You might think that being able to lie once would make the game
+    much more difficult, but it doesn't. Initially, lied is set to false. The
+    first time a response doesn't match the guess, lied gets set to true. If
+    it happens again, then return false - this cannot be a good solution,
+    since there were two mis-matches. When done, return lied, which will be
+    true if one was found, and false if not.
+</p>
+
+<p>
+    The most difficult part of the problem is determining if the response
+    matches the guess for the given solution.  This is handled in
+    resultMatches().  First, it checks if the number of black pegs matches
+    the number of items in guess that in their correct position.
+    Then, it looks for items that match, but are out of place.  Just be
+    careful here to avoid double-counting.  The usedBlack[] and usedWhite[]
+    arrays are for keeping track of pegs that have already been accounted for.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
+        feedback you may have.</p>
+
+    <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-146-div-1-600-points.html"
+                                                target="_blank">here</a>.</p>
+
+    <p>For this, and other TopCoder solutions, please visit <a
+            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
+    </p>
+</div>
