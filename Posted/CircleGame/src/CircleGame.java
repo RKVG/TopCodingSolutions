@@ -12,7 +12,7 @@ public class CircleGame {
     private static final int REMOVED = -1;
 
     /*
-    Given an index into deck, returns the next card that hasn't been removed.
+      Given an index into deck, returns the next card that hasn't been removed.
       Handles looping around the end of the array by using the mod operator.
       If we return to the given index without finding a valid card,
       then return -1.
