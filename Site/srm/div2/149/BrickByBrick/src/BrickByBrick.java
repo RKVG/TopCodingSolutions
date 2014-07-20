@@ -1,13 +1,20 @@
-import java.util.*;
-import java.math.*;
+/*
+TopCoder
+Single Round Match: 150
+Division: 2
+Level: 3
+Points: 1100
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1751
+ */
 
-import static java.lang.Math.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BrickByBrick {
 
     /*
      * Prints out the current state of the board and ball.  The ball is
-     * represented as an '*'.
+     * represented as an 'o'.
      */
     private static void printState(int[][] board, Ball ball) {
 
@@ -16,7 +23,7 @@ public class BrickByBrick {
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
                 if ((y == ball.y) && (x == ball.x)) {
-                    System.out.print('*');
+                    System.out.print('o');
                 } else if (board[y][x] < 0) {
                     System.out.print('#');
                 } else {
@@ -101,7 +108,7 @@ public class BrickByBrick {
 
         /*
          * Holds a set of integers representing the state of the ball.  If we
-         * see the same state again, the declare an infinite loop.
+         * see the same state again, then declare an infinite loop.
          * The set is cleared whenever a brick is broken.
          */
         final Set<Integer> loopDetector = new HashSet<>();
@@ -124,19 +131,17 @@ public class BrickByBrick {
             if (board[ball.y][ball.x] == 0) {
                 continue;
 
-            // An indestructible brick, just change directions.
+                // An indestructible brick, just change directions.
             } else if (board[ball.y][ball.x] < 0) {
                 ball.changeDir();
 
-            // Found a brick to break
+                // Found a brick to break
             } else {
 
                 numBricks--;
                 if (numBricks == 0) { return moves; }
 
                 loopDetector.clear();  // Reset the infinite loop detector.
-
-                board[ball.y][ball.x] = 0;  // Set the position to empty
 
                 int brokenBrick_x;
                 int brokenBrick_y;
@@ -146,11 +151,11 @@ public class BrickByBrick {
                  * Use this to get the position of the middle of the brick.
                  */
                 if (ball.isSide) {
-                    brokenBrick_x = ball.x + ball.dirX;
+                    brokenBrick_x = ball.x + ball.deltaX;
                     brokenBrick_y = ball.y;
                 } else {
                     brokenBrick_x = ball.x;
-                    brokenBrick_y = ball.y + ball.dirY;
+                    brokenBrick_y = ball.y + ball.deltaY;
                 }
 
                 /*
@@ -180,37 +185,35 @@ public class BrickByBrick {
     private class Ball {
 
         int x;
-
         int y;
-
-        short dirX;
-
-        short dirY;
+        short deltaX;
+        short deltaY;
 
         /*
-         * Every move the ball alternates between passing through
-         * aTop/Bottom, or a Side */
+         * On every move, the ball alternates between passing through
+         * aTop/Bottom, or a Side
+         */
         boolean isSide = false;
 
         // Ball always starts in Top Left square going down and to the right.
         Ball() {
             this.x = 1;
             this.y = 0;
-            this.dirX = 1;
-            this.dirY = 1;
+            this.deltaX = 1;
+            this.deltaY = 1;
         }
 
         void move() {
-            x += dirX;
-            y += dirY;
+            x += deltaX;
+            y += deltaY;
             isSide = !isSide;
         }
 
         void changeDir() {
             if (isSide) {
-                dirX *= -1;
+                deltaX *= -1;
             } else {
-                dirY *= -1;
+                deltaY *= -1;
             }
         }
 
@@ -224,13 +227,14 @@ public class BrickByBrick {
             int state = 1;
             state = (state * 100) + x;
             state = (state * 100) + y;
-            state = (state * 10) + dirX + 1;
-            state = (state * 10) + dirY + 1;
+            state = (state * 10) + deltaX + 1;
+            state = (state * 10) + deltaY + 1;
             return state;
         }
 
         public String toString() {
-            return "X=" + x + " Y=" + y + " dirX=" + dirX + " dirY=" + dirY +
+            return "X=" + x + " Y=" + y + " deltaX=" + deltaX + " deltaY=" +
+                    deltaY +
                     " isSide=" + isSide + " state=" + getState();
         }
     }

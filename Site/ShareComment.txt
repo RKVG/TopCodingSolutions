@@ -1,0 +1,6 @@
+Solution in Java to TopCoder Single Round Match # - Division # - # Points - ClassName
+
+
+Solution in Java to TopCoder Single Round Match 150 - Division 2 - 1100 Points - BrickByBrick
+
+Simulates a BreakOut style game.  A ball bounces around eliminating bricks until there are none left, or an infinite loop is detected.
