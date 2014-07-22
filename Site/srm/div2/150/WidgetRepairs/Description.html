@@ -1,0 +1,83 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1346" target="_blank">SRM 150 DIV 2 - 250 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Determine the number of days it will take a repair shop to work through the incoming items.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 150
+04: Division: 2
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1346
+08:  */
+09:
+10: public class WidgetRepairs {
+11:
+12:     public int days(int[] arrivals, int numPerDay) {
+13:
+14:         // Holds the number of items available to work on.
+15:         int queue = 0;
+16:
+17:         // Counts the number of days worked.
+18:         int workingDays = 0;
+19:
+20:         // Loop through each of the days.
+21:         for (int arrival : arrivals) {
+22:
+23:             /*
+24:              * Increment the queue by the number of items that arrived that
+25:              * day.  If the queue is > 0, count it as a working day.
+26:              * */
+27:             queue += arrival;
+28:             if (queue > 0) { workingDays++; }
+29:
+30:             // Remove from the queue the number of items processed in a day.
+31:             queue -= numPerDay;
+32:             if (queue < 0) { queue = 0; } // But dont' go below 0.
+33:         }
+34:
+35:         // Work through the remaining items.
+36:         while (queue > 0) {
+37:             workingDays++;
+38:             queue -= numPerDay;
+39:         }
+40:
+41:         return workingDays;
+42:     }
+43: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  Each day, the repair shop takes in a number of items, and works through some other number of items.  This solution uses the variable queue to store any left over items that built up from previous days.
+</p>
+
+<p>
+  Any day that had items to work on (either from a previous day, or that arrived that day) are counted as a working day.
+</p>
+
+<p>
+  There's just two things to be careful of.  First, when subtracting off the number of items that are processed in a day, make sure the queue doesn't go below zero - Line 32.  And second, after items have stopped arriving, be sure to count the remaining days to work through the backlog - Lines 36-39
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-150-div-2-250-points-widgetrepairs.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+  <p>Also, for updates, requests, further discussion, etc. please join our google+ page at
+    <a href="http://google.com/+TopCodingSolutionsNet_GP">http://google.com/+TopCodingSolutionsNet_GP</a>
+  </p>
+
+</div>
