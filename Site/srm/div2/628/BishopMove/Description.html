@@ -1,0 +1,81 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=13280" target="_blank">SRM 628 DIV 2 - 250 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+Count the number of moves it takes for a bishop to move from one square to another on a chess board.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 628
+04: Division: 2
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=13280
+08:  */
+09: 
+10: public class BishopMove {
+11: 
+12: 	public int howManyMoves(int r1, int c1, int r2, int c2) {
+13: 
+14:         // Get the number of rows and columns that the bishop must move.
+15:         int rowDiff = Math.abs(r2 - r1);
+16:         int colDiff = Math.abs(c2 - c1);
+17: 
+18:         //  Check for no moves necessary
+19:         if ((rowDiff == 0) && (colDiff == 0)) return 0;
+20: 
+21:         /*
+22:          * If the number of rows that change is the same as the number of
+23:          * columns that change, we can reach it in one move.
+24:          */
+25:         if (rowDiff == colDiff) return 1;
+26: 
+27:         /*
+28:          * If the difference is not a multiple of 2 (i.e. up 1 row,
+29:          * and over 2) then the square cannot be reached.
+30:          */
+31:         if (((rowDiff - colDiff) % 2) != 0) return -1;
+32: 
+33:         // In any other case, the square can be reached in 2.
+34:         return 2;
+35: 
+36: 	}
+37: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+It helps to think in terms of the basic properties of how a Bishop moves.  The following three rules are all you need to solve this problem:
+</p>
+
+<ol>
+	<li>If the change in the number of rows from the starting square to the destination is the same as the change in the number of columns; then the Bishop can reach that square in 1 move.</li>
+	<li>From it's starting position, the Bishop can reach any square where the difference in rows minus the difference in columns is an even multiple of 2.</li>
+	<li>Any square that can be reached by the Bishop will take at most 2 moves.
+</ol>
+
+<p>
+	This logic is implemented on lines 25, 31, and 34, and respectively.
+</p>
+
+<p>
+	Add to that a quick check at line 19 to see if any move is even necessary, and you're done.
+</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-628-div-2-250-points-bishopmove.html" target="_blank">here</a>.</p>
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+<p>Also, for updates, requests, further discussion, etc. please join
+    our google+ page at
+    <a href="http://google.com/+TopCodingSolutionsNet_GP">
+        http://google.com/+TopCodingSolutionsNet_GP</a>
+</p>
+</div>
