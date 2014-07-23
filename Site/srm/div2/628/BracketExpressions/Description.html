@@ -1,0 +1,177 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=13243"
+target="_blank">SRM 628 DIV 2 - 500 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Parse opening and closing parenthesis, brackets, etc.  Determine if the string is valid.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+001: /*
+002: TopCoder
+003: Single Round Match: 638
+004: Division: 2
+005: Level: 2
+006: Points: 500
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=13243
+008:  */
+009: 
+010: import java.util.HashMap;
+011: import java.util.Map;
+012: import java.util.Stack;
+013: 
+014: public class BracketExpressions {
+015: 
+016:     /*
+017:      * A map that holds closing characters and their corresponding opening
+018:      * characters.
+019:      */
+020:     Map<Character, Character> openCloseMap = new HashMap<>();
+021: 
+022:     public String ifPossible(String expression) {
+023: 
+024:         openCloseMap.put(')', '(');
+025:         openCloseMap.put(']', '[');
+026:         openCloseMap.put('}', '{');
+027: 
+028:         Stack<Character> st = new Stack<>();
+029: 
+030:         return (isValid(expression, st) ? "possible" : "impossible");
+031:     }
+032: 
+033:     private boolean isValid(String expression, Stack<Character> st) {
+034: 
+035:         /*
+036:          * If we've reached the end of the input string,
+037:          * return True only if the stack is empty.
+038:          */
+039:         if (expression.length() == 0) { return st.isEmpty(); }
+040: 
+041:         char c = expression.charAt(0);
+042:         String s = expression.substring(1);  // Takes the first letter off.
+043: 
+044:         /*
+045:          * If we encounter an opening character, push it on the stack,
+046:          * and recursively call isValid() with the remaingins string
+047:          */
+048:         if (openCloseMap.containsValue(c)) {
+049: 
+050:             st.push(c);
+051:             return isValid(s, st);
+052: 
+053:         /*
+054:          * If we encounter a closing character, then the top item on the
+055:          * stack had better be it's matching opening character.
+056:          */
+057:         } else if (openCloseMap.containsKey(c)) {
+058: 
+059:             Character expectedClosingChar = openCloseMap.get(c);
+060: 
+061:             if (st.isEmpty() || (st.pop() != expectedClosingChar)) {
+062:                 return false;
+063:             } else {
+064:                 return isValid(s, st);
+065:             }
+066: 
+067:             // We've encountered an 'X'
+068:         } else {
+069: 
+070:             // Try replacing X with all characters.
+071:             boolean canPush =
+072:                     isValid(")" + s, copyStack(st)) ||
+073:                             isValid("}" + s, copyStack(st)) ||
+074:                             isValid("]" + s, copyStack(st)) ||
+075:                             isValid("(" + s, copyStack(st)) ||
+076:                             isValid("{" + s, copyStack(st)) ||
+077:                             isValid("[" + s, copyStack(st));
+078: 
+079:             if (canPush) {
+080:                 return true;
+081: 
+082:             /*
+083:              * If using X to add a character to the stack doesn't seem to
+084:              * work, see if it can be used to take the top character off
+085:              */
+086:             } else {
+087:                 if (st.isEmpty()) { return false; }
+088: 
+089:                 if (openCloseMap.containsKey(st.pop())) {
+090:                     return isValid(s, st);
+091:                 }
+092:             }
+093: 
+094:             return false;
+095:         }
+096:     }
+097: 
+098:     /*
+099:      * To preseve the state of the stack we're working with,
+100:      * create a copy of it before trying possible substitutions for X
+101:      */
+102:     private Stack<Character> copyStack(Stack<Character> st) {
+103: 
+104:         Stack<Character> newStack = new Stack<>();
+105:         Stack<Character> tempStack = new Stack<>();
+106: 
+107:         while (!st.isEmpty()) {
+108:             tempStack.push(st.pop());
+109:         }
+110: 
+111:         while (!tempStack.isEmpty()) {
+112:             char c = tempStack.pop();
+113:             st.push(c);
+114:             newStack.push(c);
+115:         }
+116: 
+117:         return newStack;
+118:     }
+119: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  The constraints tell us that there are at most 50 characters, and no more than 5 wildcards.  Therefore, a brute force solution is entirely feasible.
+</p>
+
+<p>
+First, a map is created to map each closing character  ')', '}', and ']' to it's corresponding opening character '(', '{', and '['.  This comes in handy, because we can call containsValue() to determine if we're looking at an opening character, and containsKey() for closing characters. 
+</p>
+
+<p>
+The solution uses a stack and pushes opening characters while popping off closing characters - each time shortening the lenght of the input string.  If at any time, we encounter a closing character, and it's corresponding opening character is not the next item on the stack, then we have an invalid string - return false.
+<p>
+
+<p>
+If we encounter a wildcard (an 'X'), then we'll try replacing it with all possible substitutions.  Lines 63-69 append each opening and closing characters to the current string, make a copy of the current stack so it remains in tact, and then determines if the new string is valid.
+</p>
+
+<p>
+If that fails to generate a valid string, then it's possible that the X takes the place of a closing bracket.  The block starting at line 79 assumes that the X takes the place of a closing character that is ready to come off the stack and calls isValid() with the remaining string and stack elements.
+</p>
+
+<p>
+If both the scenarios fail, then return false declaring the input to be impossible.
+</p>
+
+<p>
+One possible optimization is to examine the length of the input string, it must be even.  You could return false immediately if it's not.  However, this may make your solution appear to be working correctly, when in fact it's not.  A proper solution runs almos instantaneously, so it's worthwhile to allow itself to work through this case as it may uncover hidden bugs.  
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-638-div-2-500-points.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+  <p>Also, for updates, requests, further discussion, etc. please join
+    our google+ page at
+    <a href="http://google.com/+TopCodingSolutionsNet_GP">http://google.com/+TopCodingSolutionsNet_GP</a>
+  </p>
+
+</div>

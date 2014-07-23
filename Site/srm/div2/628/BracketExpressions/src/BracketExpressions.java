@@ -1,7 +1,15 @@
-import java.util.*;
-import java.math.*;
+/*
+TopCoder
+Single Round Match: 638
+Division: 2
+Level: 2
+Points: 500
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=13243
+ */
 
-import static java.lang.Math.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class BracketExpressions {
 
@@ -48,9 +56,9 @@ public class BracketExpressions {
          */
         } else if (openCloseMap.containsKey(c)) {
 
-            Character c2 = openCloseMap.get(c);
+            Character expectedClosingChar = openCloseMap.get(c);
 
-            if (st.isEmpty() || (st.pop() != c2)) {
+            if (st.isEmpty() || (st.pop() != expectedClosingChar)) {
                 return false;
             } else {
                 return isValid(s, st);
