@@ -1,0 +1,112 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1313"
+target="_blank">SRM 149 DIV 2 - 250 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Format a dollar amount according to a set of rules.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 149
+04: Division: 2
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1313
+08:  */
+09: 
+10: public class FormatAmt {
+11: 
+12:     /*
+13:      * Formats the dollars portion of the string
+14:      */
+15:     private static String formatDollars(int d) {
+16: 
+17:         String s = String.valueOf(d);
+18: 
+19:         StringBuilder sb = new StringBuilder();
+20: 
+21:         /*
+22:          * Starts from the digit neares the decimal point and works left
+23:          * toward the most significant digit.  Inserts a comma after three
+24:          * characters, unless it's the final character.
+25:          */
+26:         int count = 0;
+27:         for (int i = s.length() - 1; i >= 0; i--) {
+28: 
+29:             // Copies the current character to the front of the StringBuilder
+30:             sb.insert(0, s.charAt(i));
+31:             count++;
+32: 
+33:             /*
+34:              * After 3 characters, insert a comma.  But only if we're not now
+35:              * at the left-most position.
+36:              */
+37:             if ((count == 3) && (i != 0)) {
+38:                 sb.insert(0, ",");
+39:                 count = 0;
+40:             }
+41:         }
+42:         return sb.toString();
+43:     }
+44: 
+45:     /*
+46:      * Inserts leading 0's until the length is at least 2.
+47:      */
+48:     private static String formatCents(int c) {
+49: 
+50:         String s = String.valueOf(c);
+51:         while (s.length() < 2) {
+52:             s = "0" + s;
+53:         }
+54: 
+55:         return s;
+56:     }
+57: 
+58:     /*
+59:      * Formats the dollars (to the left of the decimal point) and the cents
+60:      * separately, then combines them to make the return value.
+61:      */
+62:     public String amount(int dollars, int cents) {
+63: 
+64:         return "$" + formatDollars(dollars) + "." + formatCents(cents);
+65:     }
+66: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  The solution formats the dollars and cents portions separately, and then combines the together to form the return value.
+</p>
+
+<p>
+  Really the only tricky part is inserting the commas into the proper place in the dollars portion.  This is handled by the for loop beginning at line 27.  First, the variable count is initialized to 0.  Then, the for loop works from right to left counting and inserting characters into a StringBuilder.  When three characters have been seen, a comma is inserted, and count is set back to 0.  If we're at the left-most position in the string, then the comma insertion is skipped.
+</p>
+
+<p>
+  Formatting the cents portion is even easier.  There's a while loop that adds 0's on the beginning of the number until it's at least 2 wide.
+</p>
+
+<p>
+  Finally, the main method amount() combines the two, adding a "." between them, and prefixing the entire string with a "$"
+</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-149-div-2-250-points.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+  <p>Also, for updates, requests, further discussion, etc. please join our google+ page at
+    <a href="http://google.com/+TopCodingSolutionsNet_GP">http://google.com/+TopCodingSolutionsNet_GP</a>
+  </p>
+
+</div>
