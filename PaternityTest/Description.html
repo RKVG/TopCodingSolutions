@@ -1,0 +1,111 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1669" target="_blank">SRM 155 DIV 2 - 1000 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Determine possible fathers given a DNA sequence from a child, mother, and array of potential fatehrs.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 155
+04: Division: 2 / 1
+05: Level: 3 / 1
+06: Points: 1000 / 300
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1669
+08:  */
+09:
+10: import java.util.ArrayList;
+11: import java.util.List;
+12:
+13: public class PaternityTest {
+14:
+15:     public int[] possibleFathers(String child, String mother, String[] men) {
+16:
+17:         // Contains a list of fathers that cannot be ruled out
+18:         List<Integer> possibleList = new ArrayList<>();
+19:
+20:         for (int i = 0; i < men.length; i++) {
+21:
+22:             // Number of characters that match the father.
+23:             int matches = 0;
+24:
+25:             // Is current father still possible?
+26:             boolean isCurrentFatherPossible = true;
+27:
+28:             // Loop through each character in the sequence
+29:             for (int j = 0; j < child.length(); j++) {
+30:
+31:                 String father = men[i];
+32:
+33:                 /*
+34:                  * If the current character did not come from the mother,
+35:                  * then it must come from the father.  If it did not come
+36:                  * from the father, we can rule him out.
+37:                  */
+38:                 if ((child.charAt(j) != mother.charAt(j)) &&
+39:                         ((father.charAt(j)) != (child.charAt(j)))) {
+40:                     isCurrentFatherPossible = false;
+41:                     break;
+42:                 }
+43:
+44:                 // Count the number of matching characters.
+45:                 if (father.charAt(j) == child.charAt(j)) {
+46:                     matches++;
+47:                 }
+48:             }
+49:
+50:             /*
+51:              * If the father has not been ruled out previously,
+52:              * and the number of matches is >= half the length of the
+53:              * sequence, then add the current father to the list of possible
+54:              * fathers.
+55:              */
+56:             if (isCurrentFatherPossible && (matches >= (child.length() / 2))) {
+57:                 possibleList.add(i);
+58:             }
+59:         }
+60:
+61:         // Convert the possibleList to an array, and return it
+62:         int[] ret = new int[possibleList.size()];
+63:
+64:         for (int i = 0; i < ret.length; i++) {
+65:             ret[i] = possibleList.get(i);
+66:         }
+67:
+68:         return ret;
+69:     }
+70:
+71: }
+
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  There's just two checks needed to determine if the father can be ruled out or not.  First, any character that did not come from the mother must come from the father.  If the character at position x in the child's sequence is not equal to the character at position x in the mother's sequence, then it must match the character at position x in the father's sequence.  If it does not, then we can eliminate the man from the list of potential fathers.  This is tested for by the if statemet at line 38.
+</p>
+<p>
+  Second, the number of matches must be greater than or equal to half the length of the sequence.  For this, we simply count the number of matches on lines 45-47.
+</p>
+<p>
+  If both conditions are met, the the man is added to the list of possible fathers.  After looping through all the men, the possible fathers list is converted into an an array, and returned.
+</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-155-div-2-1000-points-paternity-test.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+  <p>Also, for updates, requests, further discussion, etc. please join our google+ page at
+    <a href="http://google.com/+TopCodingSolutionsNet_GP">http://google.com/+TopCodingSolutionsNet_GP</a>
+  </p>
+
+</div>

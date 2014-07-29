@@ -1,0 +1,68 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="" target="_blank">SRM DIV - Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+Decode a rope with knots in it that represent an integer.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 155
+04: Division: 2
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1686
+08:  */
+09:
+10: public class Quipu {
+11:
+12:     public int readKnots(String knots) {
+13:
+14:         int value = 0;
+15:         int current = 0;
+16:
+17:         for (int i = 1; i < knots.length(); i++) {
+18:
+19:             if (knots.charAt(i) == 'X') {
+20:                 current += 1;
+21:
+22:             } else {
+23:                 value *= 10;
+24:                 value += current;
+25:                 current = 0;
+26:             }
+27:
+28:         }
+29:
+30:         return value;
+31:     }
+32: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+    The problem may seem difficult at first, but the solution is actually very simple.  value holds the number that we're going to eventually return.  current holds the count at the current tens place.  For each X that we encounter, increment current.  When a space is encountered, multiply value by ten, add current, and then reset current back to zero.  That's all there is to it.
+</p>
+
+<p>
+  Just one more thing.  Notice that the for loop at line 17 starts at 1 instead of 0.  This skips over the first '-'.  Every String is guaranteed to start with a dash, so we just just skip over it.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-250-div-2-250-points-quipu.html" target="_blank">here</a>.</p>
+
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+<p>Also, for updates, requests, further discussion, etc. please join our google+ page at
+	<a href="http://google.com/+TopCodingSolutionsNet_GP">http://google.com/+TopCodingSolutionsNet_GP</a>
+</p>
+
+</div>

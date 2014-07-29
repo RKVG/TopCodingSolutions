@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BenfordsLaw/BenfordsLaw.iml" filepath="$PROJECT_DIR$/BenfordsLaw/BenfordsLaw.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/149/BigBurger/BigBurger.iml" filepath="$PROJECT_DIR$/Site/srm/div2/149/BigBurger/BigBurger.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/144/BinaryCode/BinaryCode.iml" filepath="$PROJECT_DIR$/Site/srm/div2/144/BinaryCode/BinaryCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Birthday/Birthday.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Birthday/Birthday.iml" />
@@ -34,12 +35,14 @@
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div1/149/MessageMess/MessageMess.iml" filepath="$PROJECT_DIR$/Site/srm/div1/149/MessageMess/MessageMess.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/MostProfitable/MostProfitable.iml" filepath="$PROJECT_DIR$/PassingNotPosted/MostProfitable/MostProfitable.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div1/148/NumberGuessing/NumberGuessing.iml" filepath="$PROJECT_DIR$/Site/srm/div1/148/NumberGuessing/NumberGuessing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PaternityTest/PaternityTest.iml" filepath="$PROJECT_DIR$/PaternityTest/PaternityTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/Unsolved/PenLift/PenLift.iml" filepath="$PROJECT_DIR$/Unsolved/PenLift/PenLift.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/147/PeopleCircle/PeopleCircle.iml" filepath="$PROJECT_DIR$/Site/srm/div2/147/PeopleCircle/PeopleCircle.iml" group="Posted" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/144/PowerOutage/PowerOutage.iml" filepath="$PROJECT_DIR$/Site/srm/div2/144/PowerOutage/PowerOutage.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/PrefixCode/PrefixCode.iml" filepath="$PROJECT_DIR$/PassingNotPosted/PrefixCode/PrefixCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Pricing/Pricing.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Pricing/Pricing.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/ProfitCalculator/ProfitCalculator.iml" filepath="$PROJECT_DIR$/PassingNotPosted/ProfitCalculator/ProfitCalculator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Quipu/Quipu.iml" filepath="$PROJECT_DIR$/Quipu/Quipu.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/146/RectangularGrid/RectangularGrid.iml" filepath="$PROJECT_DIR$/Site/srm/div2/146/RectangularGrid/RectangularGrid.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div1/146/Roundabout/Roundabout.iml" filepath="$PROJECT_DIR$/Site/srm/div1/146/Roundabout/Roundabout.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/SuperRot/SuperRot.iml" filepath="$PROJECT_DIR$/PassingNotPosted/SuperRot/SuperRot.iml" />
