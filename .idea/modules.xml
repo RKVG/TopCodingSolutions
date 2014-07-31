@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/144/BinaryCode/BinaryCode.iml" filepath="$PROJECT_DIR$/Site/srm/div2/144/BinaryCode/BinaryCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Birthday/Birthday.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Birthday/Birthday.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/628/BishopMove/BishopMove.iml" filepath="$PROJECT_DIR$/Site/srm/div2/628/BishopMove/BishopMove.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BombSweeper/BombSweeper.iml" filepath="$PROJECT_DIR$/BombSweeper/BombSweeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div1/145/Bonuses/Bonuses.iml" filepath="$PROJECT_DIR$/Site/srm/div1/145/Bonuses/Bonuses.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/628/BracketExpressions/BracketExpressions.iml" filepath="$PROJECT_DIR$/Site/srm/div2/628/BracketExpressions/BracketExpressions.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/149/BrickByBrick/BrickByBrick.iml" filepath="$PROJECT_DIR$/Site/srm/div2/149/BrickByBrick/BrickByBrick.iml" />
@@ -15,6 +16,7 @@
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/148/CeyKaps/CeyKaps.iml" filepath="$PROJECT_DIR$/Site/srm/div2/148/CeyKaps/CeyKaps.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div1/148/CircleGame/CircleGame.iml" filepath="$PROJECT_DIR$/Site/srm/div1/148/CircleGame/CircleGame.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/CodeChef/CodeChef.iml" filepath="$PROJECT_DIR$/Site/CodeChef/CodeChef.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DiskSpace/DiskSpace.iml" filepath="$PROJECT_DIR$/DiskSpace/DiskSpace.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/148/DivisorDigits/DivisorDigits.iml" filepath="$PROJECT_DIR$/Site/srm/div2/148/DivisorDigits/DivisorDigits.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div1/147/Dragons/Dragons.iml" filepath="$PROJECT_DIR$/Site/srm/div1/147/Dragons/Dragons.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/145/ExerciseMachine/ExerciseMachine.iml" filepath="$PROJECT_DIR$/Site/srm/div2/145/ExerciseMachine/ExerciseMachine.iml" />
@@ -50,6 +52,7 @@
       <module fileurl="file://$PROJECT_DIR$/Top Coder.iml" filepath="$PROJECT_DIR$/Top Coder.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/145/VendingMachine/VendingMachine.iml" filepath="$PROJECT_DIR$/Site/srm/div2/145/VendingMachine/VendingMachine.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/150/WidgetRepairs/WidgetRepairs.iml" filepath="$PROJECT_DIR$/Site/srm/div2/150/WidgetRepairs/WidgetRepairs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WordParts/WordParts.iml" filepath="$PROJECT_DIR$/WordParts/WordParts.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/WritingWords/WritingWords.iml" filepath="$PROJECT_DIR$/PassingNotPosted/WritingWords/WritingWords.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/div2/146/YahtzeeScore/YahtzeeScore.iml" filepath="$PROJECT_DIR$/Site/srm/div2/146/YahtzeeScore/YahtzeeScore.iml" />
     </modules>
