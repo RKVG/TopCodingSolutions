@@ -1,9 +1,22 @@
+/*
+TopCoder
+Single Round Match: 156
+Division: 2
+Level: 3
+Points: 1000
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1361
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class WordParts {
 
-    Map<String, Integer> fixes;
+    /*
+     * Holds all the word parts that we've processed so far,
+     * along with the minimum number of word parts needed to create them.
+     */
+    Map<String, Integer> wordParts;
 
     /*
      * Returns a map containing all possible substrings that either start at
@@ -14,7 +27,7 @@ public class WordParts {
      * required to make the string.  Inititally these are all 1.  A string
      * like "ajava" would have a value of 2: a=1 + java=1
      */
-    private static Map<String, Integer> getFixes(String s) {
+    private static Map<String, Integer> getWordParts(String s) {
 
         Map<String, Integer> m = new HashMap<>();
 
@@ -40,7 +53,7 @@ public class WordParts {
         }
 
         // Create a map of all possible prefixes and suffixes.
-        fixes = getFixes(original);
+        wordParts = getWordParts(original);
 
         Integer i = fewestParts(compound);
 
@@ -61,8 +74,8 @@ public class WordParts {
         }
 
         // If our map contains this key, just return the value.
-        if (fixes.containsKey(s)) {
-            return fixes.get(s);
+        if (wordParts.containsKey(s)) {
+            return wordParts.get(s);
         }
 
         // If this stays null, no valid combinations were found.
@@ -74,14 +87,14 @@ public class WordParts {
             String prefix = s.substring(0,i);  // Gets the first i characters.
             String suffix = s.substring(i);  // Characters after the first i.
 
-            if (!fixes.containsKey(prefix)) {
+            if (!wordParts.containsKey(prefix)) {
                 continue;
             }
 
             /*
              * Recursively call fewestParts the determine the fewest number
              * of parts that are needed to create the suffix.  If the suffix
-             * can be created (does not return null), the add the number of
+             * can be created (does not return null), then add the number of
              * parts to create the prefix.  If this sum is less than any that
              * we've seen to this point, store it in fewest.
              */
@@ -89,7 +102,7 @@ public class WordParts {
 
             if (f != null) {
 
-                f += fixes.get(prefix);
+                f += wordParts.get(prefix);
 
                 if ((fewest == null) || (f.compareTo(fewest) < 0)) {
                     fewest = f;
@@ -102,7 +115,7 @@ public class WordParts {
          * current string, so store it in the map.
          */
         if (fewest != null)  {
-            fixes.put(s, fewest);
+            wordParts.put(s, fewest);
         }
 
         return fewest;
