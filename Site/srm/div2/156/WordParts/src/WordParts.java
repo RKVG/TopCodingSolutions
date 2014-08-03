@@ -55,10 +55,8 @@ public class WordParts {
         // Create a map of all possible prefixes and suffixes.
         wordParts = getWordParts(original);
 
-        Integer i = fewestParts(compound);
+        return fewestParts(compound);
 
-        // i will be null if the compound string was invalid.
-        return (i == null) ? -1 : i;
     }
 
     /*
@@ -66,11 +64,11 @@ public class WordParts {
      * of parts to create each substring of s.
      * If no valid substring can be formed, it returns null
      */
-    private Integer fewestParts(String s) {
+    private int fewestParts(String s) {
 
         // Break the recursion when string length becomes 0.
         if ((s == null) || (s.length() == 0)) {
-            return null;
+            return -1;
         }
 
         // If our map contains this key, just return the value.
@@ -78,9 +76,7 @@ public class WordParts {
             return wordParts.get(s);
         }
 
-        // If this stays null, no valid combinations were found.
-        Integer fewest = null;
-
+        int fewest = -1;
 
         for (int i = 1; i <= s.length(); i++) {
 
@@ -94,17 +90,17 @@ public class WordParts {
             /*
              * Recursively call fewestParts the determine the fewest number
              * of parts that are needed to create the suffix.  If the suffix
-             * can be created (does not return null), then add the number of
+             * can be created (does not return -1), then add the number of
              * parts to create the prefix.  If this sum is less than any that
              * we've seen to this point, store it in fewest.
              */
-            Integer f = fewestParts(suffix);
+           int f = fewestParts(suffix);
 
-            if (f != null) {
+            if (f > 0) {
 
                 f += wordParts.get(prefix);
 
-                if ((fewest == null) || (f.compareTo(fewest) < 0)) {
+                if ((fewest == -1) || (f < fewest)) {
                     fewest = f;
                 }
             }
@@ -114,11 +110,10 @@ public class WordParts {
          * We now know the fewest number of parts needed to create the
          * current string, so store it in the map.
          */
-        if (fewest != null)  {
+        if (fewest != -1)  {
             wordParts.put(s, fewest);
         }
 
         return fewest;
     }
-
 }

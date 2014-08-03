@@ -1,0 +1,150 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1778" target="_blank">SRM 156 DIV 2 - 600 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Predict the likelihood that you'll win a mine sweeper like game.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+001: /*
+002: TopCoder
+003: Single Round Match: 156
+004: Division: 2 / 1
+005: Level: 2 / 1
+006: Points: 600 / 300
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1778
+008:  */
+009: 
+010: public class BombSweeper {
+011: 
+012:     /*
+013:      * Converts the array of Strings into a 2-Dimensional array of
+014:      * characters.  This will simplify working with the board.
+015:      */
+016:     private static char[][] generateBoard(String[] strs) {
+017: 
+018:         char[][] charArray = new char[strs.length][strs[0].length()];
+019: 
+020:         for (int row = 0; row < strs.length; row++) {
+021:             for (int col = 0; col < strs[0].length(); col++) {
+022:                 charArray[row][col] = strs[row].charAt(col);
+023:             }
+024:         }
+025: 
+026:         return charArray;
+027:     }
+028: 
+029:     /*
+030:      * Checks each of the 8 surrounding squares looking for bombs.  If a bomb
+031:      * is found, returns true - otherwise returns false
+032:      */
+033:     private static boolean hasBombNeighbor(char[][] field, int row, int col) {
+034: 
+035:         // Check row above
+036:         if (row > 0) {
+037: 
+038:             // Above and to the left
+039:             if (col > 0) {
+040:                 if (field[row - 1][col - 1] == 'B') { return true; }
+041:             }
+042: 
+043:             // Directly above
+044:             if (field[row - 1][col] == 'B') { return true; }
+045: 
+046:             // Above and to the right
+047:             if (col < field[0].length - 1) {
+048:                 if (field[row - 1][col + 1] == 'B') { return true; }
+049:             }
+050:         }
+051: 
+052:         // Same row - To the left
+053:         if (col > 0) {
+054:             if (field[row][col - 1] == 'B') { return true; }
+055:         }
+056: 
+057:         // Same row - To the right
+058:         if (col < field[0].length - 1) {
+059:             if (field[row][col + 1] == 'B') { return true; }
+060:         }
+061: 
+062:         // Check row below
+063:         if (row < field.length - 1) {
+064: 
+065:             // Below and to the left
+066:             if (col > 0) {
+067:                 if (field[row + 1][col - 1] == 'B') { return true; }
+068:             }
+069: 
+070:             // Directly below
+071:             if (field[row + 1][col] == 'B') { return true; }
+072: 
+073:             // Below and to the right
+074:             if (col < field[0].length - 1) {
+075:                 if (field[row + 1][col + 1] == 'B') { return true; }
+076:             }
+077:         }
+078: 
+079:         return false;
+080:     }
+081: 
+082:     public double winPercentage(String[] board) {
+083: 
+084:         int numBombs = 0;
+085:         int numWins = 0;
+086: 
+087:         char[][] mineField = generateBoard(board);
+088: 
+089:         /*
+090:          * Loop through each position of the board.  For each position,
+091:          * determine if it is a bomb, or has any neighbors that are bombs.
+092:          */
+093:         for (int row = 0; row < mineField.length; row++) {
+094:             for (int col = 0; col < mineField[0].length; col++) {
+095:                 if (mineField[row][col] == 'B') {
+096:                     numBombs++;
+097:                 } else if (hasBombNeighbor(mineField, row, col)) {
+098:                     // doNothing
+099:                 } else {
+100:                     numWins++;
+101:                 }
+102:             }
+103:         }
+104: 
+105:         // This equation is given in the problem statement.
+106:         return ((double) numWins / (double) (numWins + numBombs)) * 100.0;
+107:     }
+108: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>The equation for determining the likelihood of winning is given in the problem statement as (wins / (wins + losses)) where wins are the number of squares that are not bombs and do not have any neighbors that are bombs; and losses are squares that are bombs.  Be sure to multiply by 100 to get this number as a percentage.</p>
+
+<p
+  >Quite often, I find it easier to work with a 2-Dimensional array of characters rather than the given String array.  The method generateBoard() performs this simple conversion.  With the 2-Dimensional char array, we can refer to each square using just its indices, and not have to mix an index with a String.charAt().  It's a personal preference, but I think board[row][col] is cleaner than board[row].charAt(col)
+</p>
+
+<p>
+  With the mineField created, lines 94-104 loop through each row and column testing to see if that position is a bomb, or if any of it's neighbors are bombs.  If the position is a bomb, numBombs is incremented.  If it's not a bomb, but a neighbor is, then nothing happens.  And if it's not a bomb, and none of it's neighbors are either, then numWins is incremented.
+</p>
+
+<p>
+  hasBombNeighbor() determines if a given position has a bomb in any of the 8 positions surrounding it.  Just be careful here to avoid checking a neighbor that falls outside the bounds of the board.
+</p>
+
+<p>
+  Once numBombs, and numWins are known, we can plug those into the given equation and return the result.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-156-div-2-600-points-bombsweeper.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>

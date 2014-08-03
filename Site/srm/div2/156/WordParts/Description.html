@@ -1,0 +1,180 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1361" target="_blank">SRM 156 DIV 2 - Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Determine the fewest number of word parts (either prefixes or suffixes) from a given string that are needed to create another string.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+001: /*
+002: TopCoder
+003: Single Round Match: 156
+004: Division: 2
+005: Level: 3
+006: Points: 1000
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1361
+008:  */
+009: 
+010: import java.util.HashMap;
+011: import java.util.Map;
+012: 
+013: public class WordParts {
+014: 
+015:     /*
+016:      * Holds all the word parts that we've processed so far,
+017:      * along with the minimum number of word parts needed to create them.
+018:      */
+019:     Map<String, Integer> wordParts;
+020: 
+021:     /*
+022:      * Returns a map containing all possible substrings that either start at
+023:      * the beginning of the String s, or end at the end of s.  For example,
+024:      * if the input string is "java", the map would contain:
+025:      * j, ja, jav, java, a, va, ava
+026:      * The value for each of these keys represents the number of parts
+027:      * required to make the string.  Inititally these are all 1.  A string
+028:      * like "ajava" would have a value of 2: a=1 + java=1
+029:      */
+030:     private static Map<String, Integer> getWordParts(String s) {
+031: 
+032:         Map<String, Integer> m = new HashMap<>();
+033: 
+034:         for (int i = 1; i <= s.length() - 1; i++) {
+035:             m.put(s.substring(0, i), 1);  // Starts from beginning
+036:             m.put(s.substring(i), 1);     // Starts from the end
+037:         }
+038: 
+039:         // Don't forget to include the entire string.
+040:         m.put(s, 1);
+041: 
+042:         return m;
+043:     }
+044: 
+045:     /*
+046:      * The main method
+047:      */
+048:     public int partCount(String original, String compound) {
+049: 
+050:         // Check for the empty string case.
+051:         if ((compound == null) || (compound.length() < 1)) {
+052:             return 0;
+053:         }
+054: 
+055:         // Create a map of all possible prefixes and suffixes.
+056:         wordParts = getWordParts(original);
+057: 
+058:         return fewestParts(compound);
+059: 
+060:     }
+061: 
+062:     /*
+063:      * fewestParts recursively calls itslef to determine the minimum number
+064:      * of parts to create each substring of s.
+065:      * If no valid substring can be formed, it returns null
+066:      */
+067:     private int fewestParts(String s) {
+068: 
+069:         // Break the recursion when string length becomes 0.
+070:         if ((s == null) || (s.length() == 0)) {
+071:             return -1;
+072:         }
+073: 
+074:         // If our map contains this key, just return the value.
+075:         if (wordParts.containsKey(s)) {
+076:             return wordParts.get(s);
+077:         }
+078: 
+079:         int fewest = -1;
+080: 
+081:         for (int i = 1; i <= s.length(); i++) {
+082: 
+083:             String prefix = s.substring(0,i);  // Gets the first i characters.
+084:             String suffix = s.substring(i);  // Characters after the first i.
+085: 
+086:             if (!wordParts.containsKey(prefix)) {
+087:                 continue;
+088:             }
+089: 
+090:             /*
+091:              * Recursively call fewestParts the determine the fewest number
+092:              * of parts that are needed to create the suffix.  If the suffix
+093:              * can be created (does not return -1), then add the number of
+094:              * parts to create the prefix.  If this sum is less than any that
+095:              * we've seen to this point, store it in fewest.
+096:              */
+097:            int f = fewestParts(suffix);
+098: 
+099:             if (f > 0) {
+100: 
+101:                 f += wordParts.get(prefix);
+102: 
+103:                 if ((fewest == -1) || (f < fewest)) {
+104:                     fewest = f;
+105:                 }
+106:             }
+107:         }
+108: 
+109:         /*
+110:          * We now know the fewest number of parts needed to create the
+111:          * current string, so store it in the map.
+112:          */
+113:         if (fewest != -1)  {
+114:             wordParts.put(s, fewest);
+115:         }
+116: 
+117:         return fewest;
+118:     }
+119: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  The solution uses a technique known as dynamic programming.  It works by starting at the end of the compound string and works backward one character at a time.  At each character it determines and stores the smallest number of word parts that are needed to create that substring.  Once it has reached the beginning of the compound string, we'll have our answer.
+</p>
+
+<p>
+  First, we check for a null or empty input string on line 51.  It's easiest to just get this case out of the way up front.
+</p>
+
+<p>
+  Next, we build a map named wordParts that contains all possible substrings of original that either start at the beginning of the string (prefixes), or end at the end of string (suffixes).  Each of these strings can be created with one word part, so we'll mark them with a value of 1.  As an example, if our origninal word was "coder", then the wordParts map would contain:
+  c, co, cod, code, coder, r, er, der, oder.  When we encounter any of these substrings, they can be counted as 1 word part.
+</p>
+
+<p>
+  With the map in place, we call fewestParts() on line 58, and return the result - We're Done.
+</p>
+
+<p>
+  All that's left is to implement fewestParts().
+</p>
+
+<p>
+  fewestParts() works by calculating the fewest number of word parts needed to create the string s for each possible prefix/suffix combination.  If the input is "cocoder", then it will divide it up as c/ocoder, co/coder, coc/oder, coco/der, cocod/er, cocode/r, and cocoder.  For each case, if the prefix is not in the wordParts map, then we skip it.  Otherwise, recursively call fewestParts() on the suffix, and add this to the value of the prefix.  If that value is the smallest we've seen so far, then it is stored in the wordParts map.  Combining this example, with the one from above - we see that co/coder is the best we can do since "co" has a value of 1, and "coder" also has a value of 1.  Therefore, "cocoder" can be formed with 2 word parts.  Note that "co" + "cod" + "er" also works (along with some others), but this gives us a value of 3, so we don't want to  store that.
+</p>
+
+<p>
+  fewestParts() is recursive, so we need to ensure that the recusion breaks at some point.  This occurs on line 72 if the string becomes empty, or line 77 if the string already exists in the wordParts map.  In this case, we've already deteremined the fewest number of word parts needed to create the string we're currently examining, so we can just return that.
+</p>
+
+<p>
+  A good thing to know is that the prefixes and suffixes can be generated easily using java's String.substring() method.  substring(0,i) will return a prefix consisting of the first i characters.  substring(i) will return a suffix beginning after the ith character and continuing to the end.
+</p>
+
+<p>
+  Normally you don't need dynamic programming techniques in division 2, that's typically saved for divison 1.  I also found the problem statement difficult to understand and had to read it several times to get what needed to be done.  The examples were also of limited help.  I'd call this one of the toughest division 2 problems I've seen.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-156-div-2-1000-points-wordparts.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>
