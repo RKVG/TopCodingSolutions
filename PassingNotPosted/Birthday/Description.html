@@ -1,0 +1,123 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1739" target="_blank">SRM 151 DIV 2 - 500 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+Given a set of dates, determine the next date to occur after a given date.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 151
+04: Division: 2
+05: Level: 2
+06: Points: 500
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1739
+08:  */
+09: 
+10: import java.util.ArrayList;
+11: import java.util.Arrays;
+12: import java.util.Collections;
+13: import java.util.List;
+14: 
+15: public class Birthday {
+16: 
+17:     public String getNext(String date, String[] birthdays) {
+18: 
+19:         List<Reminder> reminders = new ArrayList<>();
+20:         for (String s : birthdays) {
+21:             reminders.add(new Reminder(s));
+22:         }
+23:         Collections.sort(reminders);
+24: 
+25:         Reminder now = new Reminder(date);
+26: 
+27:         for (Reminder next : reminders) {
+28:             if (next.compareTo(now) >= 0) {
+29:                 return next.toString();
+30:             }
+31:         }
+32: 
+33:         return reminders.get(0).toString();
+34:     }
+35: 
+36:     public class Reminder implements Comparable {
+37: 
+38:         final int month;
+39:         final int day;
+40:         final String monthStr;
+41:         final String dayStr;
+42: 
+43:         public Reminder(String s) {
+44: 
+45:             String s1[] = s.split("( )|(/)");
+46:             month = Integer.parseInt(s1[0]);
+47:             day = Integer.parseInt(s1[1]);
+48:             monthStr = s1[0];
+49:             dayStr = s1[1];
+50:         }
+51: 
+52:         public int compareTo(Object o) {
+53: 
+54:             Reminder other = (Reminder) o;
+55:             if (month < other.month) { return -1; }
+56:             if (month > other.month) { return 1; }
+57:             if (day < other.day) { return -1; }
+58:             if (day > other.day) { return 1; }
+59:             return 0;
+60:         }
+61: 
+62:         public String toString() {
+63: 
+64:             return monthStr + "/" + dayStr;
+65: 
+66:         }
+67:     }
+68: 
+69:     public String getNextImproved(String date, String[] birthdays) {
+70: 
+71:         Arrays.sort(birthdays);
+72: 
+73:         for (String next : birthdays) {
+74:             if (next.compareTo(date) >= 0) {
+75:                 return next.split(" ")[0];
+76:             }
+77:         }
+78: 
+79:         return birthdays[0].split(" ")[0];
+80:     }
+81:     
+82: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  This solution illustrates 2 important concepts.  First is Java's Comparable interface:
+</p>
+
+<p>
+  The solution creates an inner class named Reminder that implements Comparable.  This allows us to easily sort and compare dates.  The Reminder class takes a String for it's constructor and parses out the month and day.  Next, it provides compareTo() which uses the month and day to determine if another Reminder comes before, after, or is equal to the current object.  Finally, Reminder provides a toString() method to give the date in the format required.
+</p>
+
+<p>
+  Using the Remidner class, the for loop at line 20 converts all the Strings into Reminders.  Then we sort them on line 23.  The remaining lines get the new date and use compareTo() to find the first date that comes after the given date.  If there are no such dates, then we return the first date of the new year.
+</p>
+
+<p>
+  Now, for the second important lesson - don't rush to start coding! In this case, birthdays could have been sorted just the way they were, as Strings.  Given their format of MM/DD, birthdays would be sorted in exactly the same way.  If the format was DD/MM - then this would not be the case.  But here, the Reminder class was completely unnecessary.  I've included the method getNextImproved() at the bottom which is obviously much better.
+</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-151-div-2-500-points-birthday.html" target="_blank">here</a>.</p>
+
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>

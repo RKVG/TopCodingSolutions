@@ -1,4 +1,14 @@
+/*
+TopCoder
+Single Round Match: 151
+Division: 2
+Level: 2
+Points: 500
+Description: http://community.topcoder.com/stat?c=problem_statement&pm=1739
+ */
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,16 +36,21 @@ public class Birthday {
     public class Reminder implements Comparable {
 
         final int month;
-
         final int day;
+        final String monthStr;
+        final String dayStr;
 
         public Reminder(String s) {
+
             String s1[] = s.split("( )|(/)");
             month = Integer.parseInt(s1[0]);
             day = Integer.parseInt(s1[1]);
+            monthStr = s1[0];
+            dayStr = s1[1];
         }
 
         public int compareTo(Object o) {
+
             Reminder other = (Reminder) o;
             if (month < other.month) { return -1; }
             if (month > other.month) { return 1; }
@@ -46,18 +61,22 @@ public class Birthday {
 
         public String toString() {
 
-            StringBuilder sb = new StringBuilder(5);
-            if ((month) < 10) {
-                sb.append("0");
-            }
-            sb.append(month);
-            sb.append("/");
-            if ((day < 10)) {
-                sb.append("0");
-            }
-            sb.append(day);
+            return monthStr + "/" + dayStr;
 
-            return sb.toString();
         }
     }
+
+    public String getNextImproved(String date, String[] birthdays) {
+
+        Arrays.sort(birthdays);
+
+        for (String next : birthdays) {
+            if (next.compareTo(date) >= 0) {
+                return next.split(" ")[0];
+            }
+        }
+
+        return birthdays[0].split(" ")[0];
+    }
+
 }
