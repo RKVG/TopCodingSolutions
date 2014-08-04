@@ -1,0 +1,151 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="" target="_blank">SRM 149 DIV 2 - 1000 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Determine pricing categories in order to maximize sales revenue.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 149
+04: Division: 2
+05: Level: 3
+06: Points: 1000
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1600
+08:  */
+09:
+10: import java.util.Arrays;
+11: import java.util.HashSet;
+12: import java.util.Set;
+13:
+14: public class Pricing {
+15:
+16:     /*
+17:      * Given an array consisting of the prices that people are willing to
+18:      * pay, and four pricing categories given in increasing price order,
+19:      * this will return the expected sales total.
+20:      * The price of a cat4 ticket > cat 3 > cat 2 > cat1.
+21:      */
+22:     private static int calcSales(int[] prices, int cat1, int cat2,
+23:                                  int cat3, int cat4) {
+24:
+25:         int sum = 0;
+26:
+27:         for (int willingToPay : prices)  {
+28:
+29:             if (willingToPay >= cat4)  {  // Big spenders
+30:                 sum += cat4;
+31:             } else if (willingToPay >= cat3)  {
+32:                 sum += cat3;
+33:             } else if (willingToPay >= cat2)  {
+34:                 sum += cat2;
+35:             } else if (willingToPay >= cat1)  {
+36:                 sum += cat1;
+37:             } else {
+38:                 // do nothing - even cat1 is too expensive.
+39:             }
+40:         }
+41:
+42:         return sum;
+43:     }
+44:
+45:     /*
+46:      * Returns the number of unique values in the int[]
+47:      */
+48:     private static int numUniqueValues(int[] prices) {
+49:
+50:         Set<Integer> s = new HashSet<>();
+51:
+52:         for (int i : prices) {
+53:             s.add(i);
+54:         }
+55:
+56:         return s.size();
+57:     }
+58:
+59:     public int maxSales(int[] price) {
+60:
+61:         /*
+62:          * If there are 4 or less unique prices, then we can just assign each
+63:          * customer their maximum price.  Add them up, and return the sum.
+64:          */
+65:         if (numUniqueValues(price) <= 4) {
+66:             int sum = 0;
+67:             for (int aPrice : price) {
+68:                 sum += aPrice;
+69:             }
+70:             return sum;
+71:         }
+72:
+73:         // Sort the array of prices.
+74:         Arrays.sort(price);
+75:
+76:         int maxSales = 0;
+77:
+78:         for (int i = 0; i < price.length - 3; i++) {
+79:
+80:             for (int j = i + 1; j < price.length - 2; j++) {
+81:
+82:                 for (int k = j + 1; k < price.length - 1; k++) {
+83:
+84:                     for (int m = k + 1; m < price.length; m++) {
+85:
+86:                         int thisSales = calcSales(price, price[i], price[j],
+87:                                 price[k], price[m]);
+88:
+89:                         maxSales = Math.max(thisSales, maxSales);
+90:                     }
+91:                 }
+92:             }
+93:         }
+94:
+95:         return maxSales;
+96:     }
+97: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  The constraints limit the input to a maximum of 50 elements, and there are at most 4 pricing categories.  This domain is small enough to allow for a brute force approach.  The strategy used here is to take each possible combination of 4 prices, and see which one yields the greatest income.  Note that the price categories should come from the array of prices that customers are willing to pay.  Any price that is slightly below what a customer is willing to pay can bumped up to the price the customer will pay without losing the sale.
+</p>
+
+<p>
+  The if statement on line 65 checks the number of unique prices in the input.  If there are 4 or less, then we simply assign a price category to each of those values, and we're done.  If there are more than 4 unique prices, then we'll have some customers that either refuse to pay even the minimum amount, or end up paying less than they are willing to.  The number of unique prices is determined by numUniqueValues() - which just adds all values to a Set, and returns the size of the Set.  Since Sets do not allow duplicate values, this works out nicely.
+</p>
+
+<p>
+  After determining that there are more than 4 unique prices, the next step is to sort the prices.  This is important because we'll be passing these prices into calcSales() which expects the price categories to be in ascending order.
+</p>
+
+<p>
+  Next, a series of nested for loops, beginning on line 78, try every possible combination of prices.  Note that the for loops do not overlap m > k > j > i.  This saves a lot of duplicate work, and ensures that the price categories are given to calcSales in the proper order.
+</p>
+
+<p>
+  calcSales() loops through all the prices that the customers are willing to pay and determines the most expensive category that they're willing to pay for.  Here, it's important that the categories are in order, with cat4 the most expensive and cat1 the least. For each, sum is incremented by the value of that category.
+</p>
+
+<p>
+  Finally, the expected sales amount for the current set of categories is compared to the maximum amount seen thus far (line 89), and if it's greater, then max is updated.
+</p>
+
+<p>
+  This is a surprisingly easy for a 1000 point Division 2 question.  Once you realize that the four categories must come from the array of prices given, and that a brute-force solution will suffice, the code practically writes itself.
+</p>
+
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-149-div-2-1000-points-pricing.html" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>
