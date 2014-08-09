@@ -1,0 +1,89 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1716" target="_blank">SRM 152 DIV 2 - 500 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+Determine which picks you'll get in a fantasy league draft.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 152
+04: Division: 2 / 1
+05: Level: 2 / 1
+06: Points: 500 / 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1716
+08:  */
+09: 
+10: import java.util.ArrayList;
+11: import java.util.List;
+12: 
+13: public class LeaguePicks {
+14: 
+15:     public int[] returnPicks(int position, int friends, int picks) {
+16: 
+17:         // Uses a re-sizeable list instead of calculating the size of the int[]
+18:         List<Integer> pickList = new ArrayList<>();
+19: 
+20:         // Your first pick is just your position.
+21:         int nextPick = position;
+22: 
+23:         /*
+24:          Keeps track of whether we are working from the beginning of the list
+25:          toward the end.  Or if we've reached the end,
+26:          and are working back toward the front.
+27:          */
+28:         boolean startToEnd = true;
+29: 
+30:         // Continue until we've run out of picks.
+31:         while (nextPick <= picks) {
+32: 
+33:             pickList.add(nextPick);
+34: 
+35:             if (startToEnd) {
+36:                 nextPick += (2 * (friends - position) + 1);
+37:             } else {
+38:                 nextPick += (2 * position) - 1;
+39:             }
+40: 
+41:             startToEnd = !startToEnd; // Switch direction.
+42:         }
+43: 
+44:         // Convert the ArrayList into an int[] and return it.
+45:         int[] returnList = new int[pickList.size()];
+46: 
+47:         for (int i = 0; i < pickList.size(); i++) {
+48:             returnList[i] = pickList.get(i);
+49:         }
+50: 
+51:         return returnList;
+52:     }
+53: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  It pays to come up with the equations on lines 36 and 38 prior to starting any coding.  Initially, next pick is set to your position, and startToEnd is set to true - indicating that we're working from the start of the list toward the end.  There are (friends - position) people in the line after you; and each of them will get 2 picks - one on the way down and a second on the way back up.  So, your second pick will come (2 * (friends - position) + 1) picks later.  startToEnd is flipped to indicate that we're now working from the end back to the start.
+</p>
+
+<p>
+  There are position -1 people in the line ahead of you; and they'll each get 2 picks before it's your turn again.  So, your next pick will come (2 * position) - 1 picks later.  Again, startToEnd is flipped to indicate that we're now headed to the end of the line.  This process continues until the value in picks has been reached.
+</p>
+
+<p>
+  As each value of nextPick is calculated, it gets added to the pickList array.  This relieves us of having to determine the length of the returned int[] until the end.  Lines 45-51 create the return array, copy the contents of the pickList to the array, and then return it.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+<p>Please post any questions or comments <a href="LINK" target="_blank">here</a>.</p>
+
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>
