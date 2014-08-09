@@ -1,0 +1,86 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1765" target="_blank">SRM 152 DIV 2 - 250 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+Determine the high and low values of a function when called thousands of
+    time, where the output of one iteration is the input of the next.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+01: /*
+02: TopCoder
+03: Single Round Match: 152
+04: Division: 2
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1765
+08: */
+09:
+10: public class FixedPointTheorem {
+11:
+12:     // Number of iterations before we being keeping track of high and low.
+13:     private static final int SETTLE_CYCLES = 200_000;
+14:
+15:     // Number of iterations where we do track high and low.
+16:     private static final int RANGE_CYCLES = 1000;
+17:
+18:     // This is the function that we'll be iterating through
+19:     private static double fnct(double R, double X) {
+20:
+21:         return R * X * (1 - X);
+22:     }
+23:
+24:     public double cycleRange(double R) {
+25:
+26:         double X = 0.25;
+27:
+28:         // Run through 200,000 iterations to stabilize the function.
+29:         for (int i = 1; i < SETTLE_CYCLES; i++) {
+30:             X = fnct(R, X);
+31:         }
+32:
+33:         // Grab the first number and set it to both the high and low.
+34:         X = fnct(R, X);
+35:
+36:         double hi = X;
+37:         double lo = X;
+38:
+39:         // Start at 2 since we already grabbed the first one.
+40:         for (int i = 2; i < RANGE_CYCLES; i++) {
+41:             X = fnct(R, X);
+42:             hi = Math.max(hi, X);
+43:             lo = Math.min(lo, X);
+44:         }
+45:
+46:         return (hi - lo);
+47:     }
+48: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  Be careful that you call the function exactly 200,000 times when stabilizing it, and exactly 1,000 times when determining the high and low values.  An off-by-one error will affect the results of some tests.
+</p>
+
+<p>
+  Also, be sure that you set the initial range values correctly.  After stabilizing, the first call to the function will give you both the max and min values.  Then, continue through the remaining 999 calls updating the max and min as appropriate.
+</p>
+
+<p>
+  Finally, make sure that your function is correct.  It doesn't explicitly state it in the problem statement, but the function you want to use is the one given in the sample: F(X) = R * X * (1 -X)
+</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+<p>Please post any questions or comments <a href="LINK" target="_blank">here</a>.</p>
+
+<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>
