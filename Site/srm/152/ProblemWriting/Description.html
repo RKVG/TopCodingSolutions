@@ -1,0 +1,194 @@
+<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1763" target="_blank">SRM 152 DIV - 2 1000 Points</a>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+<p>
+  Determine if the given input String matches a Backus-Naur form.
+</p>
+
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
+<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+001: /*
+002: TopCoder
+003: Single Round Match: 152
+004: Division: 2
+005: Level: 3
+006: Points: 1000
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1763
+008:  */
+009: 
+010: public class ProblemWriting {
+011: 
+012:     private static final String ERROR_LENGTH = "dotForm must contain between " +
+013:             "1 and 25 characters, inclusive.";
+014: 
+015:     // Replace the 'X' with the position where it failed.
+016:     private static final String ERROR_FORM = "dotForm is not in dot notation," +
+017:             " check character X.";
+018: 
+019:     public String myCheckData(String dotForm) {
+020: 
+021:         // First check that we meet the length requirements.
+022:         if ((dotForm == null) || (dotForm.length() < 1) ||
+023:                 (dotForm.length() > 25)) {
+024:             return ERROR_LENGTH;
+025:         }
+026: 
+027:         StateMachine m = new StateMachine();
+028: 
+029:         /*
+030:          * Use the state machine to process each character of the input.
+031:          * After each transition, check that we are in a valid state.
+032:          */
+033:         for (int i = 0; i < dotForm.length(); i++) {
+034:             m.transition(dotForm.charAt(i));
+035: 
+036:             if (!m.isValidState()) {
+037:                 return ERROR_FORM.replace("X", "" + i);
+038:             }
+039:         }
+040: 
+041:         // When done, make sure we're in a valid end state.
+042:         if (m.isEndState()) {
+043:             return "";
+044:         }
+045: 
+046:         // Otherwise, return an error - we're expecting more characters.
+047:         return ERROR_FORM.replace("X", "" + dotForm.length());
+048: 
+049:     }
+050: 
+051:     /*
+052:      * StateMachine will help us keep track of the valid next characters
+053:      * given our current state.
+054:      */
+055:     private class StateMachine {
+056: 
+057:         private final int STATE_START = 0;
+058:         private final int STATE_NUMBER = 1;
+059:         private final int STATE_DOT1 = 2;
+060:         private final int STATE_OPERATOR = 3;
+061:         private final int STATE_DOT2 = 4;
+062:         private final int STATE_ERROR = -1;
+063: 
+064:         private int state = STATE_START;
+065: 
+066:         public boolean isValidState() {
+067: 
+068:             return (state != STATE_ERROR);
+069:         }
+070: 
+071:         public boolean isEndState() {
+072: 
+073:             return (state == STATE_NUMBER);
+074:         }
+075: 
+076:         /*
+077:          * Using the char c, and our current state, determine the next state.
+078:          * There is no return from STATE_ERROR.
+079:          */
+080:         public void transition(char c) {
+081: 
+082:             if (state == STATE_START) {
+083:                 if (isNumber(c)) {
+084:                     state = STATE_NUMBER;
+085:                 } else {
+086:                     state = STATE_ERROR;
+087:                 }
+088: 
+089:             } else if (state == STATE_NUMBER) {
+090:                 if (isDot(c)) {
+091:                     state = STATE_DOT1;
+092:                 } else if (isOperator(c)) {
+093:                     state = STATE_OPERATOR;
+094:                 } else {
+095:                     state = STATE_ERROR;
+096:                 }
+097: 
+098:             } else if (state == STATE_DOT1) {
+099:                 if (isDot(c)) {
+100:                     state = STATE_DOT1;
+101:                 } else if (isOperator(c)) {
+102:                     state = STATE_OPERATOR;
+103:                 } else {
+104:                     state = STATE_ERROR;
+105:                 }
+106: 
+107:             } else if (state == STATE_OPERATOR) {
+108:                 if (isDot(c)) {
+109:                     state = STATE_DOT2;
+110:                 } else if (isNumber(c)) {
+111:                     state = STATE_NUMBER;
+112:                 } else {
+113:                     state = STATE_ERROR;
+114:                 }
+115: 
+116:             } else if (state == STATE_DOT2) {
+117:                 if (isDot(c)) {
+118:                     state = STATE_DOT2;
+119:                 } else if (isNumber(c)) {
+120:                     state = STATE_NUMBER;
+121:                 } else {
+122:                     state = STATE_ERROR;
+123:                 }
+124:             }
+125:         }
+126: 
+127:         private boolean isNumber(char c) {
+128: 
+129:             return ((c >= '0') && (c <= '9'));
+130:         }
+131: 
+132:         private boolean isOperator(char c) {
+133: 
+134:             return ((c == '+') || (c == '-') || (c == '*') || (c == '/'));
+135:         }
+136: 
+137:         // Didn't need a method for this, but it's better to be consistent.
+138:         private boolean isDot(char c) {
+139: 
+140:             return (c == '.');
+141:         }
+142: 
+143:     }
+144: 
+145: }
+</pre>
+
+<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+<p>
+  There are a lot of difficult ways to solve this problem (recursion, regular expressions, etc.), but the easiest approach is to use a state machine to track our progress through the input String.  First, ensure that the input meets the length requirements. Then, for each character of the input we'll call transition() on our state machine.  If the state ever becomes invalid, return the appropriate string with the current position.  When done, make sure we've finished at a valid end state.
+</p>
+
+<p>
+  The following diagram shows the various states and legal transitions.
+</p>
+
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-l0HW35CMaKA/U-bvdfHJ6wI/AAAAAAAAA7M/BuDBNu6wwEM/s1600/StateMachine.gif" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-l0HW35CMaKA/U-bvdfHJ6wI/AAAAAAAAA7M/BuDBNu6wwEM/s1600/StateMachine.gif" height="114" width="320" /></a>
+</div>
+  
+<p>
+  # represents any digit. + is any operation (+, -, *, /).  . represents a Dot, and the star designates a valid end state.
+</p>
+
+<p>
+  Any transition that is not explicitly shown in the diagram results in moving to the error state, from which there is no return.
+</p>
+
+<p>
+  The code for the state machine is very simple.  We being in the start state, and then for each call to transition(); the current state and given character are used to determine the new state.
+</p>
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+
+  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+
+  <p>Please post any questions or comments <a href="LINK" target="_blank">here</a>.</p>
+
+  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+</div>
