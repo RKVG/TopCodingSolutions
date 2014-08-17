@@ -1,0 +1,223 @@
+body
+{
+   background-color: #000000;
+   color: #FFFFFF;
+   font-family: Arial;
+   font-size: 13px;
+   margin: 0;
+   padding: 0;
+}
+
+a
+{
+   color: #DCDCDC;
+   text-decoration: underline;
+}
+a:visited
+{
+   color: #C0C0C0;
+}
+a:active
+{
+   color: #FF0000;
+}
+a:hover
+{
+   color: #0000FF;
+   text-decoration: underline;
+}
+.Site_Name
+{
+   font-family: "Courier New";
+   font-size: 24px;
+   font-weight: bold;
+   font-style: normal;
+   text-decoration: none;
+   color: #FFFFFF;
+   background-color: transparent;
+   -webkit-animation-name: animate-fade-in-right;
+   -moz-animation-name: animate-fade-in-right;
+   -ms-animation-name: animate-fade-in-right;
+   animation-name: animate-fade-in-right;
+   -webkit-animation-duration: 500ms;
+   -moz-animation-duration: 500ms;
+   -ms-animation-duration: 500ms;
+   animation-duration: 500ms;
+   -webkit-animation-delay: 0ms;
+   -moz-animation-delay: 0ms;
+   -ms-animation-delay: 0ms;
+   animation-delay: 0ms;
+   -webkit-animation-timing-function: linear;
+   -moz-animation-timing-function: linear;
+   -ms-animation-timing-function: linear;
+   animation-timing-function: linear;
+   -webkit-animation-iteration-count: 1;
+   -moz-animation-iteration-count: 1;
+   -ms-animation-iteration-count: 1;
+   animation-iteration-count: 1;
+   -webkit-animation-direction: normal;
+   -moz-animation-direction: normal;
+   -ms-animation-direction: normal;
+   animation-direction: normal;
+   -webkit-animation-fill-mode: none;
+   -moz-animation-fill-mode: none;
+   -ms-animation-fill-mode: none;
+   animation-fill-mode: none;
+}
+.Footer_text
+{
+   font-family: Arial;
+   font-size: 13px;
+   font-weight: normal;
+   font-style: normal;
+   text-decoration: none;
+   color: #FFFFFF;
+   background-color: transparent;
+}
+.body_text
+{
+   font-family: Arial;
+   font-weight: normal;
+   font-style: normal;
+   text-decoration: none;
+   color: #FFFFFF;
+   background-color: transparent;
+}
+
+#wb_Text1
+{
+   background-color: transparent;
+   border: 0px #000000 solid;
+   padding: 0;
+   text-align: left;
+}
+#wb_Text1 div
+{
+   text-align: left;
+}
+#master_frame_Shape2
+{
+   width: 167px;
+   height: 600px;
+   background-color: transparent;
+   background-image: url(images/index_master_frame_Shape2_bkgrnd.png);
+   background-repeat: repeat-x;
+   background-position: left top;
+   border: 0px #A0A0A0 solid;
+}
+#master_frame_Shape2_text
+{
+   position: absolute;
+   left: 1px;
+   top: 293px;
+   width: 165px;
+   height: 306px;
+   overflow: hidden;
+   text-align: center;
+}
+#master_frame_Shape1
+{
+   width: 1280px;
+   height: 70px;
+   background-color: transparent;
+   background-image: url(images/index_master_frame_Shape1_bkgrnd.png);
+   background-repeat: repeat-x;
+   background-position: left top;
+   border: 0px #A0A0A0 solid;
+}
+#master_frame_Shape1_text
+{
+   position: absolute;
+   left: 1px;
+   top: 28px;
+   width: 1278px;
+   height: 41px;
+   overflow: hidden;
+   text-align: center;
+}
+#master_frame_Line1
+{
+   color: #A0A0A0;
+   background-color: #A0A0A0;
+   border-width: 0;
+}
+#wb_master_frame_Text2
+{
+   background-color: transparent;
+   border: 0px #000000 solid;
+   padding: 0px 0px 5px 0px;
+   text-align: center;
+}
+#wb_master_frame_Text2 div
+{
+   text-align: center;
+}
+#Footer
+{
+   background-color: transparent;
+}
+#wb_master_frame_Text1
+{
+   background-color: transparent;
+   border: 0px #000000 solid;
+   padding: 0;
+   text-align: left;
+}
+#wb_master_frame_Text1 div
+{
+   text-align: left;
+}
+#Navigation
+{
+   background-color: transparent;
+}
+#master_frame_NavigationBar1 ul.navbar
+{
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+#master_frame_NavigationBar1 ul.navbar li
+{
+   height: 22px;
+   width: 134px;
+   margin: 0 0 4px 0;
+   vertical-align: bottom;
+}
+#master_frame_NavigationBar1 ul.navbar li a
+{
+   display: block;
+   position: relative;
+}
+#master_frame_NavigationBar1 ul.navbar li a img
+{
+   position: absolute;
+   left: 0;
+   z-index: 1;
+   border-width: 0;
+}
+#master_frame_NavigationBar1 ul.navbar li span
+{
+   display: block;
+   height: 22px;
+   width: 134px;
+   position: absolute;
+   z-index: 2;
+}
+#master_frame_NavigationBar1 a .hover
+{
+   visibility: hidden;
+}
+#master_frame_NavigationBar1 a:hover .hover
+{
+   visibility: visible;
+}
+#master_frame_NavigationBar1 a:hover span
+{
+   visibility: hidden;
+}
+#Header
+{
+   background-color: transparent;
+}
+

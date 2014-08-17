@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="jaxp-api">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/SiteBuilder/lib/jaxp-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/SiteBuilder/lib/jaxp-ri.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

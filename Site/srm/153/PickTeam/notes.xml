@@ -1,0 +1,25 @@
+<div>
+<p>
+The problem asks us to create the best possible team by selecting from a pool of individuals.  Each individual has a set of scores which represent how compatible they are with each other individual.   The team's score is determinined by summing the compatibility ratings for each person on the team with every other team member.  The team with the highest score should be selected.
+</p>
+
+<p>
+  The solution use two inner classes to help represent the data: Person and Team.  Person stores the person's name, an ID (which comes in handy since people may have the same name), and a Map that maps another Person's ID to their compatibility score.
+</p>
+
+<p>
+  Team holds a set of Person objects, and has methods for adding new team mebers, generating the required return value for the winning team, and calculating the score.
+</p>
+
+<p>
+  The hardest part of this problem, is coming up with the set of all possible teams - this is handled by the getAllTeams() method. The method works by iterating through the list of all people.  For each person, getAllTeams() is called with a list of all people that come after the current person, and a team size that's decremented by one.  For each of the teams returned, the current person is added to the team, and that team is added to the set that gets returned.  The recursion continues until the size of the desired team is 1, in which case each person in the list of allPeople is effectively their own team.
+</p>
+
+<p>
+  The number of teams is small enough that this brute force approach is possible.  Although, the code, as given may fail one of the test for taking more that 2 seconds.  It ran in 0.6 seconds on my machine, so I'm not too concerned.  I've written essentially the same algorithm in C, and it passed easily.
+</p>
+
+<p>
+  Once a Set of all possible teams is obtained, it's a simple matter of calculating the score for each team, and keeping track of which team has the highest.
+</p>
+</div>

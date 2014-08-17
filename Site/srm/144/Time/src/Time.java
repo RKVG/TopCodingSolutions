@@ -1,11 +1,3 @@
-/*
-TopCoder
-Single Round Match: 144
-Division: 2
-Level: 1
-Points: 200
-Description: http://community.topcoder.com/stat?c=problem_statement&pm=1708
- */
 public class Time {
 
     public static final int SECONDS_PER_MINUTE = 60;

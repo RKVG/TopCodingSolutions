@@ -1,20 +1,6 @@
-/*
-TopCoder
-Single Round Match: 153
-Division: 2
-Level: 2
-Points: 500
-
-Single Round Match: 153
-Division: 1
-Level: 1
-Points: 250
-
-Description: http://community.topcoder.com/stat?c=problem_statement&pm=1772
- */
 public class Inventory {
 
-    public static final double DAYS_IN_MONTH = 30.0;
+    private static final double DAYS_IN_MONTH = 30.0;
 
     /*
     Calculates the average sales for the month. For months that sold out in

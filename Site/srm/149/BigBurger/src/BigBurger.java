@@ -1,12 +1,3 @@
-/*
-TopCoder
-Single Round Match: 149
-Division: 2 / 1
-Level: 2 / 1
-Points: 500 / 250
-Description: http://community.topcoder.com/stat?c=problem_statement&pm=1648
- */
-
 public class BigBurger {
 
     public int maxWait(int[] arrival, int[] service) {

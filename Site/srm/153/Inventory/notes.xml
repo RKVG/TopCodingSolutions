@@ -1,0 +1,21 @@
+<div>
+  <p>
+    Our task is to determine the expected number of sales per month given past peformance.  There are some months where the items was not in stock at all.  We do not count these months in our calculations.  In other months, the item may have sold out before the end of the month.  In this case, we need to project out what the sales would have been had enough inventory been available.
+  </p>
+
+  <p>
+    The solution works by counting up the actual or projected sales of each month.  Then it determines the average by dividing that sum by the number of months where the item was available.
+  </p>
+
+  <p>
+    numMonths is a counter that keeps track of the number of months where the item is available.  If the item was not available at all during that month, line 33 will skip to the next month, and numMonths will not be incremented.
+  </p>
+
+  <p>
+    The calcAverage() method calculates the actual or projected number of sales for any month.  By dividing the number of days the item was available by the number of days in a month, we get the fraction of the month that the item was availble.  If it was available for all 30 days, this fraction will be 1.  Then the number of sales is divided by this fraction to get the projected sales for the entire month.  So, if the item was available for 1/2 the month, this equation would return twice the number of sales.
+  </p>
+
+  <p>
+    Lines 40-49 calculate the average and return it.  Note that there is a "fudge factor" that is referenced in the problem statement.  Without this correction on line 46, some tests will not pass.
+  </p>
+</div>

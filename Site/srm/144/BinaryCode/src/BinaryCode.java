@@ -1,7 +1,3 @@
-/*
-SRM 144 DIV 1 - 300
-SRM 144 DIV 2 - 550
- */
 public class BinaryCode {
 
     /*
