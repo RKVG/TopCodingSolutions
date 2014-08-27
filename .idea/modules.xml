@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Site/srm/155/BenfordsLaw/BenfordsLaw.iml" filepath="$PROJECT_DIR$/Site/srm/155/BenfordsLaw/BenfordsLaw.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/149/BigBurger/BigBurger.iml" filepath="$PROJECT_DIR$/Site/srm/149/BigBurger/BigBurger.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SRM 144 DIV 2/BinaryCode/BinaryCode.iml" filepath="$PROJECT_DIR$/SRM 144 DIV 2/BinaryCode/BinaryCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/151/Birthday/Birthday.iml" filepath="$PROJECT_DIR$/Site/srm/151/Birthday/Birthday.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/628/BishopMove/BishopMove.iml" filepath="$PROJECT_DIR$/Site/srm/628/BishopMove/BishopMove.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/156/BombSweeper/BombSweeper.iml" filepath="$PROJECT_DIR$/Site/srm/156/BombSweeper/BombSweeper.iml" />
@@ -24,7 +23,9 @@
       <module fileurl="file://$PROJECT_DIR$/Site/srm/147/Flags/Flags.iml" filepath="$PROJECT_DIR$/Site/srm/147/Flags/Flags.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/149/FormatAmt/FormatAmt.iml" filepath="$PROJECT_DIR$/Site/srm/149/FormatAmt/FormatAmt.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/147/GoldenChain/GoldenChain.iml" filepath="$PROJECT_DIR$/Site/srm/147/GoldenChain/GoldenChain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Site/srm/157/GuessTheNumber/GuessTheNumber.iml" filepath="$PROJECT_DIR$/Site/srm/157/GuessTheNumber/GuessTheNumber.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/145/HillHike/HillHike.iml" filepath="$PROJECT_DIR$/Site/srm/145/HillHike/HillHike.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Site/srm/157/HourGlass/HourGlass.iml" filepath="$PROJECT_DIR$/Site/srm/157/HourGlass/HourGlass.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/145/ImageDithering/ImageDithering.iml" filepath="$PROJECT_DIR$/Site/srm/145/ImageDithering/ImageDithering.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/150/InterestingDigits/InterestingDigits.iml" filepath="$PROJECT_DIR$/Site/srm/150/InterestingDigits/InterestingDigits.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/Inventory/Inventory.iml" filepath="$PROJECT_DIR$/PassingNotPosted/Inventory/Inventory.iml" />
@@ -50,7 +51,6 @@
       <module fileurl="file://$PROJECT_DIR$/Site/srm/155/Quipu/Quipu.iml" filepath="$PROJECT_DIR$/Site/srm/155/Quipu/Quipu.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/146/RectangularGrid/RectangularGrid.iml" filepath="$PROJECT_DIR$/Site/srm/146/RectangularGrid/RectangularGrid.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/146/Roundabout/Roundabout.iml" filepath="$PROJECT_DIR$/Site/srm/146/Roundabout/Roundabout.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Salary/Salary.iml" filepath="$PROJECT_DIR$/Salary/Salary.iml" />
       <module fileurl="file://$PROJECT_DIR$/PassingNotPosted/SuperRot/SuperRot.iml" filepath="$PROJECT_DIR$/PassingNotPosted/SuperRot/SuperRot.iml" />
       <module fileurl="file://$PROJECT_DIR$/Site/srm/144/Time/Time.iml" filepath="$PROJECT_DIR$/Site/srm/144/Time/Time.iml" />
       <module fileurl="file://$PROJECT_DIR$/Top Coder.iml" filepath="$PROJECT_DIR$/Top Coder.iml" />

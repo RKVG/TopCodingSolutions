@@ -1,0 +1,76 @@
+<div class="solution">
+  
+<div class="header">Problem:</div>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1790" target="_blank">TopCoder Problem Statement - GuessTheNumber</a>
+
+
+<div class="header">Overview:</div>
+<p>
+Determine the number of guesses it will take to arrive at the answer in the I'm Thinking of a Number game. 
+</p>
+
+
+<div class="header">Java Source:</div>
+<div class="code">
+<pre>01: import java.lang.Integer;
+02: 
+03: public class GuessTheNumber {
+04: 	
+05: 	public int noGuesses(int upper, int answer) {
+06: 
+07:         int lower = 1;
+08:         int numGuesses = 0;
+09:         int guess = 0;
+10: 
+11:         while (guess != answer) {
+12: 
+13:             numGuesses++;
+14: 
+15:             // guess = (upper + lower) / 2;  // Don't do This!!!
+16:             guess = ((upper - lower) / 2) + lower;
+17:             // System.out.println(guess);
+18: 
+19:             if (guess < answer) {
+20:                 lower = guess + 1;
+21: 
+22:             } else if (guess > answer) {
+23:                 upper = guess - 1;
+24:             }
+25: 
+26:         }
+27: 
+28:         return numGuesses;
+29: 	}
+30: 
+31:     public static void main(String[] args) {
+32:         int upper = Integer.MAX_VALUE - 1;
+33:         int answer = Integer.MAX_VALUE - 2;
+34: 
+35:         System.out.println(new GuessTheNumber().noGuesses(upper, answer));
+36:     }
+37: }</pre>
+</div>
+
+<div class="header">Notes:</div>
+<p>
+  One of the first programs you'll write (after hello world! of course) is the number guessing game.  We enter a while loop until the guess matches the answer.
+  After each guess, we evaluate if that guess was too high, too low or correct.  If the guess is incorrect, we can eliminate anything to the wrong side of our guess.
+  The guess should be as close to the middle as possible, so that we can narrow our search down quickly.  The code for this is pretty simple, and should be familiar
+  to anyone that has written any code.  The only real difference here is that the computer is playing against itself, and we're just couting the number of guesses.
+</p>
+
+<p>
+  One bit of advice though. On line 16, the next guess is calculated.  This should be the mid-point of upper and lower.  Avoid calculating this as shown on line 15.
+  It won't matter for this problem, since upper won't be any higher than 1000; but if upper could be very large (close to Integer.MAX_VALUE) then upper + lower could cause
+  an overflow.  The safer way is shown on line 16.  This is a bug that famously laid unnoticed for decades in many sorting and search algorightms.  See
+  <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html" target="_blank">Extra, Extra - Read All About It: Nearly All Binary Searches and Mergesorts are Broken</a>
+  if you're intereseted.
+</p>
+
+<p>
+  Try swapping the comments on lines 15 16, and 17; then running the main method to see the results.
+</p>
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+</div>
