@@ -1,0 +1,42 @@
+<TopCoder>
+  <Solution id="1">
+    <Title>BigBurger</Title>
+    <Overview>You are asked to decode a string. The original String is in binary format. The encoded string is formed by adding both neighboring digits to the current digit.</Overview>
+    <tc_id>1704</tc_id>
+    <Blog>http://http://blog.topcodingsolutions.net/2014/07/srm-149-div-2-500-points.html</Blog>
+  </Solution>
+  <Solution id="2">
+    <Title>MostProfitable</Title>
+    <Overview>Determine the most profitable item sold based on cost, price, and the number of sales.</Overview>
+    <tc_id>1774</tc_id>
+    <Blog>http://blog.topcodingsolutions.net/2014/08/srm-153-div-2-250-points-mostprofitable.html</Blog>
+  </Solution>
+  <Solution id="3">
+    <Title>Inventory</Title>
+    <Overview>Determine the number of items a business can expect to sell per month based on past averages.</Overview>
+    <tc_id>1772</tc_id>
+    <Blog>http://blog.topcodingsolutions.net/2014/08/srm-153-div-2-500-points-inventory.html</Blog>
+  </Solution>
+  <Solution id="4">
+    <Title>PickTeam</Title>
+    <Overview>Choose the most effective team based on how well individuals work together.</Overview>
+    <tc_id>1773</tc_id>
+    <Blog>http://blog.topcodingsolutions.net/2014/08/srm-153-div-2-1000-points-pickteam.html</Blog>
+  </Solution>
+  <Matches>
+    <Match id="149" division="1">
+      <Challenge level="1" points="250" class_id="1" />
+    </Match>
+    <Match id="149" division="2">
+      <Challenge level="1" points="500" class_id="1" />
+    </Match>
+    <Match id="153" division="2">
+      <Challenge level="1" points="250" class_id="2" />
+      <Challenge level="2" points="500" class_id="3" />
+      <Challenge level="3" points="1000" class_id="4" />
+    </Match>
+    <Match id="153" division="1">
+      <Challenge level="1" points="250" class_id="3" />
+    </Match>
+  </Matches>
+</TopCoder>

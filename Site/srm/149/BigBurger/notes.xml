@@ -1,0 +1,17 @@
+<div>
+<p>
+For each customer, we calculate the finish time for their order.  For the first customer, that's just their arrival time plus the service time.  For each remaining customer, it will either be their arrival time, or the finishing time of the customer ahead of them, plus the service time.
+</p>
+
+<p>
+The first customer must be handled separately to avoid through an array index out of bounds exception on line 31.
+</p>
+
+<p>
+Once we have the finish time for the customer, we calculate their wait time by subtracting off their arrival and service times.  If this wait time is longer than any we've seen so far, save it in maxWaitTime.
+</p>
+
+<p>
+As a side note, I found this to be pretty easy for a Division 2 - 500 Point problem.  Compare it against <a href="LINK">BracketExpression</a> which has the same point value.
+</p>
+</div>
