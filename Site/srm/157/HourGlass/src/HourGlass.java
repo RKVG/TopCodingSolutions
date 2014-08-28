@@ -60,10 +60,7 @@ public class HourGlass {
     // The method called by the TopCoder tests.
     public int[] measurable(int glass1, int glass2) {
 
-        // The first step will always be to run out the smaller timer.
-        int runTime = Math.min(glass1, glass2);
-        flipHourGlasses(new GlassTimer(glass1, 0).runFor(runTime),
-                new GlassTimer(glass2, 0).runFor(runTime), runTime);
+        flipHourGlasses(new GlassTimer(glass1, 0), new GlassTimer(glass2, 0), 0);
 
         /*
         * Upon returning from flipHourGlasses, maxPQ will contain the
@@ -110,7 +107,8 @@ public class HourGlass {
         * Either maxPQ hasn've filled up yet or our current time is smaller
         * than the largest in maxPQ, store our current time.
         */
-        if ((!maxPQ.contains(elapsedTime)) &&
+        if ((elapsedTime > 0) &&
+                (!maxPQ.contains(elapsedTime)) &&
                 ((maxPQ.size() < NUM_TIMES_TO_RETURN) ||
                         (elapsedTime < maxPQ.peek()))) {
 
@@ -133,7 +131,7 @@ public class HourGlass {
         // Flip neither
         g1a = g1.copy();
         g2a = g2.copy();
-        runTime = getNextStop(g1a, g2a);
+        runTime = getNextPause(g1a, g2a);
 
         /*
         * Do not make calls where the runTime is not advanced.  This will
@@ -147,7 +145,7 @@ public class HourGlass {
         // Flip glass 1
         g1a = g1.flip();
         g2a = g2.copy();
-        runTime = getNextStop(g1a, g2a);
+        runTime = getNextPause(g1a, g2a);
 
         if (runTime != 0) {
             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
@@ -157,7 +155,7 @@ public class HourGlass {
         // Flip glass 2
         g1a = g1.copy();
         g2a = g2.flip();
-        runTime = getNextStop(g1a, g2a);
+        runTime = getNextPause(g1a, g2a);
 
         if (runTime != 0) {
             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
@@ -167,7 +165,7 @@ public class HourGlass {
         // Flip both
         g1a = g1.flip();
         g2a = g2.flip();
-        runTime = getNextStop(g1a, g2a);
+        runTime = getNextPause(g1a, g2a);
 
         if (runTime != 0) {
             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
@@ -180,7 +178,7 @@ public class HourGlass {
     * Determines when the next timer will run out.  In general, this will be
     * the smaller time remaining, but we want to avoid returning 0 if possible.
     */
-    private static int getNextStop(GlassTimer a, GlassTimer b) {
+    private static int getNextPause(GlassTimer a, GlassTimer b) {
 
         int a1 = a.getTimeRemaining();
         int b1 = b.getTimeRemaining();

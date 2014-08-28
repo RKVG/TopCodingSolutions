@@ -1,0 +1,277 @@
+<div class="solution">
+  
+<div class="header">Problem:</div>
+<p>
+<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1787" target="_blank">TopCoder Problem Statement - HourGlass</a>
+</p>
+
+<div class="header">Overview:</div>
+<p>
+Determine the time intervals that can be measured using two hourglasses.
+</p>
+
+
+<div class="header">Java Source:</div>
+<div class="code">
+<pre>001: import java.util.Collections;
+002: import java.util.PriorityQueue;
+003: 
+004: /*
+005: * An immutable class to represent an hour class.
+006: */
+007: class GlassTimer {
+008: 
+009:     private final int topBulb;
+010:     private final int bottomBulb;
+011: 
+012:     GlassTimer(int top, int bottom) {
+013:         this.topBulb = top;
+014:         this.bottomBulb = bottom;
+015:     }
+016: 
+017:     // Returns a new copy of this oject
+018:     GlassTimer copy() {
+019:         return new GlassTimer(this.topBulb, this.bottomBulb);
+020:     }
+021: 
+022:     // Returns a new inverted copy of the timer.
+023:     public GlassTimer flip() {
+024:         return new GlassTimer(this.bottomBulb, this.topBulb);
+025:     }
+026: 
+027:     // Returns how much sand is in the topBulb.
+028:     public int getTimeRemaining() {
+029:         return this.topBulb;
+030:     }
+031: 
+032:     /*
+033:     * Runs i amount of time out of the top bulb, and adds it to the bottom.
+034:     * If i > topBulb, we'll stop when the top runs out.
+035:     */
+036:     public GlassTimer runFor(int i) {
+037: 
+038:         if (i > topBulb) {
+039:             i = topBulb;
+040:         }
+041: 
+042:         return new GlassTimer(topBulb - i, bottomBulb + i);
+043:     }
+044: }
+045: 
+046: public class HourGlass {
+047: 
+048:     // The number of items we'll return in the result.
+049:     public static final int NUM_TIMES_TO_RETURN = 10;
+050: 
+051:     /*
+052:     * A PriorityQueue to store the times we've calculated so far.  By passing
+053:     * Collections.reverseOrder, the PriorityQueue will always have the largest
+054:     * element in the first position.
+055:     */
+056:     PriorityQueue<Integer> maxPQ =
+057:             new PriorityQueue<Integer>(NUM_TIMES_TO_RETURN,
+058:                     Collections.reverseOrder());
+059: 
+060:     // The method called by the TopCoder tests.
+061:     public int[] measurable(int glass1, int glass2) {
+062: 
+063:         flipHourGlasses(new GlassTimer(glass1, 0), new GlassTimer(glass2, 0), 0);
+064: 
+065:         /*
+066:         * Upon returning from flipHourGlasses, maxPQ will contain the
+067:         * NUM_TIMES_TO_RETURN smallest times. Create a new array to hold the
+068:         * return array, and fill it in starting from the back, by pulling the
+069:         * next largest item off the PriorityQueue
+070:         */
+071:         int[] returnArray = new int[NUM_TIMES_TO_RETURN];
+072: 
+073:         int i = NUM_TIMES_TO_RETURN - 1;
+074:         while (i >= 0) {
+075:             returnArray[i--] = maxPQ.poll();
+076:         }
+077: 
+078:         return returnArray;
+079: 
+080:     }
+081: 
+082:     /*
+083:     * Each time this method is called, one or both hour glasses will have just
+084:     * emptied.  At that point, there are four things we can do:
+085:     * 1. Nothing - let the seocnd glass run out.
+086:     * 2. Flip Glass 1
+087:     * 3. Flip Glass 2
+088:     * 4. Flip Both glasses.
+089:     * This method makes recursive calls trying each of these possiblities.
+090:     * With each call, the amount of time until the next hour glass runs out
+091:     * is calculated and added to elapsedTime
+092:     */
+093:     private void flipHourGlasses(GlassTimer g1, GlassTimer g2, int elapsedTime) {
+094: 
+095:         /*
+096:         * If we've already stored our 10 numbers, and now the elapsedTime is
+097:         * more than the largest time we've seen, just return.
+098:         * maxPQ.peek() will give us the largest time stored in maxPQ.
+099:         */
+100:         if ((maxPQ.size() == NUM_TIMES_TO_RETURN) &&
+101:                 (elapsedTime >= maxPQ.peek())) {
+102:             return;
+103:         }
+104: 
+105:         /*
+106:         * If maxPQ doesn't already contain the current elapsed time, And
+107:         * Either maxPQ hasn've filled up yet or our current time is smaller
+108:         * than the largest in maxPQ, store our current time.
+109:         */
+110:         if ((elapsedTime > 0) &&
+111:                 (!maxPQ.contains(elapsedTime)) &&
+112:                 ((maxPQ.size() < NUM_TIMES_TO_RETURN) ||
+113:                         (elapsedTime < maxPQ.peek()))) {
+114: 
+115:             // If maxPQ is full, remove that largest to avoid holding > 10.
+116:             if (maxPQ.size() == NUM_TIMES_TO_RETURN) {
+117:                 maxPQ.remove();
+118:             }
+119: 
+120:             /*
+121:             * Store the current time.  PriorityQueues use Poll() and Offer() in
+122:             * place of Pop() and Push()
+123:             */
+124:             maxPQ.offer(elapsedTime);
+125:         }
+126: 
+127:         GlassTimer g1a;
+128:         GlassTimer g2a;
+129:         int runTime;
+130: 
+131:         // Flip neither
+132:         g1a = g1.copy();
+133:         g2a = g2.copy();
+134:         runTime = getNextPause(g1a, g2a);
+135: 
+136:         /*
+137:         * Do not make calls where the runTime is not advanced.  This will
+138:         * result in infinite loops.
+139:         */
+140:         if (runTime != 0) {
+141:             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
+142:                     elapsedTime + runTime);
+143:         }
+144: 
+145:         // Flip glass 1
+146:         g1a = g1.flip();
+147:         g2a = g2.copy();
+148:         runTime = getNextPause(g1a, g2a);
+149: 
+150:         if (runTime != 0) {
+151:             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
+152:                     elapsedTime + runTime);
+153:         }
+154: 
+155:         // Flip glass 2
+156:         g1a = g1.copy();
+157:         g2a = g2.flip();
+158:         runTime = getNextPause(g1a, g2a);
+159: 
+160:         if (runTime != 0) {
+161:             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
+162:                     elapsedTime + runTime);
+163:         }
+164: 
+165:         // Flip both
+166:         g1a = g1.flip();
+167:         g2a = g2.flip();
+168:         runTime = getNextPause(g1a, g2a);
+169: 
+170:         if (runTime != 0) {
+171:             flipHourGlasses(g1a.runFor(runTime), g2a.runFor(runTime),
+172:                     elapsedTime + runTime);
+173:         }
+174: 
+175:     }
+176: 
+177:     /*
+178:     * Determines when the next timer will run out.  In general, this will be
+179:     * the smaller time remaining, but we want to avoid returning 0 if possible.
+180:     */
+181:     private static int getNextPause(GlassTimer a, GlassTimer b) {
+182: 
+183:         int a1 = a.getTimeRemaining();
+184:         int b1 = b.getTimeRemaining();
+185: 
+186:         if ((a1 == 0) && (b1 == 0)) {
+187:             return 0;
+188:         }
+189: 
+190:         if (a1 == 0) {
+191:             return b1;
+192:         }
+193: 
+194:         if (b1 == 0) {
+195:             return a1;
+196:         }
+197: 
+198:         return Math.min(a1, b1);
+199:         
+200:     }
+201: }</pre>
+</div>
+
+<div class="header">Notes:</div>
+<p>
+  The first thing to note is that we can only take an action when one (or both) of the hourglasses has emptied.  These types of problems do not allow
+  for the possibility of stopping a hourglass at the 1/2 way point, or any other intermediate position.  I'll call the time at which an hourglass empties
+  a "Pause".  At these moments, one of four actions can occur.:
+</p>
+
+<ol>
+  <li>Nothing.  We don't flip either hourglass.  Instead, just continue until the second one runs out too.</li>
+  <li>Flip Hourglass #1</li>
+  <li>Flip Hourglass #2</li>
+  <li>Flip Both #1 and #2</li>
+</ol>
+
+<p>
+  Whenever a Pause is reached, we'll recursively call flipHourGlass() for each of these four possibilities.  In each case, the time to the next Pause is
+  calculated and added to the total elapsed time. Lines 131 - 173.
+</p>
+
+<p>
+  The next Pause is calculated by the getNextPause() method which examines the amount of time remaining in each hourglass.  The Pause will occur when the
+  smaller of the two runs out - unless the smaller is already at zero.  Care needs to be taken here to ensure that we don't enter an infinite loop by
+  choosing to pause at the same state over and over again.
+</p>
+
+<p>
+  The times that can be calculated are stored in a max PriorityQueue.  Normally this structure ensure that the smallest element is always
+  the next to be popped off.  But, by passing Collections.reverseOrdeer() to the constructor, Lines 56-58, we end up with the largest
+  element at the top.  So long as the PriorityQueue maxPQ has fewer than 10 elements, we'll add the elapsedTime at every Pause.  Once it holds
+  10 elements, then we'll compare the current elapsed time to maxPQ's largest element, and if the current time is smaller, then we'll replace the
+  largest with the current time.  In this way, we are assured that the smallest 10 numbers are stored.
+</p>
+
+<p>
+  Also, the PriorityQueue provides a convienient way of breaking the recursive calls to flipHourGlass().  Once the elapsedTime is greater than the
+  largest element stored in maxPQ, there is no sense in continuing.  We can return at that point. Line 101.
+</p>
+
+<p>
+  Finally, I've created a class to represent the hourglasses - GlassTimer.  This object is immutable.  Once created, it's properties cannot be changed.
+  Calls to update the ojbect, like flip() and runFor() return new instances of GlassTimer.  This is very useful, and protects against your local
+  variables from being modified - especially when using recursion.
+</p>
+
+<p>
+  Putting it all together, the program enters by calling measurable() at line 61.  flipHourGlasses is called with two new GlassTimers, both filled
+  at the top, and an initial elapsedTime of 0.  Once that returns, we'll have a priority quest holding the 10 smallest times.  We pop (poll) the
+  largest number off one at a time, and use it to fill in the return array working from back to front.
+</p>
+
+
+
+
+
+
+<div style="margin-top:50px;text-align:center;font-size:14px">
+<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+</div>
+</div>
