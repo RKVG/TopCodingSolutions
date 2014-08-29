@@ -22,13 +22,13 @@ public class StripePainterTest {
 		assertEquals(4, new StripePainter().minStrokes(stripes));
 	}
 	
-	@Test(timeout=20000)
+	@Test(timeout=2000)
 	public void test3() {
 		String stripes = "AABBCCDDCCBBAABBCCDD";
 		assertEquals(7, new StripePainter().minStrokes(stripes));
 	}
 	
-	@Test(timeout=200000)
+	@Test(timeout=2000)
 	public void test4() {
 		String stripes = "BECBBDDEEBABDCADEAAEABCACBDBEECDEDEACACCBEDABEDADD";
 		assertEquals(26, new StripePainter().minStrokes(stripes));

@@ -1,0 +1,16 @@
+.solution .code {font-size:15px; font-family:courier new,courier,monospace; width:95%; color:black; background-color:#E0E0E0; text-align:left; padding:20px;}
+.solution .header {font-size:18px; font-family:arial;}
+.solution {font-size:14px; color:black; background-color:#A5A5A5; padding:20px;}
+.solution .footer{margin-top:50px;text-align:center;font-size:14px}
+
+.navigationTable {width:100%; color: #666666;}
+.navigationTable td {text-align:center}
+.navigationTable tr:nth-child(odd) {background: #333333;}
+.navigationTable tr:nth-child(even) {background: #444444;}
+
+.autoAltTable {border-collapse:collapse; width:100%;}
+.autoAltTable td {width:100%; padding-left: 0px; padding-right: 20px; padding-top: 5px; padding-bottom: 5px;}
+.autoAltTable td:nth-child(1) {text-align:left;}
+.autoAltTable td:nth-child(2) {text-align:center;}
+.autoAltTable tr:nth-child(odd) {background: #333333;}
+.autoAltTable tr:nth-child(even) {background: #333333;}

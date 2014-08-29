@@ -1,16 +1,20 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1777"
-   target="_blank">SRM 156 DIV 2 - 250 Points</a>
+<div class="solution">
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1777"
+           target="_blank">TopCoder Problem Statement - DiskSpace</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the smallest number of hard drives needed to store all your
+        stuff.
+    </p>
 
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-<p>
-Determine the smallest number of hard drives needed to store all your stuff.
-</p>
-
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
 01: /*
 02: TopCoder
 03: Single Round Match: 156
@@ -57,23 +61,37 @@ Determine the smallest number of hard drives needed to store all your stuff.
 44:     }
 45: }
 </pre>
+    </div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
-<p>This solution is a simple example of using a greedy algorithm.  We'll fill up the largest drives first, and use up smaller and smaller drives as necessary.</p>
-<p>The first step is to determine the toal amount of space that your data requires.  This is calculated by the for loop starting on line 19, and is stored in the variable capacityNeeded.</p>
-<p>Next, the drives are sorted by their capacity using Arrays.sort().  This will arrange the array with the smallest element first.</p>
-<p>Finally, we begin filling the drives, beginning with the largest one at the end of the total[] array and working backward to the smaller drives.  For each drive, we subtract their volume from capctiyNeeded, until capacityNeeded is no longer greater than zero.
-<p>We don't need to worry about not having enough space, because the problem statement guarantees that the capacity of the drives will be large enough.</p>
-<p>Also, it's good to remember that Java provides the methods Arrays.sort() and Collections().sort for sorting.</p>
+    <div class="header"> Notes:</div>
+    <p>This solution is a simple example of using a greedy algorithm. We'll fill
+        up the largest drives first, and use up smaller and smaller drives as
+        necessary.</p>
+
+    <p>The first step is to determine the toal amount of space that your data
+        requires. This is calculated by the for loop starting on line 19, and is
+        stored in the variable capacityNeeded.</p>
+
+    <p>Next, the drives are sorted by their capacity using Arrays.sort(). This
+        will arrange the array with the smallest element first.</p>
+
+    <p>Finally, we begin filling the drives, beginning with the largest one at
+        the end of the total[] array and working backward to the smaller drives.
+        For each drive, we subtract their volume from capctiyNeeded, until
+        capacityNeeded is no longer greater than zero.
+
+    <p>We don't need to worry about not having enough space, because the problem
+        statement guarantees that the capacity of the drives will be large
+        enough.</p>
+
+    <p>Also, it's good to remember that Java provides the methods Arrays.sort()
+        and Collections().sort for sorting.</p>
 
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
+    <div class="footer">
 
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
 
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-156-div-2-250-points-diskspace.html" target="_blank">here</a>.</p>
-
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
-
-
+    </div>
 </div>

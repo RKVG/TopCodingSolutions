@@ -1,17 +1,19 @@
 <div class="solution">
-  
-<div class="header">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1786" target="_blank">TopCoder Problem Statement - Salary</a>
+
+    <div class="header">Problem:</div>
+    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1786"
+       target="_blank">TopCoder Problem Statement - Salary</a>
 
 
-<div class="header">Overview:</div>
-<p>
-Determine an employee's compensation for the day.  Rates vary for evening and night shifts.
-</p>
+    <div class="header">Overview:</div>
+    <p>
+        Determine an employee's compensation for the day. Rates vary for evening
+        and night shifts.
+    </p>
 
 
-<div class="header">Java Source:</div>
-<div class="code">
+    <div class="header">Java Source:</div>
+    <div class="code">
 <pre>
 01: public class Salary {
 02: 
@@ -80,33 +82,46 @@ Determine an employee's compensation for the day.  Rates vary for evening and ni
 65:     }
 66: }
 </pre>
-</div>
+    </div>
 
-<div class="header">Notes:</div>
-<p>
-  The first thing to note is that you want to avoid using decimals.  If you introduce doubles, you'll waste a ton of time tracking
-  down off-by-one errors.  To get around this, we simply double each second as we count it: A day shift second counts as 2; and an
-  evening or night shift second will count as 3.  Then, when the result is calculated, the number of seconds in an hour is also
-  doubled to compensate.
-</p>
+    <div class="header">Notes:</div>
+    <p>
+        The first thing to note is that you want to avoid using decimals. If you
+        introduce doubles, you'll waste a ton of time tracking
+        down off-by-one errors. To get around this, we simply double each second
+        as we count it: A day shift second counts as 2; and an
+        evening or night shift second will count as 3. Then, when the result is
+        calculated, the number of seconds in an hour is also
+        doubled to compensate.
+    </p>
 
-<p>
-  The approach taken is to examine each second of the shift, and determine if it falls during the day shift hours or evening/night.  The
-  method convertTimeToSeconds() will give the number of seconds since the start of the day.  We use that to set two markers; the
-  start of the day shift and the end of the day shift.  Then we loop through each of the shifts, and each second of each shift and
-  compare that seconds agains the markers.  The counter effectiveSecondsWorked is the incremented by either 2 or 3.
-</p>
-  
-<p>
-  Once the effective total number of seconds is know, we multiple that by the wage, and divide by ther number of seconds in an hour times 2.
-</p>
+    <p>
+        The approach taken is to examine each second of the shift, and determine
+        if it falls during the day shift hours or evening/night. The
+        method convertTimeToSeconds() will give the number of seconds since the
+        start of the day. We use that to set two markers; the
+        start of the day shift and the end of the day shift. Then we loop
+        through each of the shifts, and each second of each shift and
+        compare that seconds agains the markers. The counter
+        effectiveSecondsWorked is the incremented by either 2 or 3.
+    </p>
 
-<p>
-  An alternative approach would be to determine the number of seconds in a shift by subtracting the start time from the end time.  If a
-  shift spans a night/day or day/evening boundary, then it would need to be broken into two (or more) segments.  I had a solution using this
-  approach about 99% done, but found a few tests that were off by 1 or 2.  Frustrated, I re-wrote the solution using the current approach.
-</p>
+    <p>
+        Once the effective total number of seconds is know, we multiple that by
+        the wage, and divide by ther number of seconds in an hour times 2.
+    </p>
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
+    <p>
+        An alternative approach would be to determine the number of seconds in a
+        shift by subtracting the start time from the end time. If a
+        shift spans a night/day or day/evening boundary, then it would need to
+        be broken into two (or more) segments. I had a solution using this
+        approach about 99% done, but found a few tests that were off by 1 or 2.
+        Frustrated, I re-wrote the solution using the current approach.
+    </p>
+
+    <div style="margin-top:50px;text-align:center;font-size:14px">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>
