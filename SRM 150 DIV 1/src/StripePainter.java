@@ -2,6 +2,7 @@ public class StripePainter {
 
     private static final char BLANK_COLOR = 'A' - 1;
     private static final int MAX_COLORS = 27;  // A-Z plus one for blank
+    private static final String INDENT = "-";
 
     int[][][] alreadySeen;
 
@@ -9,18 +10,23 @@ public class StripePainter {
 
         int length = stripes.length();
         alreadySeen = new int[length][length + 1][MAX_COLORS];
-        return minStrokes(stripes, 0, length, BLANK_COLOR);
+        return minStrokes(stripes, 0, length, BLANK_COLOR, "");
     }
 
-    private int minStrokes(String stripes, int start, int size, char color) {
+    private int minStrokes(String stripes, int start, int size, char color,
+                           String spacer) {
 
-        System.out.println(stripes + '\t' + "Start: " + start + '\t' + "Size:" +
-                " " + size + '\t' + "Color: " + color);
+        if (spacer.length() == 1) {
+            System.out.println(spacer + stripes + '\t' + "Start: " + start + '\t' +
+                    "Size:" +
+                    " " + size + '\t' + "Color: " + color);
+        }
 
         if (size == 0) return 0;
 
         if (stripes.charAt(start) == color) {
-            return minStrokes(stripes, start + 1, size - 1, color);
+            return minStrokes(stripes, start + 1, size - 1, color,
+                    spacer + INDENT);
 
         } else {
 
@@ -32,8 +38,10 @@ public class StripePainter {
 
             for (int i = 1; i <= size; i++) {
                 min = Math.min(min, 1 +
-                        minStrokes(stripes, start + 1, i - 1, stripes.charAt(start)) +
-                        minStrokes(stripes, start + i, size - i, color));
+                        minStrokes(stripes, start + 1, i - 1,
+                                stripes.charAt(start), spacer + INDENT) +
+                        minStrokes(stripes, start + i, size - i, color,
+                                spacer + INDENT));
             }
 
             alreadySeen[start][size][color - BLANK_COLOR] = min;
