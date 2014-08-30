@@ -5,6 +5,13 @@ public class StripePainterTest {
 
     @Test
 //	@Test(timeout=2000)
+    public void test0a() {
+        String stripes = "RGR";
+        assertEquals(2, new StripePainter().minStrokes(stripes));
+    }
+
+    @Test
+//	@Test(timeout=2000)
 	public void test0() {
 		String stripes = "RGBGR";
 		assertEquals(3, new StripePainter().minStrokes(stripes));

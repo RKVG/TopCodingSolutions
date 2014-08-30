@@ -21,13 +21,14 @@ public class StripePainter {
         alreadySeen = new int[length][length + 1][MAX_COLORS];
 
         /*
-        * Calculate minStrokes on the entire stripes String, starting with a
-        * blank canvas.
+        * Calculate calculateMinStrokes on the entire stripes String, starting
+        * with a blank canvas.
         */
-        return minStrokes(stripes, 0, length, BLANK_COLOR);
+        return calculateMinStrokes(stripes, 0, length, BLANK_COLOR);
     }
 
-    private int minStrokes(String stripes, int start, int size, char color) {
+    private int calculateMinStrokes(String stripes, int start, int size,
+                                    char color) {
 
         // Breaks the recursive calls.
         if (size == 0) return 0;
@@ -37,7 +38,7 @@ public class StripePainter {
         * on to the next stripe.
         */
         if (stripes.charAt(start) == color) {
-            return minStrokes(stripes, start + 1, size - 1, color);
+            return calculateMinStrokes(stripes, start + 1, size - 1, color);
         }
 
         /*
@@ -53,15 +54,16 @@ public class StripePainter {
         /*
         * Calculates the minimum number of strokes for all possible
         * combinations of sub-strings to the right of the current position.
-        * In the first pass, the first call to minStrokes will be empty, and
-        * the entire remainder of the string will be used in the second call
-        * to minStrokes.  In each subsequent pass, a character is added to the
-        * first call, and removed from the second call.
+        * In the first pass, the first call to calculateMinStrokes will be
+        * empty, and the entire remainder of the string will be used in the
+        * second call to calculateMinStrokes.  In each subsequent pass, a
+        * character is added to the first call, and removed from the second
+        * call.
         */
         for (int i = 1; i <= size; i++) {
             min = Math.min(min, 1 +
-                    minStrokes(stripes, start + 1, i - 1, stripes.charAt(start)) +
-                    minStrokes(stripes, start + i, size - i, color));
+                    calculateMinStrokes(stripes, start + 1, i - 1, stripes.charAt(start)) +
+                    calculateMinStrokes(stripes, start + i, size - i, color));
         }
 
         // Store the calculate value to avoid having to calculate it again.
@@ -71,4 +73,3 @@ public class StripePainter {
 
     }
 }
-

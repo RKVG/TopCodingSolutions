@@ -2,8 +2,8 @@
 
     <div class="header">Problem:</div>
     <p>
-        <a href="http://community.topcoder.com/stat?c=problem_statement&pm="
-           target="_blank">TopCoder Problem Statement - NAME</a>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1215"
+           target="_blank">TopCoder Problem Statement - StripePainter</a>
     </p>
 
     <div class="header">Overview:</div>
@@ -14,25 +14,111 @@
 
     <div class="header">Java Source:</div>
     <div class="code">
-<pre>CODE GOES HERE</pre>
+<pre>public class StripePainter {
+
+    private static final char BLANK_COLOR = 'A' - 1;
+    private static final int MAX_COLORS = 27;  // A-Z plus one for blank
+
+    /*
+    * Holds all the combinations of starting position, string size, and color
+    * that we've encountered before.  If they come up again, we can return
+    * the stored value and avoid re-calculating.
+    */
+    int[][][] alreadySeen;
+
+    public int minStrokes(String stripes) {
+
+        int length = stripes.length();
+
+        /*
+        * Initialize the alreadySeen array.  The Java spec guarantees all
+        * values will be set to zero.  No need to do it explicitly.
+        */
+        alreadySeen = new int[length][length + 1][MAX_COLORS];
+
+        /*
+        * Calculate calculateMinStrokes on the entire stripes String, starting
+        * with a blank canvas.
+        */
+        return calculateMinStrokes(stripes, 0, length, BLANK_COLOR);
+    }
+
+    private int calculateMinStrokes(String stripes, int start, int size,
+                                    char color) {
+
+        // Breaks the recursive calls.
+        if (size == 0) return 0;
+
+        /*
+        * If the left-most color matches the given color, then just move
+        * on to the next stripe.
+        */
+        if (stripes.charAt(start) == color) {
+            return calculateMinStrokes(stripes, start + 1, size - 1, color);
+        }
+
+        /*
+        * If we've already calculated this combination of starting position,
+        * string length, and colore; then just return that value.
+        */
+        if (alreadySeen[start][size][color - BLANK_COLOR] > 0) {
+            return alreadySeen[start][size][color - BLANK_COLOR];
+        }
+
+        int min = Integer.MAX_VALUE;
+
+        /*
+        * Calculates the minimum number of strokes for all possible
+        * combinations of sub-strings to the right of the current position.
+        * In the first pass, the first call to calculateMinStrokes will be
+        * empty, and the entire remainder of the string will be used in the
+        * second call to calculateMinStrokes.  In each subsequent pass, a
+        * character is added to the first call, and removed from the second
+        * call.
+        */
+        for (int i = 1; i <= size; i++) {
+            min = Math.min(min, 1 +
+                    calculateMinStrokes(stripes, start + 1, i - 1, stripes.charAt(start)) +
+                    calculateMinStrokes(stripes, start + i, size - i, color));
+        }
+
+        // Store the calculate value to avoid having to calculate it again.
+        alreadySeen[start][size][color - BLANK_COLOR] = min;
+
+        return min;
+
+    }
+}</pre>
     </div>
 
     <div class="header">Notes:</div>
 
-    -RGBGR	Start: 1	Size: 0	Color: R
-    -RGBGR	Start: 1	Size: 4	Color: @
-    -RGBGR	Start: 1	Size: 1	Color: R
-    -RGBGR	Start: 2	Size: 3	Color: @
-    -RGBGR	Start: 1	Size: 2	Color: R
-    -RGBGR	Start: 3	Size: 2	Color: @
-    -RGBGR	Start: 1	Size: 3	Color: R
-    -RGBGR	Start: 4	Size: 1	Color: @
-    -RGBGR	Start: 1	Size: 4	Color: R
-    -RGBGR	Start: 5	Size: 0	Color: @
+<p>
+  For any given pattern X (where X represents any number of stripes) a new pattern xX (where x is one additional stripe to the left side of X) can be
+  created with just 1 more stroke than the number of strokes neeeded to create X.  We'll use this as an upper-bound. So if the pattern X takes 10 strokes,
+  then xX will take at most 11 - possibly less.
+</p>
 
+<p>
+  The strategy then is to skip the left-most stripe and solve for everything to the right of it.  Then determine if the left-most stripe can be added with 0
+  or 1 additional strokes.  For example: GR takes 2 stroke, but R GR also only needs 2 because the left-most and right-most stripes are the same color (You'd
+  paint R first, and then put a G in the middle of it).  If the ends weren't the same color, as in B GR, then a third stripe would be needed.
+</p>
 
+<p>
+  The loop at lines 63-67 divides the substring to the right of the current position into 2 segments.  It then tries every possible combination of these
+  segment's lengths.  So, if the part to the right was 4 characters long, the first segment would be called with lengths 0, 1, 2, 3, and 4 - while the second
+  segement would have lenghts of 4, 3, 2, 1, and 0.  This ensures that each way of dividing up the part to the right is tried.
+</p>
 
-    <div style="margin-top:50px;text-align:center;font-size:14px">
+<p>
+  The solution also uses the notion of memoization.  This has been discussed in earlier posts (see HillHike).  The idea is that once a particular pattern
+  has been calculated, we'll store it so it never needs to be calculated again.  Line 70 stores each combination of start position, string length, and
+  color that gets calculated.  Then at line 48, we check to see if the combination has been calculated before.  For some tests, it's not possible
+  to finished within the time limit without this technique.
+</p>
+
+    <div class="footer">
         <p><i>Thank you</i> for taking the time to read this solution. I welcome
             any feedback you may have.</p>
     </div>
