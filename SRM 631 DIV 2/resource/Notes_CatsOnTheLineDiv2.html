@@ -1,0 +1,176 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13392"
+           target="_blank">TopCoder Problem Statement - CatsOnTheLineDiv2</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Try to spread a bunch of cats out along a line in the given amount of time such that no two cats occupy the same position.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>CODE GOES HERE</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The strategy is to work from left to right and move each cat as far to the left as they can in the given amount of time.  If that
+  position is already taken, then try the next position to the right.  If any cat cannot find a suitable position, then we declare the
+  problem to be impossible.
+</p>
+
+<p>
+  For example, lets say we have 2 cats (labeled A and B) at position zero, and three cats (labeled C, D and E) at position one. time = 2.
+</p>
+
+<table>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>E</td>
+    <td></td>
+    <td></td>
+  </td>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>B</td>
+    <td>D</td>
+    <td></td>
+    <td></td>
+  </td>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>A</td>
+    <td>C</td>
+    <td></td>
+    <td></td>
+  </td>
+  <tr>
+    <td>-2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </td>
+</table>
+
+<p>
+  First, process the cats at position 0.  Cat B can move two spaces to the left (time is 2, and position -2 is empty).  Next we try to move cat A two spaces to the left,
+  but that's already occupied (by B), so A goes in the first available space to the right.
+</p>
+
+<table>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>E</td>
+    <td></td>
+    <td></td>
+  </td>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>D</td>
+    <td></td>
+    <td></td>
+  </td>
+  <tr>
+    <td>B</td>
+    <td>A</td>
+    <td></td>
+    <td>C</td>
+    <td></td>
+    <td></td>
+  </td>
+  <tr>
+    <td>-2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </td>
+</table>
+
+<p>
+  Now we're done with position 0, and move on to position 1.  Cat E cannot move into position -1 because it's occupied by cat A, so E moves to position 0.  Cat D stays where it is,
+  and cat C moves one position to the right.
+</p>
+
+<table>
+  <tr>
+    <td>B</td>
+    <td>A</td>
+    <td>E</td>
+    <td>D</td>
+    <td>C</td>
+    <td></td>
+  </td>
+  <tr>
+    <td>-2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </td>
+</table>
+
+<p>
+  It's important to note that the initial positions and final positions are kept in two separate arrays (initialLine and newLine).  That's how cat D could stay put even though cat C had not been moved yet.
+  The initial array is represented as a List of Position objects, where Position objects hold the location and number of cats at that location.  The final position is represented
+  by the boolean array newLine - either a cat has been placed there already or not.  All indexes of newLine are initially set to false and become true when a cat is placed there. 
+</p>
+
+<p>
+  On lines 52-55 we calculate the size needed for the newLine array.  The cats can potentially move time positions to the left of the minimum starting position, or to the right of the maximum starting position.
+  Be careful when mapping these positions between initialLine and newLine.  We need to shift the values over so that the left most possible position aligns with the 0 index of newLine.
+</p>
+
+<p>
+  Since it's easy enough to count the number of cats at the start, and we now know the number of possible locations; I choose to add a check to see if the number of cats exceeds the number of locations.  It's
+  good to quit early and save a lot of computation if we can.
+</p>
+
+<p>
+ Note that we could have choosen to move all the cats to the right.  The sort order on line 49, along with the directions on the for loop at line 99 would need to be reversed; but that's all.
+</p>
+
+<p>
+  As a final comment, I'll add that this seemed tougher than the typical Division 2 - Level 2 problem.  If you don't see the algorithm, you're not likely to get done in time.  I'd be interested to see
+  if anyone solved this by working one time interval at a time.  That is, something like:
+</p>
+
+<pre>
+  while (time > 0)  {
+      moveCats();
+      if (isSatisfied()) return "Possible";
+      time--;
+  }
+  return "Impossible";
+</pre>
+
+<p>
+  I spent too much time on that line of thinking before stepping back and trying another approach.
+</p>
+ 
+    
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

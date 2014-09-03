@@ -1,0 +1,92 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13394"
+           target="_blank">TopCoder Problem Statement - TaroGrid</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count the largest number of consecutive colors by column in a grid.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class TaroGrid {
+02: 	
+03: 	public int getNumber(String[] grid) {
+04: 
+05:         // Get the dimensions of the grid
+06:         int numRows = grid.length;
+07:         int numCols = grid[0].length();
+08: 
+09:         // Set to a small number to start.
+10:         int maxVal = Integer.MIN_VALUE;
+11: 
+12:         // Step through each column.
+13:         for (int col=0; col < numCols; col++)  {
+14: 
+15:             int count = 0;
+16: 
+17:             // Take a peek at the first color in the column
+18:             char currentColor = grid[0].charAt(col);
+19: 
+20:             for (int row = 0; row < numRows; row++)  {
+21: 
+22:                 if (grid[row].charAt(col) == currentColor)  {
+23:                     count++;
+24: 
+25:                 } else  {
+26: 
+27:                     // Start a new color
+28:                     currentColor = grid[row].charAt(col);
+29:                     maxVal = Math.max(maxVal, count);
+30:                     count = 1;
+31:                 }
+32:             }
+33: 
+34:             // Don't forget.  The longest streak could be the bottom one.
+35:             maxVal = Math.max(maxVal, count);
+36:         }
+37: 
+38:         return maxVal;
+39: 	}
+40: }
+</pre>
+</div>
+
+    <div class="header">Notes:</div>
+<p>
+  Somehow, this problem seems like it would be easier it we were counting the colors across rows instead of down columns.  But, no matter,
+  the problem is not difficult if you can keep your directions straight.
+</p>
+
+<p>
+  To help keep things clear, I set numRows and numColumns on rows 6 and 7.  This makes it much easier than trying to keep track of
+  them using grid.length and grid[0].length().
+</p>
+
+<p>
+  Next, we set maxVal to the smallest possible integer.  Then, on lines 29 and 35 we'll potentially update that using Math.max().
+  This pattern comes up in almost every problem, and this is the cleanest way I've found to write it.
+</p>
+
+<p>
+  Then, there are two nested for loops.  The outer loops across the columns, and the inner loops down the rows in each column.  At
+  the start of a new column, we set reset count, and set the current color to be the first color in the column.  Then we go down
+  the column, incrementing count each time the current position matches currentColor.  When they no longer match, cut off the current
+  streak by updating currentColor, resetting count, and updating the maxVal if this streak is longer than any we've seen thus far.
+</p>
+
+<p>
+  After we've looped through all columns, return the maximum value found.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
