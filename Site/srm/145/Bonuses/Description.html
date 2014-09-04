@@ -1,20 +1,18 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
-    Problem:
-</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1677&amp;rd=4530">SRM
-    145 DIV 1 - 250 Points</a>
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1677"
+           target="_blank">TopCoder Problem Statement - Bonuses</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>Determine the amount of bonuses to award to each employee.</p>
 
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
-    Overview:
-</div>
-<p>Determine the amount of bonuses to award to each employee.</p>
-
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
-    Java Source:
-</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
     01: /*
     02: TopCoder
     03: Single Round Match: 145
@@ -86,48 +84,56 @@
     69:     }
     70: }
 </pre>
+    </div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">
-    Notes:
-</div>
-<p>Lines 21-24 simply counts up the total number of points that were assigned
-    across all employees.</p>
-<p>Line 33 then calculates the percentage for each employee. The "/" operator
-    truncates any fractions. As each
-    bonus is assigned, we subtract that amount from the bonus percentage
-    remaining.</p>
-<p>While there is any bonus percentage remaining, we'll assign 1% to the top
-    scoring employee that has not already
-    received this extra bonus.</p>
-<p>This is implemented by creating an array of booleans (Line 15) that keeps
-    track of each employee that has
-    received this extra bonus. The loop at line 51 looks for the employee with
-    the greatest score that has not been awarded the bonus. Ties will go to the
-    employee appearing earlier in the points array, since line 52 requires that
-    the current employee's points be greater than what has already been
-    seen.</p>
-<p>A more efficient way to do this might be to sort the employees by score, and
-    award the extra bonus starting at
-    the beginning of the list until the bonus runs out. However, we'd need to
-    copy the points array to the new sorted array, and maintain a mapping
-    between the tow. Furthermore, we'd need to use a stable sorting algorithm,
-    that is, one that does not switch the positions of two employees if their
-    score is the same. I'm not sure if the standard java sorting algorithms
-    guarantee this or not - so we'd be looking at implementing our own sorting
-    algorithm, which is not hard, but not necessary for this
-    problem.</p>
-<p>Update: Java's Collections.sort() is guaranteed to be stable.</p>
+    <div class="header">Notes:</div>
+
+    <p>Lines 21-24 simply counts up the total number of points that were
+        assigned
+        across all employees.</p>
+
+    <p>Line 33 then calculates the percentage for each employee. The "/"
+        operator
+        truncates any fractions. As each
+        bonus is assigned, we subtract that amount from the bonus percentage
+        remaining.</p>
+
+    <p>While there is any bonus percentage remaining, we'll assign 1% to the top
+        scoring employee that has not already
+        received this extra bonus.</p>
+
+    <p>This is implemented by creating an array of booleans (Line 15) that keeps
+        track of each employee that has
+        received this extra bonus. The loop at line 51 looks for the employee
+        with
+        the greatest score that has not been awarded the bonus. Ties will go to
+        the
+        employee appearing earlier in the points array, since line 52 requires
+        that
+        the current employee's points be greater than what has already been
+        seen.</p>
+
+    <p>A more efficient way to do this might be to sort the employees by score,
+        and
+        award the extra bonus starting at
+        the beginning of the list until the bonus runs out. However, we'd need
+        to
+        copy the points array to the new sorted array, and maintain a mapping
+        between the tow. Furthermore, we'd need to use a stable sorting
+        algorithm,
+        that is, one that does not switch the positions of two employees if
+        their
+        score is the same. I'm not sure if the standard java sorting algorithms
+        guarantee this or not - so we'd be looking at implementing our own
+        sorting
+        algorithm, which is not hard, but not necessary for this
+        problem.</p>
+
+    <p>Update: Java's Collections.sort() is guaranteed to be stable.</p>
 
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-    <p><i>Thank you</i> for taking the time to read this solution. I welcome any
-        feedback you may have.</p>
-
-    <p>Please post any questions or comments <a
-            href="http://blog.topcodingsolutions.net/2014/06/srm-145-div-1-250-points.html"
-            target="_blank">here</a>.</p>
-
-    <p>For this, and other TopCoder solutions, please visit <a
-            href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.
-    </p>
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

@@ -1,13 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1130" target="_blank">SRM 145 DIV 2 - 1100 points</a>
+<div class="solution">
 
+<div class="header">Problem:</div>
+<p>
+    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1130"
+       target="_blank">TopCoder Problem Statement - VendingMachine</a>
+</p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-Simulate a vending machine.
+<div class="header">Overview:</div>
+<p>
+    Simulate a vending machine.
+</p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+<div class="header">Java Source:</div>
+<div class="code">
+    <pre>
 001: /*
 002: TopCoder
 003: Single Round Match: 145
@@ -178,18 +184,40 @@ Simulate a vending machine.
 168:     }
 169: }
 </pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
-<p>For an 1100 point problem, this one was actually pretty straight forward. It does not require the use of any complicated algorithms or data structures. There's really only two places where you might get tripped up.</p>
-<p>The first is the rotateTo() method on line 120. Be careful and make sure that your are always rotating the shortest distance, whether that be to the right, or to the left. One lines 126 and 127, I calculate both rotL and rotR (rotL = rotate Left, rotR = rotate Right). rotL is the absolute value of the difference between the destination column and the current column.</p>
-<p>We then use the value of rotL to calculate rotR. The two must add up to the total number of columns in the machine, so rotR = numColumns - rotL.</p>
-<p>Looking back, I guess right and left don't really matter. Think of it as rotate one direction, and rotate the opposite direction.</p>
-<p>Getting this part right is half the battle. It's worth it to write some unit tests and write it out on paper to ensure that it's giving you the correct values.</p>
-<p>The second part that may prove difficult is in parsing the purchases String. Here knowing how to use regular expressions can be very handy. The purchase Sting has the format "&lt;shelf&gt;,&lt;column&gt;:&lt;time&gt;". Line 143 splits the String on either a ',' or a ':' character.</p>
+<div class="header">Notes:</div>
+<p>For an 1100 point problem, this one was actually pretty straight forward.
+    It does not require the use of any complicated algorithms or data
+    structures. There's really only two places where you might get tripped
+    up.</p>
 
+<p>The first is the rotateTo() method on line 120. Be careful and make sure
+    that your are always rotating the shortest distance, whether that be to
+    the right, or to the left. One lines 126 and 127, I calculate both rotL
+    and rotR (rotL = rotate Left, rotR = rotate Right). rotL is the absolute
+    value of the difference between the destination column and the current
+    column.</p>
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/06/srm-145-div-2-1100-points.html" target="_blank">here</a>.</p>
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+<p>We then use the value of rotL to calculate rotR. The two must add up to
+    the total number of columns in the machine, so rotR = numColumns -
+    rotL.</p>
+
+<p>Looking back, I guess right and left don't really matter. Think of it as
+    rotate one direction, and rotate the opposite direction.</p>
+
+<p>Getting this part right is half the battle. It's worth it to write some
+    unit tests and write it out on paper to ensure that it's giving you the
+    correct values.</p>
+
+<p>The second part that may prove difficult is in parsing the purchases
+    String. Here knowing how to use regular expressions can be very handy.
+    The purchase Sting has the format "&lt;shelf&gt;,&lt;column&gt;:&lt;time&gt;".
+    Line 143 splits the String on either a ',' or a ':' character.</p>
+
+<div class="footer">
+    <p><i>Thank you</i> for taking the time to read this solution. I welcome
+        any feedback you may have.</p>
+</div>
+
 </div>

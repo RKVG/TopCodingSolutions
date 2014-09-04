@@ -1,13 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1728" target="_blank">SRM 145 DIV 2 - 250 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1728"
+           target="_blank">TopCoder Problem Statement - ImageDithering</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-Count the number of times any letter in "dithered" appear in "screen".
+    <div class="header">Overview:</div>
+    <p>
+        Count the number of times any letter in "dithered" appear in "screen".
+    </p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
 01: /*
 02: TopCoder
 03: Single Round Match: 145
@@ -16,42 +22,51 @@ Count the number of times any letter in "dithered" appear in "screen".
 06: Points: 250
 07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1728
 08:  */
-09: 
-10: import java.util.*;
-11: 
-12: public class ImageDithering {
-13:     public int count(String dithered, String[] screen) {
-14: 
-15:         int count = 0;
-16: 
-17:         char[] dColors = dithered.toCharArray();
-18:         Set<Character> dSet = new HashSet<Character>();
-19: 
-20:         for (int i = 0; i < dColors.length; i++) {
-21:             dSet.add(dColors[i]);
-22:         }
-23: 
-24:         for (String row : screen) {
-25:             for (int i = 0; i < row.length(); i++) {
-26:                 if (dSet.contains(row.charAt(i))) {
-27:                     count++;
-28:                 }
-29:             }
-30:         }
-31: 
-32:         return count;
-33:     }
-34: }
+09:
+10: import java.util.HashSet;
+11: import java.util.Set;
+12:
+13: public class ImageDithering {
+14:
+15:     public int count(String dithered, String[] screen) {
+16:
+17:         int count = 0;
+18:
+19:         char[] dColors = dithered.toCharArray();
+20:         Set<Character> dSet = new HashSet<>();
+21:
+22:         for (char dColor : dColors) {
+23:             dSet.add(dColor);
+24:         }
+25:
+26:         for (String row : screen) {
+27:             for (int i = 0; i < row.length(); i++) {
+28:                 if (dSet.contains(row.charAt(i))) {
+29:                     count++;
+30:                 }
+31:             }
+32:         }
+33:
+34:         return count;
+35:     }
+36: }
 </pre>
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
-<p>In lines 14-18, I create a Hash set to hold all of the characters in "dithered".</p>
-<p>Then in lines 24-30, I loop through the rows and then columns in screen, checking to see if each character is in that set.  If it is, increment count.</p>
-
-
-
-<div style="margin-top:50px;text-align:center;font-size:14px">
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/06/srm-145-div-2-250-points.html" target="_blank">here</a>.</p>
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
 </div>
+        <div class="header">Notes:</div>
+
+        <p>In lines 14-18, I create a Hash set to hold all of the characters in
+            "dithered".</p>
+
+        <p>Then in lines 24-30, I loop through the rows and then columns in
+            screen,
+            checking to see if each character is in that set. If it is,
+            increment
+            count.</p>
+
+
+        <div class="footer">
+            <p><i>Thank you</i> for taking the time to read this solution. I
+                welcome
+                any feedback you may have.</p>
+        </div>
+    </div>

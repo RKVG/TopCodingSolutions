@@ -1,0 +1,65 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1768"
+           target="_blank">TopCoder Problem Statement - ProfitCalculator</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the profit margin given an array of items.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class ProfitCalculator {
+02: 
+03:     public int percent(String[] items) {
+04: 
+05:         // Holds running totals of the customer and stores costs.
+06:         float totalCustCost = 0f;
+07:         float totalStoreCost = 0f;
+08: 
+09:         for (String s : items) {
+10: 
+11:             // Splits the item into customer and store components
+12:             String[] costs = s.split(" ");
+13: 
+14:             totalCustCost += Float.parseFloat(costs[0]);
+15:             totalStoreCost += Float.parseFloat(costs[1]);
+16:         }
+17: 
+18:         float margin = ((totalCustCost - totalStoreCost) / totalCustCost) * 100;
+19: 
+20:         return (int) margin;
+21:     }
+22: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+      Not much to this problem.  totalCustCost and totalStoreCost are created to keep a running total of the
+      customer and stores costs.  We loop through each of the items in the input array, and update the totals
+      as each item is processed.  At the end just use the formulat ((customer cost - store cost ) / customer cost) * 100
+      to get the final profit.
+    </p>
+    
+    <p>
+      When processing each item, the String method split() is used to divide the customer and store portions.  Then
+      Float.parseFloat() is used to convert the string representation into a float.
+    </p>
+    
+    <p>
+      The return value must be an int, so we must cast this since a float to an int could lose precision.  However,
+      fortunately, that's just what the problem statement calls for.
+    </p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

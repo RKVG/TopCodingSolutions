@@ -14,7 +14,117 @@
 
     <div class="header">Java Source:</div>
     <div class="code">
-<pre>CODE GOES HERE</pre>
+<pre>
+001: import java.util.ArrayList;
+002: import java.util.Collections;
+003: import java.util.List;
+004: 
+005: public class CatsOnTheLineDiv2 {
+006: 
+007:     public static String PASS = "Possible";
+008:     public static String FAIL = "Impossible";
+009: 
+010:     /*
+011:     * This class ties together a position with the number of cats at that
+012:     * position.  It also implements Comparable so we can sort them.  After
+013:     * sorting, we can go through the positions from left to right.
+014:     */
+015:     class Position implements Comparable<Position> {
+016:         int position;
+017:         int numCats;
+018: 
+019:         Position(int position, int numCats) {
+020:             this.position = position;
+021:             this.numCats = numCats;
+022:         }
+023: 
+024:         // Compare based on position.  There should be no duplicates.
+025:         @Override
+026:         public int compareTo(Position o) {
+027:             if (this.position < o.position) return -1;
+028:             if (this.position > o.position) return 1;
+029:             return 0;
+030:         }
+031:     }
+032: 
+033:     public String getAnswer(int[] position, int[] count, int time) {
+034: 
+035:         List<Position> initialLine = new ArrayList<>();
+036: 
+037:         int numCats = 0;
+038: 
+039:         /*
+040:         * For each element of the position and count arrays, create a new
+041:         * Position object and adds it to initialLine.  Also counts the
+042:         * total number of cats.
+043:         */
+044:         for (int i = 0; i < position.length; i++) {
+045:             initialLine.add(new Position(position[i], count[i]));
+046:             numCats += count[i];
+047:         }
+048: 
+049:         Collections.sort(initialLine);
+050: 
+051:         // Calculate the size of the line after allowing that cats to move.
+052:         int minPos = initialLine.get(0).position - time;
+053:         int maxPos = initialLine.get(initialLine.size() - 1).position + time;
+054:         int numPositions = maxPos - minPos + 1;
+055: 
+056:         // See if there are more cats than positions.  Maybe we can quit early.
+057:         if (numCats > numPositions) return FAIL;
+058: 
+059:         /*
+060:         * Holds the positions that have a cat after they've moved.  Note that
+061:         * the array cannont have negative indexes, so we'll need to shift
+062:         * the position over by minPos in order to map it.
+063:         * Also, when done, each position can only have 1 cat (or zero), so we
+064:         * can use an array of booleans instead of ints.
+065:         */
+066:         boolean[] newLine = new boolean[numPositions];
+067: 
+068:         /*
+069:         * Loop through each Position (working left to right, since they were
+070:         * sorted).  At each Position, loop through the number of cats.  For
+071:         * each cat, try to find a final position for them.  If a position
+072:         * cannot be found, then return FAIL.
+073:         */
+074:         for (Position p : initialLine) {
+075:             for (int i = 0; i < p.numCats; i++) {
+076: 
+077:                 /*
+078:                 * Note (p.position - minPos).  This shifts all the values over
+079:                 * so they are zero-based.
+080:                 */
+081:                 if (!findPositionForCat(newLine, p.position - minPos, time))
+082:                     return FAIL;
+083:             }
+084:         }
+085: 
+086:         // If we've found positions for all the cats, return PASS.
+087:         return PASS;
+088:     }
+089: 
+090:     /*
+091:     * Attempts to find a position to place the cat.  Returns true if a position
+092:     * can be found; otherwise false.
+093:     * We'll move the cat to the furthest position left as possible given the
+094:     * amount of time.  If that position is full (true), then keep looking to
+095:     * the right.
+096:     */
+097:     private static boolean findPositionForCat(boolean[] line, int p, int time) {
+098: 
+099:         for (int i = (p - time); i <= (p + time); i++) {
+100:             if (!line[i]) {
+101:                 line[i] = true;  // Mark the position is occupied.
+102:                 return true;
+103:             }
+104:         }
+105: 
+106:         return false;
+107:     }
+108: 
+109: }
+</pre>
     </div>
 
     <div class="header">Notes:</div>

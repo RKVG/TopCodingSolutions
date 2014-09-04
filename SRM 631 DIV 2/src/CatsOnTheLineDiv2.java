@@ -1,6 +1,6 @@
-import java.util.*;
-import java.math.*;
-import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CatsOnTheLineDiv2 {
 
@@ -16,7 +16,7 @@ public class CatsOnTheLineDiv2 {
         int position;
         int numCats;
 
-        Position(int position, int numCats)  {
+        Position(int position, int numCats) {
             this.position = position;
             this.numCats = numCats;
         }
@@ -30,7 +30,7 @@ public class CatsOnTheLineDiv2 {
         }
     }
 
-	public String getAnswer(int[] position, int[] count, int time) {
+    public String getAnswer(int[] position, int[] count, int time) {
 
         List<Position> initialLine = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class CatsOnTheLineDiv2 {
         * Position object and adds it to initialLine.  Also counts the
         * total number of cats.
         */
-        for (int i=0; i<position.length; i++)  {
+        for (int i = 0; i < position.length; i++) {
             initialLine.add(new Position(position[i], count[i]));
             numCats += count[i];
         }
@@ -71,8 +71,8 @@ public class CatsOnTheLineDiv2 {
         * each cat, try to find a final position for them.  If a position
         * cannot be found, then return FAIL.
         */
-        for (Position p : initialLine)  {
-            for (int i=0; i<p.numCats; i++)  {
+        for (Position p : initialLine) {
+            for (int i = 0; i < p.numCats; i++) {
 
                 /*
                 * Note (p.position - minPos).  This shifts all the values over
@@ -85,7 +85,7 @@ public class CatsOnTheLineDiv2 {
 
         // If we've found positions for all the cats, return PASS.
         return PASS;
-	}
+    }
 
     /*
     * Attempts to find a position to place the cat.  Returns true if a position
@@ -94,14 +94,14 @@ public class CatsOnTheLineDiv2 {
     * amount of time.  If that position is full (true), then keep looking to
     * the right.
     */
-    private static boolean findPositionForCat(boolean[] line, int p, int time)  {
+    private static boolean findPositionForCat(boolean[] line, int p, int time) {
 
-            for (int i = (p - time); i <= (p + time); i++) {
-                if (!line[i]) {
-                    line[i] = true;  // Mark the position is occupied.
-                    return true;
-                }
+        for (int i = (p - time); i <= (p + time); i++) {
+            if (!line[i]) {
+                line[i] = true;  // Mark the position is occupied.
+                return true;
             }
+        }
 
         return false;
     }
