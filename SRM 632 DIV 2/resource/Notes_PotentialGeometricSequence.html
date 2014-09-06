@@ -1,0 +1,142 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=16075"
+           target="_blank">TopCoder Problem Statement - PotentialGeometricSequence</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the number of sequences of an array that may generate a geometric sequence.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+CODE GOES HERE
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+<p>
+  Possibly the most confusing problem statement I've come across so far on TopCoder.  The
+  solution above passes all of the system tests, but I still have no idea what the problem
+  is asking for.
+</p>
+
+<p>
+  My advice is to ignore almost everything in the problem statement and notes.  The mention of possible geometric
+  sequences, trailing zeros in the binary representation of the number, answers being positive or negative, etc.
+  are all irrelevant.  There is no need to examine the binary representation of any numbers, or calculate geometric
+  sequences.  Here's what you need to do:
+</p>
+
+<p>
+  For each possible sub-sequence in d[] (d[x] through d[y]) determine if the values are evenly spaced.  That's it!
+</p>
+
+<p>
+  Any sub-sequence of size 1 or 2 will be evenly spaced by definition, and therefore included in the count.
+  For larger sub-sequences, calculate the step size by subtraction: d[x+1] - d[x].  Now, test to see if each
+  d[i] + step = d[i + 1]  for all values of i between x and j.
+</p>
+
+<p>
+  The following tables illustrates the 37 possible sub-sequences expected by Example #4
+</p>
+
+<table border="1">
+  <tr align="center">
+    <td>Index in d[]</td>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>10</td>
+    <td>11</td>
+    <td>12</td>
+    <td>13</td>
+    <td>14</td>
+  </tr>
+  <tr align="center">
+    <td>Value of d[x]</td>
+    <td>1</td>
+    <td>3</td>
+    <td>5</td>
+    <td>5</td>
+    <td>5</td>
+    <td>5</td>
+    <td>64</td>
+    <td>4</td>
+    <td>23</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>4</td>
+    <td>3</td>
+ </tr>
+</table>
+   
+<table border="1">
+  <tr>
+    <th>count</th>
+    <th>Start Index</th>
+    <th>End Index</th>
+    <th>Length</th>
+  </tr>
+  <tr><td>1</td><td>0</td><td>0</td><td></td></tr>
+  <tr><td>2</td><td>1</td><td>1</td><td></td></tr>
+  <tr><td>3</td><td>2</td><td>2</td><td></td></tr>
+  <tr><td>4</td><td>3</td><td>3</td><td></td></tr>
+  <tr><td>5</td><td>4</td><td>4</td><td></td></tr>
+  <tr><td>6</td><td>5</td><td>5</td><td></td></tr>
+  <tr><td>7</td><td>6</td><td>6</td><td></td></tr>
+  <tr><td>8</td><td>7</td><td>7</td><td></td></tr>
+  <tr><td>9</td><td>8</td><td>8</td><td></td></tr>
+  <tr><td>10</td><td>9</td><td>9</td><td></td></tr>
+  <tr><td>11</td><td>10</td><td>10</td><td></td></tr>
+  <tr><td>12</td><td>11</td><td>11</td><td></td></tr>
+  <tr><td>13</td><td>12</td><td>12</td><td></td></tr>
+  <tr><td>14</td><td>13</td><td>13</td><td></td></tr>
+  <tr><td>15</td><td>14</td><td>14</td><td></td></tr>
+  <tr><td>16</td><td>0</td><td>1</td><td></td></tr>
+  <tr><td>17</td><td>1</td><td>2</td><td></td></tr>
+  <tr><td>18</td><td>2</td><td>3</td><td></td></tr>
+  <tr><td>19</td><td>3</td><td>4</td><td></td></tr>
+  <tr><td>20</td><td>4</td><td>5</td><td></td></tr>
+  <tr><td>21</td><td>5</td><td>6</td><td></td></tr>
+  <tr><td>22</td><td>6</td><td>7</td><td></td></tr>
+  <tr><td>23</td><td>7</td><td>8</td><td></td></tr>
+  <tr><td>24</td><td>8</td><td>9</td><td></td></tr>
+  <tr><td>25</td><td>9</td><td>10</td><td></td></tr>
+  <tr><td>26</td><td>10</td><td>11</td><td></td></tr>
+  <tr><td>27</td><td>11</td><td>12</td><td></td></tr>
+  <tr><td>28</td><td>12</td><td>13</td><td></td></tr>
+  <tr><td>29</td><td>13</td><td>14</td><td></td></tr>
+  <tr><td>30</td><td>0</td><td>2</td><td></td></tr>
+  <tr><td>31</td><td>2</td><td>4</td><td></td></tr>
+  <tr><td>32</td><td>3</td><td>5</td><td></td></tr>
+  <tr><td>33</td><td>9</td><td>11</td><td></td></tr>
+  <tr><td>34</td><td>10</td><td>12</td><td></td></tr>
+  <tr><td>35</td><td>12</td><td>14</td><td></td></tr>
+  <tr><td>36</td><td>2</td><td>5</td><td></td></tr>
+  <tr><td>37</td><td>9</td><td>12</td><td></td></tr>
+</table>      
+
+  
+  
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

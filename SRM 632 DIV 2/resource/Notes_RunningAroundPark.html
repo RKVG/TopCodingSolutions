@@ -1,0 +1,55 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13391"
+           target="_blank">TopCoder Problem Statement - RunningAroundPark</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+Count the minimum number of laps a runner could have made around a loop based on the trees they remember seeing.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: public class RunningAroundPark {
+02: 	
+03: 	public int numberOfLap(int N, int[] d) {
+04: 
+05:         int previousTree = N;
+06:         int numLaps = 0;
+07: 
+08:         for (int i = 0; i < d.length; i++)  {
+09: 
+10:             // When we see a smaller (or equal) numbered tree, increment numLaps
+11:             if (d[i] <= previousTree)  {
+12:                 numLaps++;
+13:             }
+14: 
+15:             previousTree = d[i];
+16:         }
+17: 
+18:         return numLaps;
+19:     }
+20: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+      We need to count the number of inversions in the input array.  That is, each time we encounter a number that is smaller than
+      (or equal to) the previous number, increase the number of laps. 
+    </p>
+    
+    <p>
+      Start by setting previousTree to be the largest numbered tree in the park, the parameter N.  Then loop through each of the elements in d[].
+      If the current element is less than or equal to previousTree, increment the number of laps.  At each step, update previousTree
+      to the new current value.
+    </p>
+    
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
