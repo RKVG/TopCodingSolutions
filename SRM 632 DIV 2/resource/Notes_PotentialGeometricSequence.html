@@ -14,9 +14,62 @@
 
     <div class="header">Java Source:</div>
     <div class="code">
-<pre>
-CODE GOES HERE
-</pre>
+<pre>01: public class PotentialGeometricSequence {
+02: 
+03:     public int numberOfSubsequences(int[] d)  {
+04: 
+05:         int count = 0;
+06: 
+07:         /*
+08:         * j bounces back and forth between i and d.length as i
+09:         * moves from 0 to d.length.
+10:         * This gives us every possible contiguous subsequence.
+11:         */
+12:         for (int i = 0; i < d.length; i++)  {
+13:             for (int j = i; j < d.length; j++)  {
+14:                 if (checkSequence(i, j, d))  {
+15:                     count++;
+16:                 }
+17:             }
+18:         }
+19: 
+20:         return count;
+21:     }
+22: 
+23:     /*
+24:     * Checks to see if the values in d[] decrease by the same amount
+25:     * for each step from j down to i.  If so, return true; otherwise false.
+26:     * For example, if the values in d[] are {3,4,5} it will return true
+27:     * because we decrease by 1 to go from 5 to 4, and then by 1 again to
+28:     * go from 4 to 3.
+29:     */
+30:     private static boolean checkSequence(int i, int j, int[] d)  {
+31: 
+32:         /*
+33:         * If there are 0 or 1 steps between i and j, then it must be true
+34:         */
+35:         if ((j - i) <= 1) return true;
+36: 
+37:         /*
+38:         * Get the difference between the two right-most values.  Each step
+39:         * from here on must differ by this same amount.
+40:         */
+41:         int diff = d[i + 1] - d[i];
+42: 
+43:         /*
+44:         * Work right to left from j down to i.  Ensure that each step
+45:         * differs by diff
+46:         */
+47:         for (int x = i; x < j; x++)  {
+48:             if ((d[x] + diff) != (d[x+1]))  {
+49:                 return false;
+50:             }
+51:         }
+52: 
+53:         return true;
+54:     }
+55: 
+56: }</pre>
     </div>
 
     <div class="header">Notes:</div>
@@ -31,11 +84,11 @@ CODE GOES HERE
   My advice is to ignore almost everything in the problem statement and notes.  The mention of possible geometric
   sequences, trailing zeros in the binary representation of the number, answers being positive or negative, etc.
   are all irrelevant.  There is no need to examine the binary representation of any numbers, or calculate geometric
-  sequences.  Here's what you need to do:
+  sequences.  Here, in one sentence, is what you need to do:
 </p>
 
 <p>
-  For each possible sub-sequence in d[] (d[x] through d[y]) determine if the values are evenly spaced.  That's it!
+  For each possible sub-sequence in d[], determine if the values are evenly spaced.  That's it!
 </p>
 
 <p>
@@ -48,7 +101,9 @@ CODE GOES HERE
   The following tables illustrates the 37 possible sub-sequences expected by Example #4
 </p>
 
+
 <table border="1">
+  <caption align="bottom">Input array.  Given as parameter d[]</caption>
   <tr align="center">
     <td>Index in d[]</td>
     <td>0</td>
@@ -87,52 +142,61 @@ CODE GOES HERE
  </tr>
 </table>
    
+   <br />
+   <br />
+   
 <table border="1">
+  <caption align="bottom">Subsequences that meet the problem's criteria</caption>
   <tr>
     <th>count</th>
     <th>Start Index</th>
     <th>End Index</th>
     <th>Length</th>
   </tr>
-  <tr><td>1</td><td>0</td><td>0</td><td></td></tr>
-  <tr><td>2</td><td>1</td><td>1</td><td></td></tr>
-  <tr><td>3</td><td>2</td><td>2</td><td></td></tr>
-  <tr><td>4</td><td>3</td><td>3</td><td></td></tr>
-  <tr><td>5</td><td>4</td><td>4</td><td></td></tr>
-  <tr><td>6</td><td>5</td><td>5</td><td></td></tr>
-  <tr><td>7</td><td>6</td><td>6</td><td></td></tr>
-  <tr><td>8</td><td>7</td><td>7</td><td></td></tr>
-  <tr><td>9</td><td>8</td><td>8</td><td></td></tr>
-  <tr><td>10</td><td>9</td><td>9</td><td></td></tr>
-  <tr><td>11</td><td>10</td><td>10</td><td></td></tr>
-  <tr><td>12</td><td>11</td><td>11</td><td></td></tr>
-  <tr><td>13</td><td>12</td><td>12</td><td></td></tr>
-  <tr><td>14</td><td>13</td><td>13</td><td></td></tr>
-  <tr><td>15</td><td>14</td><td>14</td><td></td></tr>
-  <tr><td>16</td><td>0</td><td>1</td><td></td></tr>
-  <tr><td>17</td><td>1</td><td>2</td><td></td></tr>
-  <tr><td>18</td><td>2</td><td>3</td><td></td></tr>
-  <tr><td>19</td><td>3</td><td>4</td><td></td></tr>
-  <tr><td>20</td><td>4</td><td>5</td><td></td></tr>
-  <tr><td>21</td><td>5</td><td>6</td><td></td></tr>
-  <tr><td>22</td><td>6</td><td>7</td><td></td></tr>
-  <tr><td>23</td><td>7</td><td>8</td><td></td></tr>
-  <tr><td>24</td><td>8</td><td>9</td><td></td></tr>
-  <tr><td>25</td><td>9</td><td>10</td><td></td></tr>
-  <tr><td>26</td><td>10</td><td>11</td><td></td></tr>
-  <tr><td>27</td><td>11</td><td>12</td><td></td></tr>
-  <tr><td>28</td><td>12</td><td>13</td><td></td></tr>
-  <tr><td>29</td><td>13</td><td>14</td><td></td></tr>
-  <tr><td>30</td><td>0</td><td>2</td><td></td></tr>
-  <tr><td>31</td><td>2</td><td>4</td><td></td></tr>
-  <tr><td>32</td><td>3</td><td>5</td><td></td></tr>
-  <tr><td>33</td><td>9</td><td>11</td><td></td></tr>
-  <tr><td>34</td><td>10</td><td>12</td><td></td></tr>
-  <tr><td>35</td><td>12</td><td>14</td><td></td></tr>
-  <tr><td>36</td><td>2</td><td>5</td><td></td></tr>
-  <tr><td>37</td><td>9</td><td>12</td><td></td></tr>
+  <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+  <tr><td>2</td><td>1</td><td>1</td><td>1</td></tr>
+  <tr><td>3</td><td>2</td><td>2</td><td>1</td></tr>
+  <tr><td>4</td><td>3</td><td>3</td><td>1</td></tr>
+  <tr><td>5</td><td>4</td><td>4</td><td>1</td></tr>
+  <tr><td>6</td><td>5</td><td>5</td><td>1</td></tr>
+  <tr><td>7</td><td>6</td><td>6</td><td>1</td></tr>
+  <tr><td>8</td><td>7</td><td>7</td><td>1</td></tr>
+  <tr><td>9</td><td>8</td><td>8</td><td>1</td></tr>
+  <tr><td>10</td><td>9</td><td>9</td><td>1</td></tr>
+  <tr><td>11</td><td>10</td><td>10</td><td>1</td></tr>
+  <tr><td>12</td><td>11</td><td>11</td><td>1</td></tr>
+  <tr><td>13</td><td>12</td><td>12</td><td>1</td></tr>
+  <tr><td>14</td><td>13</td><td>13</td><td>1</td></tr>
+  <tr><td>15</td><td>14</td><td>14</td><td>1</td></tr>
+  <tr><td>16</td><td>0</td><td>1</td><td>2</td></tr>
+  <tr><td>17</td><td>1</td><td>2</td><td>2</td></tr>
+  <tr><td>18</td><td>2</td><td>3</td><td>2</td></tr>
+  <tr><td>19</td><td>3</td><td>4</td><td>2</td></tr>
+  <tr><td>20</td><td>4</td><td>5</td><td>2</td></tr>
+  <tr><td>21</td><td>5</td><td>6</td><td>2</td></tr>
+  <tr><td>22</td><td>6</td><td>7</td><td>2</td></tr>
+  <tr><td>23</td><td>7</td><td>8</td><td>2</td></tr>
+  <tr><td>24</td><td>8</td><td>9</td><td>2</td></tr>
+  <tr><td>25</td><td>9</td><td>10</td><td>2</td></tr>
+  <tr><td>26</td><td>10</td><td>11</td><td>2</td></tr>
+  <tr><td>27</td><td>11</td><td>12</td><td>2</td></tr>
+  <tr><td>28</td><td>12</td><td>13</td><td>2</td></tr>
+  <tr><td>29</td><td>13</td><td>14</td><td>2</td></tr>
+  <tr><td>30</td><td>0</td><td>2</td><td>3</td></tr>
+  <tr><td>31</td><td>2</td><td>4</td><td>3</td></tr>
+  <tr><td>32</td><td>3</td><td>5</td><td>3</td></tr>
+  <tr><td>33</td><td>9</td><td>11</td><td>3</td></tr>
+  <tr><td>34</td><td>10</td><td>12</td><td>3</td></tr>
+  <tr><td>35</td><td>12</td><td>14</td><td>3</td></tr>
+  <tr><td>36</td><td>2</td><td>5</td><td>4</td></tr>
+  <tr><td>37</td><td>9</td><td>12</td><td>4</td></tr>
 </table>      
 
+<p>
+  In the bottom table, we see each possible sub-sequence of lenght 1 or 2.  Also included are all subsequences where the step from one index to the next is equal.
+  For example, for count #37 d[9] = 2 and d[10] = 3.  A step size of 1.  d[11] and d[12] continue this pattern, but d[13] breaks it.  Therefore
+  we include the subsequence from d[9] to d[12].
+</p>
   
   
     <div class="footer">
