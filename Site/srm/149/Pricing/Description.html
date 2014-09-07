@@ -1,16 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="" target="_blank">SRM 149 DIV 2 - 1000 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1600"
+           target="_blank">TopCoder Problem Statement - Pricing</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-<p>
+    <div class="header">Overview:</div>
+    <p>
   Determine pricing categories in order to maximize sales revenue.
 </p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-01: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
 02: TopCoder
 03: Single Round Match: 149
 04: Division: 2
@@ -106,10 +109,10 @@
 94:
 95:         return maxSales;
 96:     }
-97: }
-</pre>
+97: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+    <div class="header">Notes:</div>
 <p>
   The constraints limit the input to a maximum of 50 elements, and there are at most 4 pricing categories.  This domain is small enough to allow for a brute force approach.  The strategy used here is to take each possible combination of 4 prices, and see which one yields the greatest income.  Note that the price categories should come from the array of prices that customers are willing to pay.  Any price that is slightly below what a customer is willing to pay can bumped up to the price the customer will pay without losing the sale.
 </p>
@@ -138,14 +141,8 @@
   This is a surprisingly easy for a 1000 point Division 2 question.  Once you realize that the four categories must come from the array of prices given, and that a brute-force solution will suffice, the code practically writes itself.
 </p>
 
-
-
-<div style="margin-top:50px;text-align:center;font-size:14px">
-
-  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-
-  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-149-div-2-1000-points-pricing.html" target="_blank">here</a>.</p>
-
-  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
-
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

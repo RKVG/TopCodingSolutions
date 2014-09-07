@@ -1,0 +1,90 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1772"
+           target="_blank">TopCoder Problem Statement - Inventory</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the number of items a business can expect to sell per month based on past averages.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Inventory {
+02: 
+03:     private static final double DAYS_IN_MONTH = 30.0;
+04: 
+05:     /*
+06:     Calculates the average sales for the month. For months that sold out in
+07:     less than 30 days, assume the same rate for the remainder of the month.
+08:      */
+09:     private static double calcAverage(int sales, int days) {
+10:         return ((double) sales) / ((double) days / DAYS_IN_MONTH);
+11:     }
+12: 
+13:     public int monthlyOrder(int[] sales, int[] daysAvailable) {
+14: 
+15:         /*
+16:         Keep a running total of the sum of monthly sales,
+17:         and the number of months.  We'll divides these to get the average.
+18:          */
+19:         double sumOfMonthlySales = 0.0;
+20:         int numMonths = 0;
+21: 
+22:         for (int i = 0; i < sales.length; i++) {
+23: 
+24:             // If items were available for 0 days, do not count the month.
+25:             if (daysAvailable[i] == 0) { continue; }
+26: 
+27:             // Add current months sales to the running total.
+28:             sumOfMonthlySales += calcAverage(sales[i], daysAvailable[i]);
+29:             numMonths++;
+30:         }
+31: 
+32:         double average = sumOfMonthlySales / (double) numMonths;
+33: 
+34:         /*
+35:         Adjusts for the imprecision of Doubles.  See the Notes in the problem
+36:          statement.
+37:          */
+38:         average -= Double.parseDouble("1e-9");
+39: 
+40:         // Round up using the ceiling method.
+41:         return (int) Math.ceil(average);
+42:     }
+43: }</pre>
+</div>
+
+    <div class="header">Notes:</div>
+
+  <p>
+    Our task is to determine the expected number of sales per month given past peformance.  There are some months where the items was not in stock at all.  We do not count these months in our calculations.  In other months, the item may have sold out before the end of the month.  In this case, we need to project out what the sales would have been had enough inventory been available.
+  </p>
+
+  <p>
+    The solution works by counting up the actual or projected sales of each month.  Then it determines the average by dividing that sum by the number of months where the item was available.
+  </p>
+
+  <p>
+    numMonths is a counter that keeps track of the number of months where the item is available.  If the item was not available at all during that month, line 33 will skip to the next month, and numMonths will not be incremented.
+  </p>
+
+  <p>
+    The calcAverage() method calculates the actual or projected number of sales for any month.  By dividing the number of days the item was available by the number of days in a month, we get the fraction of the month that the item was availble.  If it was available for all 30 days, this fraction will be 1.  Then the number of sales is divided by this fraction to get the projected sales for the entire month.  So, if the item was available for 1/2 the month, this equation would return twice the number of sales.
+  </p>
+
+  <p>
+    Lines 40-49 calculate the average and return it.  Note that there is a "fudge factor" that is referenced in the problem statement.  Without this correction on line 46, some tests will not pass.
+  </p>
+  
+      <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+    
+</div>

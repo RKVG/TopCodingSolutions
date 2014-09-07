@@ -1,9 +1,0 @@
-<div>
-<p>
-  There's just two steps to solving this problem.  First, we need to loop through each item and calculate it's profit.  This is given by the equation on line 25: profit = (prices[i] - costs[i]) * sales[i];
-</p>
-
-<p>
-  Then, for each profit, we need to determine if it's greater than any previously seen value; and if so, we store both the index of that item as well as the profit.  This is done on lines 26-29. By requiring the new profit to be greater than maxProfitAmt (as opposed to greater than or equal to), we ensure that in cases of a tie, the first value remains.
-</p>
-</div>

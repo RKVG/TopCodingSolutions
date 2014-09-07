@@ -1,14 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1744" target="_blank">SRM 148 DIV 2 - 1000 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1744"
+           target="_blank">TopCoder Problem Statement - MNS</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+    <div class="header">Overview:</div>
+    <p>
 Given a list of numbers, determines how many ways the can be arranged to form a magic square.
+</p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-001: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>001: /*
 002: TopCoder
 003: Single Round Match: 148
 004: Division: 2
@@ -175,18 +180,24 @@ Given a list of numbers, determines how many ways the can be arranged to form a 
 165: 
 166:         return results.size();
 167:     }
-168: }
-</pre>
+168: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+    <div class="header">Notes:</div>
+
 <p>A magic square is a two dimensional grid of numbers where every row and column add up to the same amount. In this problem, the grid is always 3x3. If we number the positions as such:</p>
+
 <p>Then, by knowing the values of squares 1, 2, 3, 4, and 5 - we can determine what all the remaining squares must be. Square 1+ Square 2+ Square 3 = the value of the magic square - call this msNum. Therefore, Square 6 =msNum- Square 4 - Square 5. Square 7 =msNum- Square 1 - Square 2, etc.</p>
+
 <p>This solutions uses a brute force approach. Lines 139-164 loop through all possible values for squares 1,2,3,4, and 5. For each combination, it calls generateMagicSquare() which creates as many magic squares as possible using the remaining numbers. The if-statements immediately following each for (i.e. line 43) ensure that the same index do not get used multiple times.</p>
+
 <p>generateMagicSquare() creates as many magic squares as possible, given the fixed squares provided and the set of numbers from which to choose. It creates a new list called availableMaster that holds all the number that were not assigned to those fixed squares, and then uses a copy of that named availableCurrent for each iteration through the loop at line 57. The loop attempts to fill in legal values for squares 6, 7, 8, and 9. If that's possible, then we have a good magic square.</p>
+
 <p>The method msValue() on line 104 creates a unique identifier for each possible magic square. It does this by simply assigning each number in the square to a tens place and returns a long. So if the square was the example given at the very top of this notes sections, the result would be: 123456789. Since this identifier is added to a Set (line 89-91) it ensures that we don't count duplicates.</p>
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-148-div-2-1000-points.html" target="_blank">here</a>.</p>
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

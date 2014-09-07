@@ -1,174 +1,174 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1773"
-   target="_blank">SRM 153 DIV 2 - 1000 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1773"
+           target="_blank">TopCoder Problem Statement - PickTeam</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-<p>
+    <div class="header">Overview:</div>
+    <p>
     Choose the most effective team based on how well individuals work together.
 </p>
 
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>001: /*
+002:  * TopCoder Single Round Match: 153
+003:  * Division: 2
+004:  * Level: 3
+005:  * Points: 1000
+006:  * Problem Statement: http://community.topcoder.com/stat?c=problem_statement&pm=1773
+007:  */
+008: 
+009: import java.util.*;
+010: 
+011: public class PickTeam {
+012: 
+013:     /*
+014:      * This method converts the String[] people in a List of Perosn objects
+015:      */
+016:     private static List getAllPeople(String[] people) {
+017: 
+018:         List l = new ArrayList<>();
+019: 
+020:         for (int i = 0; i < people.length; i++) {
+021:             Person p = new Person(i, people[i].split(" "));
+022:             l.add(p);
+023:         }
+024: 
+025:         return l;
+026: 
+027:     }
+028: 
+029:     /*
+030:      * Returns a set of all possible teams given the list of people and the
+031:      * desired team size.
+032:      */
+033:     private static Set getAllTeams(List allPeople,
+034:                                          int size) {
+035: 
+036:         // This is the set we'll return.
+037:         Set teams = new HashSet<>();
+038: 
+039:         /*
+040:          * Check that we have people to work with, and that the desired team
+041:          * size is not more than the number of people available.
+042:          */
+043:         if ((allPeople == null) || (allPeople.size() == 0) ||
+044:                 (size > allPeople.size())) {
+045:             return teams;
+046:         }
+047: 
+048:         /*
+049:          * If the desired team size is 1.  Then everyone get their own team.
+050:          */
+051:         if (size == 1) {
+052:             for (Person p : allPeople) {
+053:                 Team t = new Team();
+054:                 t.addTeamMember(p);
+055:                 teams.add(t);
+056:             }
+057:             return teams;
+058:         }
+059: 
+060:         // Copies the list of allPeople
+061:         List currentPeople = new ArrayList<>();
+062:         currentPeople.addAll(allPeople);
+063: 
+064:         /*
+065:          * For each person, we'll call getAllTeams() will all of the remaining
+066:          * people
+067:          */
+068:         for (int i=0; i allPeople = getAllPeople(people);
+069: 
+070:         // Get a set of all possible teams
+071:         Set allTeams = getAllTeams(allPeople, teamSize);
+072: 
+073:         int maxScore = Integer.MIN_VALUE;
+074:         Team bestTeam = null;
+075: 
+076:         // Find the team with the greatest score.
+077:         for (Team team : allTeams) {
+078:             int score = team.getScore();
+079:             if (score > maxScore) {
+080:                 maxScore = score;
+081:                 bestTeam = team;
+082:             }
+083:         }
+084: 
+085:         return bestTeam.getNames();
+086:     }
+087: }
+088: 
+089: /*
+090:  * The Team class holds a set of Person which represents the people on the
+091:  * team.  Also provide methods for calculating the score, and displaying
+092:  * the team members in the format expected by the tests.
+093:  */
+094: class Team {
+095: 
+096:     Set teamMembers = new HashSet<>();
+097: 
+098:     // Calculates the score for the team.
+099:     public int getScore() {
+100: 
+101:         int score = 0;
+102: 
+103:         for (Person p : teamMembers) {
+104:             for (Person p1 : teamMembers) {
+105:                 score += p.getCompatibility(p1);
+106:             }
+107:         }
+108: 
+109:         return score;
+110:     }
+111: 
+112:     // Returns the team member's names as a sorted array.
+113:     public String[] getNames() {
+114: 
+115:         String[] names = new String[teamMembers.size()];
+116: 
+117:         int i = 0;
+118:         for (Person p : teamMembers) {
+119:             names[i++] = p.name;
+120:         }
+121: 
+122:         Arrays.sort(names);
+123:         return names;
+124:     }
+125: 
+126:     public void addTeamMember(Person p) {
+127:         teamMembers.add(p);
+128:     }
+129: 
+130: }
+131: 
+132: class Person {
+133: 
+134:     final int id;
+135:     final String name;
+136:     final Map compatibilityMap = new HashMap();
+137: 
+138:     Person(int id, String[] data) {
+139: 
+140:         this.id = id;
+141:         name = data[0];
+142: 
+143:         for (int i = 1; i < data.length; i++) {
+144:             compatibilityMap.put((i - 1), Integer.parseInt(data[i]));
+145:         }
+146:     }
+147: 
+148:     // Returns an int representing how compatible this person is with the other.
+149:     public int getCompatibility(Person p) {
+150:         return compatibilityMap.get(p.id);
+151:     }
+152: 
+153: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-    1: /*
-    2:  * TopCoder Single Round Match: 153
-    3:  * Division: 2
-    4:  * Level: 3
-    5:  * Points: 1000
-    6:  * Problem Statement: http://community.topcoder.com/stat?c=problem_statement&pm=1773
-    7:  */
-    8:
-    9: import java.util.*;
-   10:
-   11: public class PickTeam {
-   12:
-   13:     /*
-   14:      * This method converts the String[] people in a List of Perosn objects
-   15:      */
-   16:     private static List getAllPeople(String[] people) {
-   17:
-   18:         List l = new ArrayList<>();
-   19:
-   20:         for (int i = 0; i < people.length; i++) {
-   21:             Person p = new Person(i, people[i].split(" "));
-   22:             l.add(p);
-   23:         }
-   24:
-   25:         return l;
-   26:
-   27:     }
-   28:
-   29:     /*
-   30:      * Returns a set of all possible teams given the list of people and the
-   31:      * desired team size.
-   32:      */
-   33:     private static Set getAllTeams(List allPeople,
-   34:                                          int size) {
-   35:
-   36:         // This is the set we'll return.
-   37:         Set teams = new HashSet<>();
-   38:
-   39:         /*
-   40:          * Check that we have people to work with, and that the desired team
-   41:          * size is not more than the number of people available.
-   42:          */
-   43:         if ((allPeople == null) || (allPeople.size() == 0) ||
-   44:                 (size > allPeople.size())) {
-   45:             return teams;
-   46:         }
-   47:
-   48:         /*
-   49:          * If the desired team size is 1.  Then everyone get their own team.
-   50:          */
-   51:         if (size == 1) {
-   52:             for (Person p : allPeople) {
-   53:                 Team t = new Team();
-   54:                 t.addTeamMember(p);
-   55:                 teams.add(t);
-   56:             }
-   57:             return teams;
-   58:         }
-   59:
-   60:         // Copies the list of allPeople
-   61:         List currentPeople = new ArrayList<>();
-   62:         currentPeople.addAll(allPeople);
-   63:
-   64:         /*
-   65:          * For each person, we'll call getAllTeams() will all of the remaining
-   66:          * people
-   67:          */
-   68:         for (int i=0; i allPeople = getAllPeople(people);
-   91:
-   92:         // Get a set of all possible teams
-   93:         Set allTeams = getAllTeams(allPeople, teamSize);
-   94:
-   95:         int maxScore = Integer.MIN_VALUE;
-   96:         Team bestTeam = null;
-   97:
-   98:         // Find the team with the greatest score.
-   99:         for (Team team : allTeams) {
-  100:             int score = team.getScore();
-  101:             if (score > maxScore) {
-  102:                 maxScore = score;
-  103:                 bestTeam = team;
-  104:             }
-  105:         }
-  106:
-  107:         return bestTeam.getNames();
-  108:     }
-  109: }
-  110:
-  111: /*
-  112:  * The Team class holds a set of Person which represents the people on the
-  113:  * team.  Also provide methods for calculating the score, and displaying
-  114:  * the team members in the format expected by the tests.
-  115:  */
-  116: class Team {
-  117:
-  118:     Set teamMembers = new HashSet<>();
-  119:
-  120:     // Calculates the score for the team.
-  121:     public int getScore() {
-  122:
-  123:         int score = 0;
-  124:
-  125:         for (Person p : teamMembers) {
-  126:             for (Person p1 : teamMembers) {
-  127:                 score += p.getCompatibility(p1);
-  128:             }
-  129:         }
-  130:
-  131:         return score;
-  132:     }
-  133:
-  134:     // Returns the team member's names as a sorted array.
-  135:     public String[] getNames() {
-  136:
-  137:         String[] names = new String[teamMembers.size()];
-  138:
-  139:         int i = 0;
-  140:         for (Person p : teamMembers) {
-  141:             names[i++] = p.name;
-  142:         }
-  143:
-  144:         Arrays.sort(names);
-  145:         return names;
-  146:     }
-  147:
-  148:     public void addTeamMember(Person p) {
-  149:         teamMembers.add(p);
-  150:     }
-  151:
-  152: }
-  153:
-  154: class Person {
-  155:
-  156:     final int id;
-  157:     final String name;
-  158:     final Map compatibilityMap = new HashMap();
-  159:
-  160:     Person(int id, String[] data) {
-  161:
-  162:         this.id = id;
-  163:         name = data[0];
-  164:
-  165:         for (int i = 1; i < data.length; i++) {
-  166:             compatibilityMap.put((i - 1), Integer.parseInt(data[i]));
-  167:         }
-  168:     }
-  169:
-  170:     // Returns an int representing how compatible this person is with the other.
-  171:     public int getCompatibility(Person p) {
-  172:         return compatibilityMap.get(p.id);
-  173:     }
-  174:
-  175: }
-  176:
-  177:
-</pre>
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+    <div class="header">Notes:</div>
 <p>
 The problem asks us to create the best possible team by selecting from a pool of individuals.  Each individual has a set of scores which represent how compatible they are with each other individual.   The team's score is determinined by summing the compatibility ratings for each person on the team with every other team member.  The team with the highest score should be selected.
 </p>
@@ -193,11 +193,8 @@ The problem asks us to create the best possible team by selecting from a pool of
   Once a Set of all possible teams is obtained, it's a simple matter of calculating the score for each team, and keeping track of which team has the highest.
 </p>
 
-
-<div style="margin-top:50px;text-align:center;font-size:14px">
-
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
-
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

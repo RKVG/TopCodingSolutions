@@ -1,14 +1,20 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1225">SRM 147 DIV 2 - 600 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1225"
+           target="_blank">TopCoder Problem Statement - PeopleCircle</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+    <div class="header">Overview:</div>
+    <p>
 Determine the starting arrangement of a number of males and females sitting around a circle, given the number of females, and the value of i, where the ith person is removed each round.
+</p>
 
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-01: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
 02: TopCoder
 03: Single Round Match: 147
 04: Division: 2
@@ -90,14 +96,19 @@ Determine the starting arrangement of a number of males and females sitting arou
 80: 
 81:         circle[pos] = 'F';
 82:     }
-83: }
-</pre>
+83: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+
+    <div class="header">Notes:</div>
 <p>This problem requires you to start from the end state and work backwards to reconstruct what the beginning must have looked like. We know from the problem that it started as some point and removed the Kth person. This repeated numFemale times until all the females are gone. So the first hint is that on every move a female is removed, the number of males remains constant.</p>
+
 <p>Lines 19 through 27 create an array large enough to hold all participants, and then inserts the number of males starting at the head of the array.</p>
+
 <p>Now, we reverse the process. Instead of counting ahead and removing a female, we count back and insert a female. Line 48 handles counting back, and the insertFemale() method takes care of inserting the 'F' at the given position and shifting everything beyond that point one spot to the right.</p>
+
 <p>We must be careful because the size of the circle array is not the number of people currently in the circle at that point. Lines 51-53 detect when we've gone in front of the beginning of the array, and set us back to the end based on the number of people.</p>
+
 <p>Finally, we won't necessary end up at the start of the array. So, to construct the return string, we need to concatenate everything to the right of our current position, with everything from the beginning of the the array up to our current position.</p>
 
 <table>
@@ -111,9 +122,8 @@ Determine the starting arrangement of a number of males and females sitting arou
 
 <p>For some clarity, if our final position is at the ^, then the return string would be B + A.</p>
 
-
-<div style="margin-top:50px;text-align:center;font-size:14px">
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/06/srm-147-div-2-600-points.html" target="_blank">here</a>.</p>
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

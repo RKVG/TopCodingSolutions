@@ -1,16 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1778" target="_blank">SRM 156 DIV 2 - 600 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1778"
+           target="_blank">TopCoder Problem Statement - BombSweeper</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-<p>
+    <div class="header">Overview:</div>
+    <p>
   Predict the likelihood that you'll win a mine sweeper like game.
 </p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-001: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>001: /*
 002: TopCoder
 003: Single Round Match: 156
 004: Division: 2 / 1
@@ -117,11 +120,14 @@
 105:         // This equation is given in the problem statement.
 106:         return ((double) numWins / (double) (numWins + numBombs)) * 100.0;
 107:     }
-108: }
-</pre>
+108: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
-<p>The equation for determining the likelihood of winning is given in the problem statement as (wins / (wins + losses)) where wins are the number of squares that are not bombs and do not have any neighbors that are bombs; and losses are squares that are bombs.  Be sure to multiply by 100 to get this number as a percentage.</p>
+    <div class="header">Notes:</div>
+
+<p>
+  The equation for determining the likelihood of winning is given in the problem statement as (wins / (wins + losses)) where wins are the number of squares that are not bombs and do not have any neighbors that are bombs; and losses are squares that are bombs.  Be sure to multiply by 100 to get this number as a percentage.
+</p>
 
 <p
   >Quite often, I find it easier to work with a 2-Dimensional array of characters rather than the given String array.  The method generateBoard() performs this simple conversion.  With the 2-Dimensional char array, we can refer to each square using just its indices, and not have to mix an index with a String.charAt().  It's a personal preference, but I think board[row][col] is cleaner than board[row].charAt(col)
@@ -139,12 +145,9 @@
   Once numBombs, and numWins are known, we can plug those into the given equation and return the result.
 </p>
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-
-  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-
-  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-156-div-2-600-points-bombsweeper.html" target="_blank">here</a>.</p>
-
-  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 
 </div>

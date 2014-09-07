@@ -108,7 +108,7 @@ public class SolutionPage {
                             "class=\"solution_heading\">Notes:</div>");
 
                     BufferedReader notesReader = Files.newBufferedReader
-                            (solutionInBasePath.resolve("notes.xml"), charset);
+                            (solutionInBasePath.resolve("Description.html"), charset);
                     while ((line = notesReader.readLine()) != null)  {
                         writer.write(line);
                     }

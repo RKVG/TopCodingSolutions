@@ -1,16 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="" target="_blank">SRM 150 DIV 2 - 500 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1523"
+           target="_blank">TopCoder Problem Statement - InterestingDigits</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-<p>
+    <div class="header">Overview:</div>
+    <p>
 Determine the "interesting" digits for a given base.
 </p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-01: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
 02: TopCoder
 03: Single Round Match: 150
 04: Division: 2 / 1
@@ -105,10 +108,10 @@ Determine the "interesting" digits for a given base.
 93: 
 94:         return retArray;
 95:     }
-96: }
-</pre>
+96: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+    <div class="header">Notes:</div>
 <p>
   To determine if a digit is interesting, we need to check all of it's 1, 2, and 3 digit multiples.  For each multiple, we add up the digits.  If this sum is more than one digit, then add up the sum of those digits.  When the sum is just 1 digit, it should be divided evenly by our original digit.  For example, the digit 9 is interesting in base 10.  If we take any multiple, say 9 X 123 = 1107.  And 1 + 1 + 0 + 7 = 9 - which is evenly divisible by 9.
 </p>
@@ -133,13 +136,8 @@ Determine the "interesting" digits for a given base.
   There's actually a much simpler way of determining if a number is "interesting".  See the solution given in the <a href="http://community.topcoder.com/tc?module=Static&d1=match_editorials&d2=srm150" target="_blank">TopCoder Match Editorials</a>
 </p>
 
-
-<div style="margin-top:50px;text-align:center;font-size:14px">
-
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/08/srm-150-div-2-500-points.html" target="_blank">here</a>.</p>
-
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
-
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

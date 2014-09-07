@@ -1,13 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&amp;pm=1741" target="_blank">SRM 148 DIV 2 - 250 Points</a>
+<div class="solution">
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1741"
+           target="_blank">TopCoder Problem Statement - DivisorDigits</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
 Determine which digits in a number evenly divide the number.
+</p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-01: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
 02: TopCoder
 03: Single Round Match: 148
 04: Division: 2
@@ -47,15 +53,17 @@ Determine which digits in a number evenly divide the number.
 38: 
 39:         return count;
 40:     }
-41: }
-</pre>
+41: }</pre>
+</div>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+    <div class="header">Notes:</div>
+
 <p>On line 23, we convert the "number" parameter into a char array. This makes it easy for us to iterate through each digit. Line 26 handles the iteration, and line 29 converts each of the chars into an int. Be careful here to subtract off the value of '0' - otherwise your digit will be 48 greater than you expect!</p>
-<p>Then, it's just a matter of seeing the digit divides the number evenly. This is done on line 34 using the mod operator %.</p>
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-<p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-<p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-148-div-2-250-points.html" target="_blank">here</a>.</p>
-<p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
+<p>Then, it's just a matter of seeing if the digit divides the number evenly. This is done on line 34 using the mod operator %.</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>

@@ -1,16 +1,19 @@
-<div style="margin-top:0px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Problem:</div>
-<a href="http://community.topcoder.com/stat?c=problem_statement&pm=1669" target="_blank">SRM 155 DIV 2 - 1000 Points</a>
+<div class="solution">
 
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1669"
+           target="_blank">TopCoder Problem Statement - PaternityTest</a>
+    </p>
 
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Overview:</div>
-<p>
+    <div class="header">Overview:</div>
+    <p>
   Determine possible fathers given a DNA sequence from a child, mother, and array of potential fatehrs.
 </p>
 
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Java Source:</div>
-<pre style="background:#000000;color:#fdbb30;font-family:Courier New,Courier,monospace;font-size:14px;height:auto;line-height:20px;overflow:auto;padding:20px;text-align:left;width:95%">
-01: /*
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
 02: TopCoder
 03: Single Round Match: 155
 04: Division: 2 / 1
@@ -80,11 +83,11 @@
 68:         return ret;
 69:     }
 70:
-71: }
+71: }</pre>
+</div>
 
-</pre>
-
-<div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">Notes:</div>
+    <div class="header">Notes:</div>
+    
 <p>
   There's just two checks needed to determine if the father can be ruled out or not.  First, any character that did not come from the mother must come from the father.  If the character at position x in the child's sequence is not equal to the character at position x in the mother's sequence, then it must match the character at position x in the father's sequence.  If it does not, then we can eliminate the man from the list of potential fathers.  This is tested for by the if statemet at line 38.
 </p>
@@ -96,16 +99,8 @@
 </p>
 
 
-<div style="margin-top:50px;text-align:center;font-size:14px">
-
-  <p><i>Thank you</i> for taking the time to read this solution.  I welcome any feedback you may have.</p>
-
-  <p>Please post any questions or comments <a href="http://blog.topcodingsolutions.net/2014/07/srm-155-div-2-1000-points-paternity-test.html" target="_blank">here</a>.</p>
-
-  <p>For this, and other TopCoder solutions, please visit <a href="http://www.topcodingsolutions.net" target="_blank">www.topcodingsolutions.net</a>.</p>
-
-  <p>Also, for updates, requests, further discussion, etc. please join our google+ page at
-    <a href="http://google.com/+TopCodingSolutionsNet_GP">http://google.com/+TopCodingSolutionsNet_GP</a>
-  </p>
-
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
 </div>
