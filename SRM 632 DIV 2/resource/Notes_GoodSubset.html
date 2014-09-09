@@ -1,0 +1,275 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13396"
+           target="_blank">TopCoder Problem Statement - GoodSubset</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine all combinations of an array that when multiplied together equal a given value.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.ArrayList;
+002: import java.util.Collection;
+003: import java.util.List;
+004: 
+005: public class GoodSubset {
+006: 
+007:     /*
+008:     * Stores a list of Integers along with their product.  Avoids having
+009:     * to muliply the Integers together multiple times to get their product.
+010:     * This class was added after the solution was working in an attempt to
+011:     * improve performace.  A lot of time was being spent re-calculating
+012:     * the products of these lists.
+013:     * Note: I don't think it helped much...
+014:     */
+015:     class ListAndProduct {
+016:         List<Integer> ints;
+017:         int product;
+018: 
+019:         ListAndProduct(List<Integer> ints, int product)  {
+020:             this.ints = ints;
+021:             this.product = product;
+022:         }
+023:     }
+024: 
+025:     // Reset count each time it reaches this value.
+026:     public static final int MOD_VALUE = 1_000_000_007;
+027: 
+028: 
+029:     /*
+030:     * The method called by the tests.  Obtains a Collection of ListAndProduct
+031:     * objects, and then counts the number of items whose product equals
+032:     * goodValue.
+033:     */
+034:     public int numberOfSubsets(int goodValue, int[] d) {
+035: 
+036:         if (d.length == 0) return 0;
+037: 
+038:         Collection<ListAndProduct> possibleGoodSubsets =
+039:                 getPossibleGoodSubsets(goodValue, d, 0);
+040: 
+041:         int count = 0;
+042: 
+043:         for (ListAndProduct lap : possibleGoodSubsets) {
+044: 
+045:             if (goodValue == lap.product) {
+046:                 count++;
+047:                 if (count == MOD_VALUE) count = 0;
+048:             }
+049: 
+050:         }
+051: 
+052:         return count;
+053: 
+054:     }
+055: 
+056:     /*
+057:     * Returns a Collection of ListAndProduct objects.  The product of of
+058:     * each item will be a factor of goodValue.
+059:     */
+060:     private Collection<ListAndProduct> getPossibleGoodSubsets(
+061:             int goodValue, int[] d, int index) {
+062: 
+063:         Collection<ListAndProduct> possibleGoodSubSets;
+064: 
+065:         /*
+066:         * If this is the last element in d[] the create the return list,
+067:         * otherwise, obtain it by recursively calling getPossibleSubsets using
+068:         * the next index.
+069:         */
+070:         if (index == (d.length - 1)) {
+071:             possibleGoodSubSets = new ArrayList<>();
+072: 
+073:         } else {
+074:             possibleGoodSubSets = getPossibleGoodSubsets(
+075:                     goodValue, d, index + 1);
+076:         }
+077: 
+078:         // Only interested in numbers that are factors of goodValue.
+079:         if (goodValue % d[index] == 0) {
+080: 
+081:             /*
+082:             * Contains new items to be added to possibleGoodSubSets.  Don't
+083:             * want to modify that list until the for loop is done though.
+084:             */
+085:             List<ListAndProduct> toAdd = new ArrayList<>();
+086: 
+087:             for (ListAndProduct lap : possibleGoodSubSets) {
+088: 
+089:                 /*
+090:                 * For each of the items currently in the possibleGoodSubSets
+091:                 * Collection, does multiplying that product by d[index] also
+092:                 * result in a factor of goodValue?  If so, note it so it gets
+093:                 * added to the Collection.
+094:                 */
+095:                 long product = (long) d[index] * (long) lap.product;
+096: 
+097:                 if ((goodValue % product) == 0) {
+098: 
+099:                     /*
+100:                     * Create and store a new ListAndProduct object using the
+101:                     * previous list of integers, and the current index.  Store
+102:                     * the list along with its product.
+103:                     */
+104:                     List<Integer> newInts = new ArrayList<>();
+105:                     for (int i : lap.ints) {
+106:                         newInts.add(i);
+107:                     }
+108:                     newInts.add(d[index]);
+109:                     toAdd.add(new ListAndProduct(newInts, (int) product));
+110:                 }
+111: 
+112:             }
+113: 
+114:             /*
+115:             * possibleGoodSubSets could not be modified within the above for
+116:             * loop.  So now, we can add all the items from toAdd into it.
+117:             */
+118:             for (ListAndProduct lap : toAdd) {
+119:                 possibleGoodSubSets.add(lap);
+120:             }
+121: 
+122:             // The current index is a factor of goodValue, so add that in too.
+123:             List<Integer> l = new ArrayList<>();
+124:             l.add(d[index]);
+125:             possibleGoodSubSets.add(new ListAndProduct(l, d[index]));
+126:         }
+127: 
+128:         return possibleGoodSubSets;
+129: 
+130:     }
+131: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  First, a disclaimer.  The given code works, but fails one of the timing tests.  The constraints are that the solution
+  must complete in under 2 seconds.  The code above passes all the tests except test #32.  It give the correct answer, but
+  takes about 25 seconds to complete.  I've tried a few techniques to bring this time down without success.  If you've got
+  any ideas, I'd like to hear them.
+</p>
+
+<p>
+  The solution uses a technique know as dynamic programming.  Here, we'll solve for the last element in the array; and then
+  using what we've computed, work backward toward the beginning of the array.  I'll explain how it works, by walking through
+  an example.
+</p>
+
+<p>
+  For test3, the input array is { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } and goodValue = 12.
+</p>
+
+<p>
+  The idea is to start at the right side of the array, and only consider elements or products that are factors of goodValue.
+  Items matching our criteria are stored in a Collection of Lists of Integers called possibleGoodSubsets.  So starting at 12:
+  12 is a factor of 12, so add it to possibleGoodSubsets.  11, 10, 9, 8, and 7 are not factors of 12, so we skip past those.
+</p>
+
+<p>
+  6 is a factor of 12, so add that.  However 6 * 12 = 72 which is not a factor, so we don't add 6,12 to the List.
+</p>
+
+<p>
+  5 is not a factor, so skip it.  4 is a factor, so we'll add it just like 6 was.
+<p>
+  
+<p>
+  3 is a factor of 12.  Also 4 is already in our list, and 3 * 4 = 12 is a factor, so we'll add not only 3; but also 3,4
+</p>
+
+<p>
+  The table below shows how possibleGoodSubsets grows as we work backward through the array.
+</p>
+
+<table>
+  <tr>
+    <th>Value</th>
+    <th>possibleGoodSubsets</th>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>{{12}}</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>{{12}}</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>{{12}}</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>{{12}}</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>{{12}}</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>{{12}}</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>{{12}, {6}}</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>{{12}, {6}}</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>{{12}, {6}, {4}}</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>{{12}, {6}, {4}, {3,4}, {3}}</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>{{12}, {6}, {4}, {3,4}, {3}, {6,2}, {3,2}, {2}}</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>{{12}, {6}, {4}, {3,4}, {3}, {6,2}, {3,2}, {2}, {12,1}, {6,1}, {4,1}, {3,4,1}, {3,1}, {6,2,1}, {3,2,1}, {2,1}, {1}}</td>
+  </tr>
+</table>
+
+<p>
+  The collection given at Value 1 is what will be returned to the numOfSubsets() method.  It then looks for elements whose product
+  equals goodValue.  In this case {{12}, {3,4}, {6,2}, {12,1}, {3,4,1}, {6,2,1}}
+</p>
+
+<p>
+  This works great so long as not too many elements of the input array are factors of goodValue.  In test32 all 100 of the items
+  in the input array are factors, and many of those number, when multiplied together produce factors.  So the size of possibleGoodSubsets
+  really explodes in that case.
+</p>
+
+<p>
+  One thing I noticed when profiling the code was this it was spending most of its time computing the products.  To alieviate this,
+  I introduced the class ListAndProduct so that I could store a List of Integers and it's product together, and thus avoid
+  having to calculate the product of that list over and over again.  Unfortunately, the effectiveness of that chage was minimal.
+</p>
+
+<p>
+  I think this is a good algorithm, and does a good job of illustrating techniques of dynamic programming.  So, I'm not really
+  interested in re-writing it.  But, if you have ideas that can help get this under the 2 second limit for the worst case scenarios,
+  I'd like to hear it.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
