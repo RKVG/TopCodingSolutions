@@ -1,0 +1,94 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1791"
+           target="_blank">TopCoder Problem Statement - TireRotation</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Given an initial state, determine the number of tire rotations needed
+        to reach the current state.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class TireRotation {
+02:
+03: 	public int getCycle(String initial, String current) {
+04:
+05:         // Start at phase 1 and the initial pattern.
+06:         int phase = 1;
+07:         String s = initial;
+08:
+09:         /*
+10:         * Loop until we either match the current pattern, or have cycled
+11:         * through all 4 phases.
+12:         */
+13:         while ((phase < 5) && (!s.equals(current))) {
+14:             s = rotateTires(s);
+15:             phase++;
+16:         }
+17:
+18:         /*
+19:         * If phase is > 4, then the pattern was invalid, return -1.
+20:         * Otherwise return phase.
+21:         */
+22:         return (phase > 4) ? -1 : phase;
+23:     }
+24:
+25:     /*
+26:     * Returns a String representing the new tire pattern after performing
+27:     * a rotation.
+28:     * The tire in:
+29:     * position 1, c[0] receives the tire from position 4, charAt(3)
+30:     * position 2, c[1] receives the tire from position 3, charAt(2)
+31:     * position 3, c[2] receives the tire from position 1, charAt(0)
+32:     * position 4, c[3] receives the tire from position 2, charAt(1)
+33:     */
+34:     private static String rotateTires(String s)  {
+35:
+36:         char[] c = new char[4];
+37:
+38:         c[0] = s.charAt(3);
+39:         c[1] = s.charAt(2);
+40:         c[2] = s.charAt(0);
+41:         c[3] = s.charAt(1);
+42:
+43:         return new String(c);
+44:     }
+45: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        There's just two things to take care of to solve this problem, both of
+        which are very easy.  First, write a method that performs the tire
+        rotation and returns the results.  And second, loop through the
+        rotations until a match is found, or we've exhausted all possible
+        configurations.
+    </p>
+
+    <p>
+        The while loop on line 13 calls rotateTires() and checkes the result.
+        The loop terminates when a match is found, or if phase becomes greater
+        than 4 - meaning that there is no possible solution.
+    </p>
+
+    <p>
+        The rotateTires() method takes a String and returns a new String
+        representing the tire pattern after a rotation.  It simply creates
+        an array to store the new values, and maps the old positions into
+        their proper new place.  Just make sure you map in the right direction
+        and offset everything by 1.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
