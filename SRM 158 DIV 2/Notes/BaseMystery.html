@@ -1,0 +1,110 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1789"
+           target="_blank">TopCoder Problem Statement - BaseMystery</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine which bases a given equation is valid in.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: import java.util.ArrayList;
+02: import java.util.List;
+03: 
+04: public class BaseMystery {
+05: 
+06:     private static final int MAX_BASE = 20;
+07: 
+08:     public int[] getBase(String equation) {
+09: 
+10:         // Saves all of the validBases as they're discovered.
+11:         List<Integer> validBases = new ArrayList<>();
+12: 
+13:         // Try each base from 2 to MAX_BASE
+14:         for (int base = 2; base <= MAX_BASE; base++) {
+15:             if (isLegal(base, equation)) {
+16:                 validBases.add(base);
+17:             }
+18:         }
+19: 
+20:         // Convert the List<Integer> to the expected return type int[]
+21:         int[] ret = new int[validBases.size()];
+22:         int index = 0;
+23: 
+24:         for (int i : validBases) {
+25:             ret[index++] = i;
+26:         }
+27: 
+28:         return ret;
+29:     }
+30: 
+31:     private boolean isLegal(int base, String equation) {
+32: 
+33:         // Splits the equation up into it's three parts.
+34:         String[] s = equation.split("[+=]");
+35: 
+36:         int addend1;
+37:         int addend2;
+38:         int sum;
+39: 
+40:         // Let the Integer class do all the hard work for you!
+41:         try {
+42:             addend1 = Integer.parseInt(s[0], base);
+43:             addend2 = Integer.parseInt(s[1], base);
+44:             sum = Integer.parseInt(s[2], base);
+45: 
+46:         } catch (NumberFormatException e) {
+47: 
+48:             /*
+49:             * An exception is thrown if the number format is invalid for the
+50:             * given base.  i.e. a 2 in base-2 or a G in base-16
+51:             */
+52:             return false;
+53:         }
+54: 
+55:         return (addend1 + addend2) == sum;
+56:     }
+57: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+    This is a very easy Divison 2 - 500 point problem, if you let the language
+    do all of the hard work.  All you need to do is loop through the
+    possible bases, from 2 up to the limit of 20, and check to see if the
+    equation is valid.  To be valid, it must not contain any invalid digits
+    for the given base, and the equation must be true.
+</p>
+
+<p>
+    isLegal() begins by splitting the equation up into its two addends and
+    it's sum.  This is done easily with the split method on line 34.  The
+    parameter "[+=]" causes it to split on both the + and = character, thus
+    dividing the equation into three pieces.
+</p>
+
+<p>
+    Knowing that the Integer class provides a parseInt() method that can
+    interpret different bases makes the rest of the problem a piece of cake.
+    Just allow it to do its thing, and catch any NumberFormatExceptions that it
+    might throw.
+</p>
+
+<p>
+    Finally, just check to see that that equation evaluates to true.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
