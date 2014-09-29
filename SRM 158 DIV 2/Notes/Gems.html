@@ -1,0 +1,182 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1767"
+           target="_blank">TopCoder Problem Statement - Gems</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Compute the number of possible moves for the given state of a game.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: public class Gems {
+002: 
+003:     private static final int MIN_GROUP_SIZE = 3;
+004: 
+005:     private int board_height;
+006:     private int board_width;
+007: 
+008:     public int numMoves(String[] b) {
+009: 
+010:         board_height = b.length;
+011:         board_width = b[0].length();
+012: 
+013:         /*
+014:         * Copy the String[] into a char[][].  This makes it much easier to
+015:         * work with, for example, when swapping positions.
+016:         */
+017:         char[][] board = new char[board_height][board_width];
+018: 
+019:         for (int y = 0; y < board_height; y++) {
+020:             for (int x = 0; x < board_width; x++) {
+021:                 board[y][x] = b[y].charAt(x);
+022:             }
+023:         }
+024: 
+025:         int numMoves = 0;
+026: 
+027:         for (int y = 0; y < board_height; y++) {
+028:             for (int x = 0; x < board_width; x++) {
+029: 
+030:                 // If not at right edge, swap right.
+031:                 if (x < board_width - 1) {
+032:                     swapGems(board, x, y, x + 1, y);
+033: 
+034:                     if ((getGroupSize(board, x + 1, y) >= MIN_GROUP_SIZE) ||
+035:                             (getGroupSize(board, x,y) >= MIN_GROUP_SIZE))  {
+036:                         numMoves++;
+037: //                        System.out.println("Y: " + y + " X:" + x +
+038: //                              " --> Y1:" + y + " X1:" + (x+1));
+039: 
+040:                     }
+041: 
+042:                     swapGems(board, x + 1, y, x, y);
+043:                 }
+044: 
+045:                 // If not at bottom edge, swap down.
+046:                 if (y < board_height - 1) {
+047:                     swapGems(board, x, y, x, y + 1);
+048: 
+049:                     if ((getGroupSize(board, x, y + 1) >= MIN_GROUP_SIZE) ||
+050:                             (getGroupSize(board,x,y) >= MIN_GROUP_SIZE))  {
+051:                         numMoves++;
+052: //                        System.out.println("Y: " + y + " X:" + x +
+053: //                          " --> Y1:" + (y+1) + " X1:" + x);
+054: 
+055:                     }
+056: 
+057:                     swapGems(board, x, y + 1, x, y);
+058:                 }
+059:             }
+060:         }
+061: 
+062:         return numMoves;
+063:     }
+064: 
+065:     /*
+066:     * Swaps the values at the two positions given.
+067:     */
+068:     private static void swapGems(char[][] board, int x, int y,
+069:                                  int x1, int y1) {
+070: 
+071:         char t = board[y][x];
+072:         board[y][x] = board[y1][x1];
+073:         board[y1][x1] = t;
+074: 
+075:     }
+076: 
+077:     /*
+078:     * Returns the larger of the horizontal or vertical group size
+079:     * that the given position belongs to.
+080:     */
+081:     private int getGroupSize(char[][] board, int x, int y) {
+082: 
+083:         int groupSizeVer = 1;  // Size of Vertical group
+084:         int groupSizeHor = 1;  // Size of Horizontal group
+085: 
+086:         int x1;
+087:         int y1;
+088: 
+089:         char target = board[y][x];
+090: 
+091:         // Check Up
+092:         x1 = x;
+093:         y1 = y - 1;
+094:         while ((y1 >= 0) && (board[y1][x1] == target)) {
+095:             y1--;
+096:             groupSizeVer++;
+097:         }
+098: 
+099:         // Check Down
+100:         x1 = x;
+101:         y1 = y + 1;
+102: 
+103:         while ((y1 < board_height) && (board[y1][x1] == target)) {
+104:             y1++;
+105:             groupSizeVer++;
+106:         }
+107: 
+108:         // Check Left
+109:         x1 = x - 1;
+110:         y1 = y;
+111:         while ((x1 >= 0) && (board[y1][x1] == target)) {
+112:             x1--;
+113:             groupSizeHor++;
+114:         }
+115: 
+116:         // Check Right
+117:         x1 = x + 1;
+118:         y1 = y;
+119:         while ((x1 < board_width) && board[y1][x1] == target) {
+120:             x1++;
+121:             groupSizeHor++;
+122:         }
+123: 
+124:         return Math.max(groupSizeVer, groupSizeHor);
+125: 
+126:     }
+127: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The problem can be solved using a brute force algorithm.  Loop through each row and column of the board, swap the gem with it's neighbor to the right and below, and see if it results in a group of 3 or more in a row being created.  We only swap to the right and down in order to avoid double-counting moves.
+</p>
+
+<p>
+  First, I suggest copying the String[] into a 2-dimensional character array.  This makes opearations like swapping characters much easier.  I hate mixing array indexes with .charAt().  It's easy enough to convert to the
+  far more useful char[][], and since memory is much of a concern here, there's no reason not to.  This is handled on lines 17-23.
+</p>
+
+<p>
+  Next, we entered a nested loop that iterates over each row, and then each column within the row.  So long as we're not at the right-edge, swap the current position with the one to it's right.  Then, getGroupSize() is called to
+  see if a large enough group was created.  getGroupSize() may need to be called for both the current position, and the swap position.  We then swap the gems back to their original posistion, and check to see if a downward swap works, again checking to ensure that we're not already on the bottom row, and taking care to swap the gems back when we're done.  The number of swaps that result in a large enough group is tallied, and returned at the end.
+</p>
+
+<p>
+  The swapGems() method does exactly what you'd expect - it swaps the values at the two given locations.
+</p>
+
+<p>
+  getGroupSize() returns the size of the largest group, wether it be horizontal or vertical, at the current position.  It works by just moving from the start position up, then down, counting each position until it no longer matches the value at the original position, or reaches an edge.  The same is done horizontally, and the larger value is returned.
+</p>
+
+<p>
+  All in all, this was pretty easy for a Division 2 - 1000 point problem.
+</p>
+
+
+  
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
