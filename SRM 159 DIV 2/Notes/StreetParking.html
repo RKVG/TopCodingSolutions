@@ -1,0 +1,84 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1753"
+           target="_blank">TopCoder Problem Statement - StreetParking</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the number of parking spaces available on a street given a set of rules.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class StreetParking {
+02: 	
+03: 	public int freeParks(String street) {
+04: 
+05:         int numSpots = 0;
+06: 
+07:         for (int p = 0; p < street.length(); p++)  {
+08:             if (isGoodParkingSpot(p, street))  {
+09:                 numSpots++;
+10:             }
+11:         }
+12: 
+13:         return numSpots;
+14: 	}
+15: 
+16:     private static boolean isGoodParkingSpot(int p, String s)  {
+17: 
+18:         // Is it directly in front of a private driveway.
+19:         if (s.charAt(p) == 'D') return false;
+20: 
+21:         // Is it directly in front of a bus stop.
+22:         if (s.charAt(p) == 'B') return false;
+23: 
+24:         // Is it 5 meters in front of a bus stop.
+25:         if (((p + 1)  < s.length()) && (s.charAt(p + 1) == 'B')) return false;
+26: 
+27:         // Is it 10 meters in front of a bus stop.
+28:         if (((p + 2) < s.length()) && (s.charAt(p + 2) == 'B')) return false;
+29: 
+30:         // Is it directly in front of a side-street.
+31:         if (s.charAt(p) == 'S') return false;
+32: 
+33:         // Is it 5 meters before a side street.
+34:         if (((p + 1)  < s.length()) && (s.charAt(p + 1) == 'S')) return false;
+35: 
+36:         // Is it 5 meters after a side street.
+37:         if ((p > 0) && (s.charAt(p - 1)) == 'S') return false;
+38: 
+39:         return true;
+40:     }
+41: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    
+    <p>
+      To solve this, simply step through each position of the street String, and increment a count for each position that is valid.
+    </p>
+    
+    <p>
+      The method isGoodParkingSpot() inspects the given String position to see if it matches all the criteria.  As soon as a rule
+      violation is found, it returns false.  If all the conditions are satisfied, then it returns true.
+    </p>
+    
+    <p>
+      The only thing you need to be careful of is not going beyond the boundaries of the string.  When looking at positions 5 or 10
+      meters ahead, check to make sure that there are 1 or 2 more positions.  Similarly, when checking 5 meters behind, make
+      sure that this is not the first position.
+    </p>
+    
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
