@@ -1,0 +1,72 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1800"
+           target="_blank">TopCoder Problem Statement - CardCount</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the cards that will end up in each players hand after a deck has been delt.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class CardCount {
+02: 
+03:     public String[] dealHands(int numPlayers, String deck) {
+04: 
+05:         int numCardsPerPlayer = deck.length() / numPlayers;
+06: 
+07:         String[] hands = new String[numPlayers];
+08: 
+09:         // Loop through the players one at a time.
+10:         for (int i = 0; i < numPlayers; i++) {
+11: 
+12:             StringBuilder hand = new StringBuilder(numCardsPerPlayer);
+13: 
+14:             /*
+15:             * Start with the card at position i, then skip numPlayers cards
+16:             * until the hand is full.
+17:             */
+18:             for (int j = i; hand.length() < numCardsPerPlayer; j += numPlayers) {
+19:                 hand.append(deck.charAt(j));
+20:             }
+21: 
+22:             hands[i] = hand.toString();
+23:         }
+24: 
+25:         return hands;
+26:     }
+27: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+<p>
+  Rather than deal the first card to player one, then the next card to player two, and so on; this solution determines all of the cards
+  that will end up in a player's hand before moving on to the next player.
+</p>
+
+<p>
+  It's simple enough to determine how many cards each player will get, just divide the length of the deck by the number of players.  The division
+  operator rounds down, which ensures that all players get the same number of cards without needing more cards than there are in the deck.
+</p>
+
+<p>
+  The outer-most for loop loops through each of the players.  For each player, their first card will be in position i.  Then we just add
+  each card that is numPlayers further down in the deck until the player has the correct number of cards.  Each card is added to a StringBuffer, which
+  gets converted into a String and added to the appropriate place in the hands[] array.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
