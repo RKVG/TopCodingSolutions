@@ -1,0 +1,66 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1333"
+           target="_blank">TopCoder Problem Statement - Substitute</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Given a key, decode a String.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Substitute {
+02:
+03:     public int getValue(String key, String code) {
+04:
+05:         int result = 0;
+06:
+07:         for (int i = 0; i < code.length(); i++) {
+08:
+09:             int p = key.indexOf(code.charAt(i));
+10:
+11:             if (p >= 0) {
+12:                 result *= 10;
+13:                 result += (p + 1) % 10;
+14:             }
+15:
+16:         }
+17:
+18:         return result;
+19:
+20:     }
+21: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        The solution begins by initializing an int (result) to zero.  Each time we encounter a character that is in key, we'll multiply
+        result by 10, and then add the new number.  This is a pretty standard way of parsing characters into integers.
+    </p>
+
+    <p>
+        The for loop on line 7 iterates through each character in the code.  Line 9 sets p to the index in key of the current character.  If
+        that character does not appear in the key, indexOf() will return -1, and we'll move on to the next character.
+    </p>
+
+    <p>
+        If indexOf() returns a non-negative index (the current character in code appears in the key), then we use that as the next digit.  Note
+        howerver, that the values are off by one, so we need to add one to the value returned by indexOf() and also do a mod 10.  This maps
+        index 0 to 1, index 1 to 2, ... and index 9 to 0 (10 mod 10).
+    </p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
