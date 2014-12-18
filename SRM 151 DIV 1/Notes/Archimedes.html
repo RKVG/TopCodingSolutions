@@ -1,0 +1,81 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1693"
+           target="_blank">TopCoder Problem Statement - Archimedes</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Approximate the value of &Pi; using the circumference of polygons inscribed in a circle.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Archimedes {
+02:
+03:     public double approximatePi(int numSides) {
+04:
+05:         double innerAngle = 360 / (double) numSides;
+06:         double outerAngle = (180 - innerAngle) / 2;
+07:         double lengthOfSide = Math.cos(Math.toRadians(outerAngle));  // Don't forget to convert to Radians
+08:         return numSides * lengthOfSide;
+09:
+10:     }
+11: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        To solve this, we need to determine the length of each side of the inscribed polygon.
+    </p>
+    <p>
+        To construct the inscribed polygon, start by imagining spokes coming from the center of the circle out to the
+        edge.  The number of spokes equals the number of sides in the polygon.  The polygon will be drawn by
+        connecting the points where the spokes intersect the circle.
+    </p>
+    <p>
+        Next, the angle between the spokes is simply 360&deg; divided by the number of spokes (sides).  I've called
+        this innerAngle.
+    </p>
+    <p>
+        outerAngle is the angle formed between a spoke and a side of the inscribed polygon.  Since two adjacent spokes
+        and the connecting edge between them constitute a triangle, the sum of their sides is 180&deg;  Therefore,
+        outerAngle is 180&deg; - innerAngle divided by 2.
+    </p>
+    <p>
+        Now, the length of the side of the polygon is just the cosine of the outerAngle.  Note that Math.cos()
+        expects a value in radians, so remember to call Math.toRadians() first since we've been working in degrees.
+    </p>
+    <p>
+        Finally, just return numSides * lengthOfSide.
+    </p>
+    <p>
+        Be careful to cast to a double where necessary in order to avoid losing precision.  You will not get the
+        correct answer if the cast is left out of the calculation for the innerAngle.
+    </p>
+    <p>
+        If you need to brush up on your trigonometry, there are plenty of sites to help out.  I recommend checking out
+        the <a href="https://www.khanacademy.org/">Kahn Academy</a>
+    </p>
+    <p>
+        As a final note, the TopCoder editorials given an even shorter answer:
+        <ul><li>return numSides * Math.sin(Math.PI / numSides);</li></ul>
+        I'm not sure how I feel about using Math.PI when we're trying to approximate &Pi; but I supposed that's being
+        picky.  Besides, I'm sure the toRadians() method uses &Pi; anyway.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+        <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
