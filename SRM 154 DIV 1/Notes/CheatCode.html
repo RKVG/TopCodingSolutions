@@ -1,0 +1,184 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1779"
+           target="_blank">TopCoder Problem Statement - CheatCode</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine if a series of key presses matches a cheat code.  The key presses may contain repeating characters that are not present in the code.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.ArrayList;
+002: import java.util.List;
+003: 
+004: public class CheatCode {
+005: 
+006:     /*
+007:     * This class simply binds a char and an int together.
+008:     */
+009:     private class CharAndCount {
+010: 
+011:         final char c;
+012:         final int count;
+013: 
+014:         CharAndCount(char c, int count) {
+015:             this.c = c;
+016:             this.count = count;
+017:         }
+018:     }
+019: 
+020:     public int[] matches(String keyPresses, String[] codes) {
+021: 
+022:         // Encode the String to make it easier to analyse.
+023:         List<CharAndCount> keyPressCode = createCode(keyPresses);
+024: 
+025:         // Holds all of the codes that match keyPresses
+026:         List<Integer> matches = new ArrayList<>();
+027: 
+028:         /*
+029:         * Loop through each code.  If keyPresses matches the code, then
+030:         * add code to the list of matches.
+031:         */
+032:         for (int i = 0; i < codes.length; i++) {
+033:             if (matchesCheat(keyPressCode, createCode(codes[i]))) {
+034:                 matches.add(i);
+035:             }
+036:         }
+037: 
+038:         // Convert the List into an array and return it.
+039:         int[] result = new int[matches.size()];
+040:         for (int i = 0; i < result.length; i++) {
+041:             result[i] = matches.get(i);
+042:         }
+043:         return result;
+044: 
+045:     }
+046: 
+047:     /*
+048:     * Takes an encoded string that represents the keyPresses, and one
+049:     * that represents the code.  See the createCode method.
+050:     * code matches if it's character sequence is contained in presses,
+051:     * and each character's count is less than or equal to the count in
+052:     * presses.
+053:     */
+054:     private boolean matchesCheat(List<CharAndCount> presses,
+055:                                  List<CharAndCount> code) {
+056: 
+057:         int pStartIdx = 0;
+058:         int codeIdx = 0;
+059: 
+060:         /*
+061:         * Start at position 0 in presses and check until the current position
+062:         * plus the length of the code would put us beyond the length of
+063:         * presses.
+064:         */
+065:         while (pStartIdx <= (presses.size() - code.size())) {
+066: 
+067:             int pCurrentIdx = pStartIdx;
+068: 
+069:             /*
+070:             * While presses and code agree, increment indexes for each
+071:             */
+072:             while ((pCurrentIdx < presses.size()) &&
+073:                     (codeIdx < code.size()) &&
+074:                     (presses.get(pCurrentIdx).c == code.get(codeIdx).c) &&
+075:                     (presses.get(pCurrentIdx).count >=
+076:                             code.get(codeIdx).count)) {
+077:                 pCurrentIdx++;
+078:                 codeIdx++;
+079:             }
+080: 
+081:             // If we matched the entire code, return true.
+082:             if (codeIdx == code.size()) return true;
+083: 
+084:             /*
+085:             * Otherwise, return to the beginning of the code, and start with
+086:             * the next position in presses.
+087:             */
+088:             codeIdx = 0;
+089:             pStartIdx++;
+090:         }
+091: 
+092:         return false;
+093:     }
+094: 
+095:     /*
+096:     * Encodes a String by replacing each repeating character with a
+097:     * CharAndCount object that holds the character and the number of
+098:     * times it repeats.  For example:
+099:     * AAABBC becomes {{3,A}, {2,B}, {1,C}}
+100:     */
+101:     private List<CharAndCount> createCode(String s) {
+102: 
+103:         List<CharAndCount> result = new ArrayList<>();
+104: 
+105:         if ((s == null) || (s.length() == 0)) return result;
+106: 
+107:         int count = 0;
+108:         char c = s.charAt(0);
+109: 
+110:         for (int i = 0; i < s.length(); i++) {
+111: 
+112:             // If character is the same, just increase the count.
+113:             if (c == s.charAt(i)) {
+114:                 count++;
+115:             } else {
+116: 
+117:                 // Set up the next repeating sequence.
+118:                 result.add(new CharAndCount(c, count));
+119:                 count = 1;
+120:                 c = s.charAt(i);
+121:             }
+122:         }
+123:         result.add(new CharAndCount(c, count));
+124: 
+125:         return result;
+126:     }
+127: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+In my first attempt at this problem, I built a regular expression out of each of the codes and then simply checked to see if the key presses were matched
+by that regular expression.  I inserted a '+' after each character of the code, meaning that it matches on 1 or more characters from key presses.  So, if
+the code was "ABC", the regular expression became "A+B+C+"  which would match "AAAAAAAAABCCC". This worked great, except that there are some test cases
+that timed out.  For example, checking to see if "A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+A+"
+matches "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" is extermely slow.  Regular expression matching in Java can run in O(n^2) time, making this
+approach unfeasible.  For a good explanation of Regular Expression running time, see <a href="http://swtch.com/~rsc/regexp/regexp1.html">Regular Expression
+Matching Can Be Simple And Fast</a>
+</p>
+
+<p>
+  This solution encodes the key presses and all of the codes by replacing repeating characters (or even a single character) with a character and it's count.
+  The key press sequence "AAAAAAAAAA" is encoded as {A,10}. The character and it's cound are bound together using a CharAndCount class.
+</p>
+
+<p>
+  Once the Stirngs are encoded, it becomes much easier to see if there is a match.  We'll use two indexes into the key press list: pStartIdx, and pCurrentIdx.
+  pStartIdx begins at the first character of the key press string and slowly makes its way toward the end.  For each position of pStartIdx, pCurrentIdx searches
+  the remainder of the key press string, beginning at pStartIdx and going to the end attempting to match the given code.  If no match is found, then pStartIdx
+  is incremented and the process repeats.
+</p>
+
+<p>
+  In order for the code the match, there must be a sequence of characters in presses that matches the sequence given by code.  Also, the count in presses must be
+  greater than, or equal to, the count in code for each corresponding character.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
