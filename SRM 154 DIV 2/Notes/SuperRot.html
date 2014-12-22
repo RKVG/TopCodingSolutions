@@ -1,0 +1,70 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1625"
+           target="_blank">TopCoder Problem Statement - SuperRot</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Extend the rot13 function to include lower case characters and numerals.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class SuperRot {
+02:
+03:  public String decoder(String message) {
+04:
+05:         char[] retMessage = new char[message.length()];
+06:
+07:         int x = 0;
+08:
+09:         for (int c : message.toCharArray())  {
+10:
+11:             if (Character.isUpperCase(c))  {
+12:                 c = ((c - 'A' + 13) % 26) + 'A';
+13:
+14:             } else if (Character.isLowerCase(c))  {
+15:                 c = ((c - 'a' + 13) % 26) + 'a';
+16:
+17:             } else if (Character.isDigit(c))  {
+18:                 c = ((c - '0' + 5) % 10) + '0';
+19:
+20:             }
+21:
+22:             retMessage[x++] = (char) c;
+23:         }
+24:
+25:         return new String(retMessage);
+26:  }
+27: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The if statement on lines 9 through 20 determines the type of character (Upper Case, Lower Case, or Digit) and takes the
+        appropriate action.  There's basically four steps in doing the conversion:
+    </p>
+
+    <ol>
+        <li>Subtract the base character ('A', 'a', or '0') from the current character.</li>
+        <li>Add the rotation value (13 for characters, 5 for digits).</li>
+        <li>Mod the number by the size of the current set (26 for characters, 10 for digits)</li>
+        <li>Add the base character ('A', 'a', or '0') back on.
+    </ol>
+
+    <p>
+        That's it.  Just repeat for each character in the input String.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
