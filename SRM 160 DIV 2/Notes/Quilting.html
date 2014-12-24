@@ -1,0 +1,234 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1608"
+           target="_blank">TopCoder Problem Statement - Quilting</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the color of the last patch when constructing a quilt.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.ArrayList;
+002: import java.util.List;
+003: 
+004: public class Quilting {
+005: 
+006:     private static final int NO_COLOR = -1;
+007: 
+008:     // X and Y steps when moving up, left, down, and right
+009:     private static final int[] spiralX = {0, -1, 0, 1};
+010:     private static final int[] spiralY = {-1, 0, 1, 0};
+011: 
+012:     // Ensures that we move up after the first patch.
+013:     private int direction = 3;
+014: 
+015:     // Each int is an index into colorList.
+016:     private int[][] quilt;
+017: 
+018:     /*
+019:     * Keeps track of how often a color was used.  The index matches
+020:     * the index in colorList, and the value is the count.
+021:     */
+022:     private int[] colorUsageQuilt;
+023: 
+024:     /*
+025:     * Method called by TopCoder
+026:     */
+027:     public String lastPatch(int length, int width, String[] colorList) {
+028: 
+029:         // Initialize the quilt.  All colors set to NO_COLOR
+030:         quilt = new int[width][length];
+031:         for (int x = 0; x < width; x++)  {
+032:             for (int y = 0; y < length; y++)  {
+033:                 quilt[x][y] = NO_COLOR;
+034:             }
+035:         }
+036: 
+037:         colorUsageQuilt = new int[colorList.length];
+038: 
+039:         // Starting point, location of first patch.
+040:         int x = width / 2;
+041:         int y = length / 2;
+042: 
+043:         int lineLength = 0;
+044: 
+045:         // Change directions when lineLength reaches this.
+046:         int lineLengthMax = 1;
+047: 
+048:         // Loop through all patches
+049:         for (int i = 0; i < (width * length); i++)  {
+050: 
+051:             int color = getPatchColor(x, y);
+052:             quilt[x][y] = color;
+053:             colorUsageQuilt[color]++;
+054: 
+055:             lineLength++;
+056: 
+057:             if (lineLength == lineLengthMax)  {
+058:                 lineLength = 1;
+059:                 direction = (direction + 1) % 4;
+060: 
+061:                 // Line length increases when starting up or down.
+062:                 if ((direction % 2) == 0)  {
+063:                     lineLengthMax++;
+064:                 }
+065:             }
+066: 
+067:             // Move to next patch position.
+068:             x += spiralX[direction];
+069:             y += spiralY[direction];
+070:         }
+071: 
+072:         // Back up one to the last patch
+073:         x -= spiralX[direction];
+074:         y -= spiralY[direction];
+075: 
+076:         return colorList[quilt[x][y]];
+077:     }
+078: 
+079:     private int getPatchColor(int x, int y)  {
+080: 
+081:         // Calculate least used neighboring color.
+082:         List<Integer> leastNeighborColors = getLeastNeighborColors(x, y);
+083:         if (leastNeighborColors.size() == 1)  {
+084:             return leastNeighborColors.get(0);
+085:         }
+086: 
+087:         // Of the least used neighboring colors, calculate least used overall.
+088:         List<Integer> leastOverallColors =
+089:                 getLeastOverallColors(leastNeighborColors);
+090:         if (leastOverallColors.size() == 1)  {
+091:             return leastOverallColors.get(0);
+092:         }
+093: 
+094:         // If still tied, return minimum value in list
+095:         int min = Integer.MAX_VALUE;
+096:         for (int i : leastOverallColors)  {
+097:             min = Math.min(min, i);
+098:         }
+099:         return min;
+100:     }
+101: 
+102:     private List<Integer> getLeastNeighborColors(int x, int y) {
+103: 
+104:         int[] colorCount = new int[colorUsageQuilt.length];
+105: 
+106:         // Loop through the 9x9 grid surrounding x,y and count the colors.
+107:         for (int x1 = x-1; x1 <= x+1; x1++)  {
+108:             for (int y1 = y-1; y1 <= y+1; y1++)  {
+109: 
+110:                 // Ensure we're not out of bounds, and that a color is set.
+111:                 if ((x1 >= 0) && (x1 < quilt.length) &&
+112:                         (y1 >= 0) && (y1 < quilt[0].length) &&
+113:                         (quilt[x1][y1] != NO_COLOR))  {
+114: 
+115:                     // Increment the count for the color at this position.
+116:                     colorCount[quilt[x1][y1]]++;
+117:                 }
+118: 
+119:             }
+120:         }
+121: 
+122:         // Determine the smallest count.
+123:         int leastCount = Integer.MAX_VALUE;
+124: 
+125:         for (int i = 0; i < colorCount.length; i++)  {
+126:             leastCount = Math.min(leastCount, colorCount[i]);
+127:         }
+128: 
+129:         // Add all colors that have the smallest count.
+130:         List<Integer> leastUsedColors = new ArrayList<>();
+131: 
+132:         for (int i = 0; i < colorCount.length; i++)  {
+133:             if (colorCount[i] == leastCount)  {
+134:                 leastUsedColors.add(i);
+135:             }
+136:         }
+137: 
+138:         return leastUsedColors;
+139:     }
+140: 
+141:     private List<Integer> getLeastOverallColors(List<Integer> colors)  {
+142: 
+143:         // Determine the smallest count among all colors.
+144:         int leastCount = Integer.MAX_VALUE;
+145: 
+146:         for (int color : colors)  {
+147:             leastCount = Math.min(leastCount, colorUsageQuilt[color]);
+148:         }
+149: 
+150:         // Add all colors that have that smallest count.
+151:         List<Integer> leastUsedColors = new ArrayList<>();
+152: 
+153:         for (int color : colors)  {
+154:             if (colorUsageQuilt[color] == leastCount)  {
+155:                 leastUsedColors.add(color);
+156:             }
+157:         }
+158: 
+159:         return leastUsedColors;
+160:     }
+161: 
+162: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The quilt is represented as a 2 dimensional array of ints, where the value of each location is an index into the colorList array.  We start by initializing
+  each location in the quilt to -1 to indicate that the color has not yet been choosen.
+</p>
+
+<p>
+  The next step is to determine where the first patch will be located.  Here it might help to draw some examples out on paper.  You'll find that the origin
+  works out to x = width / 2  and y = length / 2.  Remember, the / operator removes any decimal portion of the division, effectively rounding down.
+</p>
+
+<p>
+  To determine the color of the first patch, we simply implement the 3 rules that were given.  This is found in getPatchColor().  getLeastNeighbor() looks
+  at the 9 positions surrounding the current location, and counts the number of times each color appears.  Here we have to be careful not to look outside
+  the bounds of the arrays, and to ignore any place where the color has not been set.  Once we've counted how many times each color appears, we find the
+  smallest number, and finally return a list that contains all colors whose count is equal to that smallest number.
+</p>
+
+<p>
+  If the list size is 1, we're done.  If there are ties, we move on to rule 2.   The array colorUsageQuilt keeps track of how many times each color
+  is used in the entire quilt.  We use this and similar logic as before to return the colors that came out of rule 1 which now match the minimum count.  If there
+  are still ties, we just return the color with the smallest index.
+</p>
+
+<p>
+  That takes care of determining the color for a patch.  The next step is to devise a method to move from one patch to the next following the outward spiraling pattern.
+  Here the arrays spiralX and spiralY come into play and the related variables diretion, lineLength, and lineLengthMax.  direction provides an index into spiralX
+  and spiralY to get the change in x and y to move to the next location.  We also keep track of the current line length, and the maximum length for the current line.
+  This tells us when to change direction.
+</p>
+
+<p>
+  Initially the direction is to the right, and the lineLengthMax is 1.  Then we set the color of the first patch, and lineLength becomes 1.  This matches
+  lineLengthMax, so we increment direction (mod 4) which corresponds to up, and reset lineLength.  Whenever the direction changes to up or down, we increment
+  lineLengthMax.  This setup gives us a nice counter-clockwise outward spiral movement.
+</p>
+
+<p>
+  Finally, we just need to loop through the number of patches, setting the color at each, and then moving on to the next patch.  After all the patches have
+  been set, we need to back up one place since we'll have moved on to the next location.  Then just return the color there.  Remember, the value at that location
+  is an index into colorList.
+</p>
+ 
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
