@@ -1,0 +1,174 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1599"
+           target="_blank">TopCoder Problem Statement - BridgeCrossing</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>Solve the problem where a number of people have to cross a rickety bridge in as little time as possible.</p>
+    <p>The following rules apply:</p>
+    <ul>
+        <li>At most, two people may be on the bridge at any given time.</li>
+        <li>There is a single flashlight which must accompany any group crossing the bridge.</li>
+        <li>Each person will have an amount of time that it takes them to cross the bridge. (i.e. person 1 = 1 minute, person 2 = 5 minutes, etc.)</li>
+        <li>Any group (2 people) crossing together will take as much time as the slowest person in the group.</li>
+    </ul>
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: /*
+002: TopCoder
+003: Single Round Match: 146
+004: Division: 2
+005: Level: 3
+006: Points: 1000
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1599
+008:  */
+009:
+010: import java.util.HashSet;
+011: import java.util.Set;
+012:
+013: public class BridgeCrossing {
+014:
+015:     /*
+016:     Use two hash sets to hold the people that are on
+017:     the starting side (side1) and the finish (side2)
+018:      */
+019:     private final Set<Integer> side1 = new HashSet<Integer>();
+    020:
+    021:     private final Set<Integer> side2 = new HashSet<Integer>();
+        022:
+        023:     /*
+        024:     Move people from the "fromSide" set to the "toSide" set.
+        025:     numToSend - indicates the number of people moving across together.  It
+        026:     must be either 1 or 2.
+        027:     fastest - indicates whether we want the fastest people (true), or the
+        028:     slowest (false) to go across.
+        029:     Returns the amount of time it will take to move the people across.
+        030:      */
+        031:     private static int sendOver(int numToSend, boolean fastest,
+        032:                                 Set<Integer> fromSide, Set<Integer> toSide) {
+            033:
+            034:         int eTime = 0;
+            035:         int currentMax;
+            036:
+            037:         // Loop either 1 or 2 times, depending on the number being asked to
+            038:         // send.
+            039:         for (int n = 0; n < numToSend; n++) {
+            040:
+            041:             if (fastest) {
+            042:                 currentMax = Integer.MAX_VALUE;
+            043:             } else {
+            044:                 currentMax = 0;
+            045:             }
+            046:
+            047:             /*
+            048:             If we're looking for the fastest person (fastest = true),
+            049:             then look for values that are below currentMax.
+            050:             If we're looking for the slowest person (fastest = false),
+            051:             then look for values that are above currentMax.
+            052:              */
+            053:             for (int i : fromSide) {
+            054:                 if ((fastest && (i < currentMax)) ||
+            055:                         (!fastest && (i > currentMax))) {
+            056:                     currentMax = i;
+            057:                 }
+            058:             }
+            059:
+            060:             /*
+            061:             We've found either the fastest or slowest.  Remove them from the
+            062:             from side and add them to the to side.
+            063:             Set eTime to either eTime (if this is the first time through the
+            064:             loop) or the greater of eTime and currentMax if we've been
+            065:             through the loop before.  The effect is that eTime will contain the
+            066:             slower person's time.
+            067:              */
+            068:             fromSide.remove(currentMax);
+            069:             toSide.add(currentMax);
+            070:             eTime = Math.max(eTime, currentMax);
+            071:         }
+            072:
+            073:         // Return the slower person's time.  (Just the time if numToSend = 1)
+            074:         return eTime;
+            075:     }
+            076:
+            077:     public int minTime(int[] times) {
+            078:
+            079:         int eTime = 0;  // Holds the elapsed time.  The return value.
+            080:
+            081:         // Put all the people onto the starting side
+            082:         for (int i = 0; i < times.length; i++) {
+            083:             side1.add(times[i]);
+            084:         }
+            085:
+            086:         /*
+            087:         Send the two fastest from side1 to side2.
+            088:         Check to make sure there are more than 1 people on side 1.
+            089:         If there is only one person on side1, then just send that one.
+            090:         */
+            091:         eTime += sendOver((side1.size() >= 2) ? 2 : 1, true, side1, side2);
+            092:
+            093:         // When side1 no longer has any people, we're done.
+            094:         while (side1.size() != 0) {
+            095:
+            096:             // Send the fastest person back from side2 to side1
+            097:             eTime += sendOver(1, true, side2, side1);
+            098:
+            099:             /*
+            100:             Send the two slowest people from side1 to side2.
+            101:             There must be at least two people, since we weren't done,
+            102:             and above we've just sent one more back.
+            103:              */
+            104:             eTime += sendOver(2, false, side1, side2);
+            105:
+            106:             // Check again to see if we're done.
+            107:             if (side1.size() == 0) {
+            108:                 return eTime;
+            109:             }
+            110:
+            111:             // Send the fastest person back from side2 to side1
+            112:             eTime += sendOver(1, true, side2, side1);
+            113:
+            114:             // Send the two fastest from side1 to side2.
+            115:             eTime += sendOver(2, true, side1, side2);
+            116:         }
+            117:
+            118:         return eTime;
+            119:     }
+            120: }
+</pre>
+    </div>
+
+
+    <div class="header">Notes:</div>
+    <p>In order to minimize the time it takes for everyone to cross, we'll want to use the following strategy:</p>
+
+    <ul>
+        <li>Group the slowest people together. If the slowest two people take 5 and 10 minutes respectively, then the trip will take 10 minutes, but there is no faster way to get the slowest person across. By sending the second slowest with the slowest, the second slowest person gets across "for free".</li>
+        <li>Utilize the fastest person in situations where we're just bringing the flashlight back and forth.</li>
+    </ul>
+
+    <p>The algorithm looks like this:</p>
+
+    <p>Repeat until side 1 is empty:</p>
+
+    <ol>
+        <li>Send the two fastest people (person 1 and person 2) from side 1 to side 2.</li>
+        <li>Send the fastest (person 1) from side 2 back to side 1.</li>
+        <li>Send the two slowest people from side 1 to side 2.</li>
+        <li>Send the fastest person on side 2 (person 2) from side 2 back to side 1.</li>
+    </ol>
+
+    <p>Once you have the algorithm, the main method is pretty straight forward. I created a method sendOver() to abstract the details of moving people from one side to another.</p>
+    <p>The sendOver() method takes as parameters the number of people to send (1 or 2), whether we want to send the fastest or slowest people (fastest = true|false), the source side, and the destination side.</p>
+    <p>Lines 41-45 and 53-58 are a little tricky. Basically, if we're sending the fastest people over, then I'll set currentMax to a high number, and then update it whenever I find something smaller. If I'm looking for slow people, then I set it to a low number, and update it whenever I find something larger. I could have picked a better name than currentMax, since often it will actually be a minimum.</p>
+    <p>Line 115 might also be confusing. We'll reach this line either once or twice depending on the value of numToSend. The first time, eTime will equal 0, so it will get set to currentMax, the time it took for the first person to cross the bridge. The second time, it will either keep it's value, or get set to the new person's time, depending on who is slower.</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

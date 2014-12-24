@@ -8,8 +8,8 @@
 
     <div class="header">Overview:</div>
     <p>
-Count the number of non-square rectangles that are contained in a rectangular grid.
-</p>
+        Count the number of non-square rectangles that are contained in a rectangular grid.
+    </p>
 
     <div class="header">Java Source:</div>
     <div class="code">
@@ -22,31 +22,31 @@ Count the number of non-square rectangles that are contained in a rectangular gr
 06: Points: 500
 07: Description: http://community.topcoder.com/stat?c=problem_statement&amp;pm=1589
 08:  */
-09: 
+09:
 10: public class RectangularGrid {
-11: 
+11:
 12:     /*
 13:     Determines the number of s-sized Squares that can be found in a rectangle
 14:      of dimensions width x height.
 15:      */
 16:     private static long findSquaresInRectangle(int s, int width, int height) {
-17: 
+17:
 18:         long count = 0;
-19: 
+19:
 20:         for (int x = 0; (x + s) <= width; x++) {
 21:             for (int y = 0; (y + s) <= height; y++) {
 22:                 count++;
 23:             }
 24:         }
-25: 
+25:
 26:         return count;
 27:     }
-28: 
+28:
 29:     public long countRectangles(int width, int height) {
-30: 
+30:
 31:         long widthL = (long) width;
 32:         long heightL = (long) height;
-33: 
+33:
 34:         /*
 35:         The total number of rectangles, including squares,
 36:         that can be found in a rectangular grid is given by the formula:
@@ -56,10 +56,10 @@ Count the number of non-square rectangles that are contained in a rectangular gr
 40:         long totalWithSquares =
 41:                 (((widthL * widthL) + widthL) *
 42:                         ((heightL * heightL) + heightL)) / 4;
-43: 
+43:
 44:         // Now, We subtract off the number of squares.
 45:         long totalWithoutSquares = totalWithSquares;
-46: 
+46:
 47:         /*
 48:         Loop from size 1x1 up to the smaller of the two dimensions:
 49:         height x height OR width x width.
@@ -69,19 +69,19 @@ Count the number of non-square rectangles that are contained in a rectangular gr
 53:             totalWithoutSquares -=
 54:                     findSquaresInRectangle(i, width, height);
 55:         }
-56: 
+56:
 57:         return totalWithoutSquares;
 58:     }
 59: }
 </pre>
-        </div>
+    </div>
 
     <div class="header">Notes:</div>
-<p>This problem is solved in two steps.  First, I calculate the total number of rectangles, including squares, that can be found in the rectangular grid.  Then, I subtract off the number of squares.</p>
-<p>The formula for the number of rectangles in the grid is given in the comment on line 37, and is calculated on lines 40-42.  Be careful here as this number can exceed the maximum value that can be stored in an int.  Lines 31 and 32 convert width and height to longs so these new variables can be used in the calculation - avoiding a lot of ugly casting.</p>
-<p>The second step is to subtract off the number of squares.  For this, we consider squares of size 1 x 1 up to N x N where N is the minimum of height and width. Lines 52-55.</p>
-<p>The method findSquaresInRectangle() calculates the number of squares that can be found in a rectangular grid.  There may be a formula for this, but it's pretty straight forward to figure it out.</p>
-<p>Imagine a square of size s x s positioned in the top left corner of the rectangle.  We then slide it right one space, and then again, until the right edge of the square falls outside the bounds of the rectangle. Line 20.  Then move it down one row and repeat.  Keep going until moving it down causes the bottom edge of the square to go outside the rectangle. Line 21.</p>
+    <p>This problem is solved in two steps.  First, I calculate the total number of rectangles, including squares, that can be found in the rectangular grid.  Then, I subtract off the number of squares.</p>
+    <p>The formula for the number of rectangles in the grid is given in the comment on line 37, and is calculated on lines 40-42.  Be careful here as this number can exceed the maximum value that can be stored in an int.  Lines 31 and 32 convert width and height to longs so these new variables can be used in the calculation - avoiding a lot of ugly casting.</p>
+    <p>The second step is to subtract off the number of squares.  For this, we consider squares of size 1 x 1 up to N x N where N is the minimum of height and width. Lines 52-55.</p>
+    <p>The method findSquaresInRectangle() calculates the number of squares that can be found in a rectangular grid.  There may be a formula for this, but it's pretty straight forward to figure it out.</p>
+    <p>Imagine a square of size s x s positioned in the top left corner of the rectangle.  We then slide it right one space, and then again, until the right edge of the square falls outside the bounds of the rectangle. Line 20.  Then move it down one row and repeat.  Keep going until moving it down causes the bottom edge of the square to go outside the rectangle. Line 21.</p>
 
     <div class="footer">
         <p><i>Thank you</i> for taking the time to read this solution. I welcome
