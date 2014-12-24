@@ -8,8 +8,8 @@
 
     <div class="header">Overview:</div>
     <p>
-    Simulate a classic board game with a slight twist.
-</p>
+        Simulate a classic board game with a slight twist.
+    </p>
 
 
     <div class="header">Java Source:</div>
@@ -138,40 +138,40 @@
     121: }
 
 </pre>
-        </div>
+    </div>
 
     <div class="header">Notes:</div>
 
 
-<p>
-    possibleSecrets() generates all possible secret codes. There's only 7 * 7 *
-    7 * 7 = 2,401 of them, so it's not that many. For each of the possible
-    code, it calls goodSolution() to see if the solution, guesses, and
-    results agree. If so, the count is increased. When done, count will contain
-    the number of solutions that satisfy the game's criteria.
-</p>
+    <p>
+        possibleSecrets() generates all possible secret codes. There's only 7 * 7 *
+        7 * 7 = 2,401 of them, so it's not that many. For each of the possible
+        code, it calls goodSolution() to see if the solution, guesses, and
+        results agree. If so, the count is increased. When done, count will contain
+        the number of solutions that satisfy the game's criteria.
+    </p>
 
-<p>
-    goodSolution() loops through all the guess/response pairs for the given
-    solution, and determines if they satisfy the rules of the game. That is,
-    one, and only one, result does not agree with the given guess and
-    solution. You might think that being able to lie once would make the game
-    much more difficult, but it doesn't. Initially, lied is set to false. The
-    first time a response doesn't match the guess, lied gets set to true. If
-    it happens again, then return false - this cannot be a good solution,
-    since there were two mis-matches. When done, return lied, which will be
-    true if one was found, and false if not.
-</p>
+    <p>
+        goodSolution() loops through all the guess/response pairs for the given
+        solution, and determines if they satisfy the rules of the game. That is,
+        one, and only one, result does not agree with the given guess and
+        solution. You might think that being able to lie once would make the game
+        much more difficult, but it doesn't. Initially, lied is set to false. The
+        first time a response doesn't match the guess, lied gets set to true. If
+        it happens again, then return false - this cannot be a good solution,
+        since there were two mis-matches. When done, return lied, which will be
+        true if one was found, and false if not.
+    </p>
 
-<p>
-    The most difficult part of the problem is determining if the response
-    matches the guess for the given solution.  This is handled in
-    resultMatches().  First, it checks if the number of black pegs matches
-    the number of items in guess that in their correct position.
-    Then, it looks for items that match, but are out of place.  Just be
-    careful here to avoid double-counting.  The usedBlack[] and usedWhite[]
-    arrays are for keeping track of pegs that have already been accounted for.
-</p>
+    <p>
+        The most difficult part of the problem is determining if the response
+        matches the guess for the given solution.  This is handled in
+        resultMatches().  First, it checks if the number of black pegs matches
+        the number of items in guess that in their correct position.
+        Then, it looks for items that match, but are out of place.  Just be
+        careful here to avoid double-counting.  The usedBlack[] and usedWhite[]
+        arrays are for keeping track of pegs that have already been accounted for.
+    </p>
 
     <div class="footer">
         <p><i>Thank you</i> for taking the time to read this solution. I welcome
