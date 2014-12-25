@@ -1,0 +1,185 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1801"
+           target="_blank">TopCoder Problem Statement - StringTrain</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Concatenate a series of Strings together by matching prefixes and suffixes
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.HashSet;
+002: import java.util.Set;
+003: 
+004: public class StringTrain {
+005: 
+006:     // The method called by TopCoder
+007:     public String buildTrain(String[] cars) {
+008: 
+009:         String train = cars[0];
+010: 
+011:         // Process each car in turn.
+012:         for (int i = 1; i < cars.length; i++) {
+013:             train = processCar(train, cars[i]);
+014:         }
+015: 
+016:         // Get the train length before removing characters.
+017:         int trainLength1 = train.length();
+018: 
+019:         train = removeAllButLastChar(train);
+020: 
+021:         return trainLength1 + " " + train;
+022:     }
+023: 
+024:     private static String processCar(String train, String car) {
+025: 
+026:         int trainIdx = 0;
+027:         int carIdx = 0;
+028: 
+029:         while (trainIdx < train.length()) {
+030: 
+031:             /*
+032:             * Move forward through the characters in train until one that
+033:             * matches the first character of car is found.
+034:             */
+035:             while ((trainIdx < train.length()) &&
+036:                     (car.charAt(carIdx) != train.charAt(trainIdx))) {
+037:                 trainIdx++;
+038:             }
+039: 
+040:             // If we reach the end of train, return train.
+041:             if (trainIdx == train.length()) {
+042:                 return train;
+043:             }
+044: 
+045:             // Mark the start of this possible suffix.
+046:             int startOfSuffix = trainIdx;
+047: 
+048:             /*
+049:             * While the characters match, and we haven't reached the
+050:             * end of either string, move to the next character of each string.
+051:             */
+052:             while ((trainIdx < train.length()) &&
+053:                     (carIdx < car.length()) &&
+054:                     (car.charAt(carIdx) == train.charAt(trainIdx))) {
+055:                 trainIdx++;
+056:                 carIdx++;
+057:             }
+058: 
+059:             // If we've reached the end of the train.
+060:             if (trainIdx == train.length()) {
+061: 
+062:                 /*
+063:                 * If startOfSuffix == 0, then the entire train String
+064:                 * is being used.  If carIdx == car.length, then the entire
+065:                 * car String is used.  In either case, it's not a proper
+066:                 * pre/suf-fix.
+067:                 */
+068:                 if ((startOfSuffix != 0) && (carIdx < car.length())) {
+069: 
+070:                     /*
+071:                     * Create the return string by starting with train as the
+072:                     * base and adding the remaining characters from car.
+073:                     */
+074:                     StringBuilder sb = new StringBuilder();
+075:                     sb.append(train);
+076:                     for (int i = carIdx; i < car.length(); i++) {
+077:                         sb.append(car.charAt(i));
+078:                     }
+079:                     return sb.toString();
+080:                 }
+081:             }
+082: 
+083:             // Move train index forward, and reset the car index.  Try again.
+084:             trainIdx = startOfSuffix + 1;
+085:             carIdx = 0;
+086: 
+087:         }
+088: 
+089:         return train;
+090:     }
+091: 
+092:     private static String removeAllButLastChar(String s) {
+093: 
+094:         // This set contains all characters that have been seen.
+095:         Set<Character> usedChars = new HashSet<>();
+096: 
+097:         StringBuilder sb = new StringBuilder(s.length());
+098: 
+099:         /*
+100:         * Work backward from the end of the String to the front.
+101:         * Add characters to the output only if they are not in the usedChars
+102:         * set.  When a new character is encountered, add it to the front
+103:         * of the output, and add the character to usedChars so it is not
+104:         * added again.
+105:         */
+106:         for (int i = s.length() - 1; i >= 0; i--) {
+107:             if (!usedChars.contains(s.charAt(i))) {
+108:                 usedChars.add(s.charAt(i));
+109:                 sb.insert(0, s.charAt(i));
+110:             }
+111:         }
+112: 
+113:         return sb.toString();
+114: 
+115:     }
+116: 
+117: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The main method buildTrain() simply sets the initial value of the train and then loops through each of the remaining cars, calling processCar() on them.
+  All of the hard work is done inside processCar().
+  After all the cars have been processed, we note the length of the train, and then call removeAllButLastChar() before returning the results.  
+</p>
+
+<p>
+  processCar() works by moving through the train string from beginning to end.  The variable trainIdx is the current character in the train string that we're examining.
+  carIdx is an index into the car String, and startOfSuffix will hold the position of the beginning of a possible prefix/suffix match.  This is in case the match
+  ultimately fails so we can pick up from the next character.
+</p>
+
+<p>
+  First, processCar() skips over characters in train until it finds one that matches the first
+  character of car. If there are no matches before reaching the end of train, then just return train.  Assuming that the first character of car appears
+  in train, we mark that location as the beginning of a possible suffix.  Then we walk through both strings one character at a time until we either reach
+  the end of one of the Strings, or until the characters no longer match.
+</p>
+
+<p>
+  If we reach the end of the train string, then we have a possible prefix/suffix match.  Check to make sure that our match does not include the entire
+  train or car String, as this would not be a "proper" prefix or suffix.  If that test passes, then we construct the result string by appending the remaining
+  characters from car onto the end of train.
+</p>
+
+<p>
+  If the characters cease to match up, or if we reach the end of the car string, then we reset carIdx back to the beginning of the car String and
+  set the trainIdx to the character following where we began the previous prefix/suffix match attempt.  We then continue trying to find a match
+  from that point.
+</p>
+
+<p>
+  With the hard part done, we now turn to removeAllButLastChar().  First we create a Set of characters to hold all of the characters we've seen so far.
+  Then there's a StringBuilder to build up our result.
+  Next, we'll work backward through the string.  For each chacter, if it exists in the usedChars Set, then skip it.  If it's not in that set, add it, and
+  then add that character to the front of our StringBuilder.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
