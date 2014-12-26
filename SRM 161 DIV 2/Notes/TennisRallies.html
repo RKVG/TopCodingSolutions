@@ -1,0 +1,205 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+      <table>
+        <tr>
+          <td>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1802"
+           target="_blank">TopCoder Problem Statement - TennisRallies</a>
+          </td>
+        </tr>
+        <tr><td>Single Round Match 161 Round 1 - Division I, Level Two</td></tr>
+       <tr><td>Single Round Match 161 Round 1 - Division II, Level Three</td></tr>
+      </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the number tennis shot patterns possible given a set of forbidden sequences.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: public class TennisRallies {
+002: 
+003: 
+004:     private int numPossible;
+005: 
+006:     public int howMany(int numLength, String[] forbidden, int allowed) {
+007: 
+008:         /*
+009:         * Used to see if we're better off calling isValid() more often to keep
+010:         * the size of the recursion tree smaller, or hold off using it until
+011:         * after all possible combinations have been generated.
+012:         */
+013:         boolean usedDelayedValidate = true;
+014: 
+015:         numPossible = 0;
+016: 
+017:         long start = System.currentTimeMillis();
+018: 
+019:         if (usedDelayedValidate)  {
+020:             addShotsDelayedValidate("", numLength, forbidden, allowed);
+021:         } else {
+022:             addShotsEarlyValidate("", numLength, forbidden, allowed);
+023:         }
+024:         long end = System.currentTimeMillis();
+025: 
+026:         System.out.println("Time: " + (end - start) + "ms");
+027: 
+028:         return numPossible;
+029:     }
+030: 
+031:     // Use recursion to create and validate all possible shot patterns.
+032:     private void addShotsEarlyValidate(String base, int size,
+033:                                        String[] forbidden, int allowed) {
+034: 
+035:         if (base.length() == size) {
+036:             numPossible++;
+037: 
+038:         } else {
+039:             if (isValid(base + "c", forbidden, allowed)) {
+040:                 addShotsEarlyValidate(base + "c", size, forbidden, allowed);
+041:             }
+042: 
+043:             if (isValid(base + "d", forbidden, allowed))
+044:                 addShotsEarlyValidate(base + "d", size, forbidden, allowed);
+045:         }
+046:     }
+047: 
+048:     private void addShotsDelayedValidate(String base, int size,
+049:                                          String[] forbidden, int allowed) {
+050: 
+051:         if (base.length() == size) {
+052:             if (isValid(base, forbidden, allowed))  {
+053:                 numPossible++;
+054:             }
+055:         } else  {
+056:             addShotsDelayedValidate(base + "c", size, forbidden, allowed);
+057:             addShotsDelayedValidate(base + "d", size, forbidden, allowed);
+058:         }
+059:     }
+060: 
+061:     /*
+062:     * Counts the number of times a pattern given in forbidden appears in
+063:     * s.  Stops when that count reaches allowed.
+064:     */
+065:     private boolean isValid(String s, String[] forbidden, int allowed) {
+066: 
+067:         int numFails = 0;
+068: 
+069:         for (String f : forbidden) {
+070:             numFails += countMatches(s, f, (allowed - numFails));
+071:             if (numFails >= allowed) return false;
+072:         }
+073: 
+074:         return true;
+075: 
+076:     }
+077: 
+078:     /*
+079:     * Counts the number of times pat appears in str.  Stops when/if
+080:     * maxMatches is reached.
+081:     */
+082:     private int countMatches(String str, String pat, int maxMatches) {
+083: 
+084:         int strIdx = 0;
+085:         int patIdx = 0;
+086:         int startOfMatch = 0;
+087:         int numMatches = 0;
+088: 
+089:         if (str.length() < pat.length()) {
+090:             return 0;
+091:         }
+092: 
+093:         // Walk through str one char at a time until we reach the end.
+094:         while (strIdx < str.length()) {
+095: 
+096:             // Advance until a char in str matches the first char in pat.
+097:             while ((strIdx < str.length() &&
+098:                     (str.charAt(strIdx) != pat.charAt(patIdx)))) {
+099:                 strIdx++;
+100:             }
+101: 
+102:             if (strIdx == str.length()) return numMatches;
+103: 
+104:             // Note the beginning of a potential match.
+105:             startOfMatch = strIdx;
+106: 
+107:             // Advance through both strings so long as the chars match
+108:             while ((strIdx < str.length()) &&
+109:                     (patIdx < pat.length()) &&
+110:                     str.charAt(strIdx) == pat.charAt(patIdx)) {
+111:                 strIdx++;
+112:                 patIdx++;
+113:             }
+114: 
+115:             // If we've reached the end of pat, then a match has been found.
+116:             if (patIdx == pat.length()) {
+117:                 numMatches++;
+118:                 if (numMatches == maxMatches) {
+119:                     return numMatches;
+120:                 }
+121: 
+122:                 // Begin again at the next character.
+123:                 strIdx = startOfMatch + 1;
+124:                 patIdx = 0;
+125: 
+126: 			/*
+127:      * If we didn't reach the end of the string, then the characters
+128: 			* must have differed.  Start again at the character following
+129: 			* startOfMatch.
+130: 			*/
+131:             } else if (strIdx < str.length()) {
+132:                 strIdx = startOfMatch + 1;
+133:                 patIdx = 0;
+134:             }
+135: 
+136:         }
+137: 
+138:         return numMatches;
+139:     }
+140: 
+141: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The solution uses recursion to generate all valid combinations of cross-court "c", and down-the-line "d" shots.  The howMany() method simply resets the counter
+  variable numPossible, and the launches the recursive method addShots().  When addShots() completes, we'll have our answer in numPossible.
+</p>
+
+<p>
+  It's important to note the constraints given by the problem.  numLength can be at most 18.  Since we have only two characters (c and d), there can be at most
+  2^18 = 262,144 possible sequences.  This is entirely possible to solve using a brute-force algorithm.  If there were one or two more shot types, say a passing shot
+  and/or a lob, then we'd be looking at 3^18 = 387,420,489 and 4^18 = ~69 billion which would make brute-force less feasible.
+<p>
+  I've left in two variations of the addShots() method: addShotsEarlyValidate() and addShotsDelayedValidate().  In addShotsEarlyValidate(), we check each String as it
+  is being built to ensure it will be valid before making the recursive call.  The idea is to limit the size of the recursive tree.  However, this results in many
+  more calls to isValid(). Alternatively, addShotsDelayedValidate() allows all possible patterns to continue, and only calls isValid() once the desired length has been
+  reached.  This results in a larger recursive tree, but limits the number of calls to isValid().  I ran both against the provided test cases, and
+  addShotsDelayedValidate() ran in roughly half as much time.
+</p>
+
+<p>
+  The isValid() method simply calls countMatches() on each string in the forbidden array.  It exits as soon as the value of allowed is reached.
+</p>
+
+<p>
+  The real work is performed in countMatches().  countMatches() works left to right through the str String.  At each character, it checks to see if pat
+  can be found anywhere to the right of the current index.  It too keeps track of the number of matches it has found and exits early once maxMatches is reached.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
