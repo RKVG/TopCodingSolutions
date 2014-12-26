@@ -1,0 +1,108 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1807"
+                       target="_blank">TopCoder Problem Statement - IsHomomorphism</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 161 Round 1 - Division I, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Test if two functions, given as tables, provide the same results for a set of values.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: import java.util.ArrayList;
+02: import java.util.List;
+03: 
+04: public class IsHomomorphism {
+05: 	
+06: 	public String[] numBad(String[] source, String[] target, int[] mapping) {
+07: 
+08: 		List<String> results = new ArrayList<>();
+09: 
+10: 		for (int a = 0; a < source.length; a++)  {
+11: 			for (int b = 0; b < source.length; b++)  {
+12: 
+13: 				/*
+14: 				* Testing:
+15: 				* mappings(a@b) = mappings(a)~mappings(b)
+16: 				* for all values of a and b.
+17: 				*/
+18: 
+19: 				/*
+20: 				* For the '@' operator, the first value given is the index into
+21: 				* the source array, and the second value gives the character
+22: 				* we're interested in.
+23: 				*/
+24: 				int leftSide = mapping[source[a].charAt(b) - '0'];
+25: 
+26: 				// Same for the '~' operator, except use the target array
+27: 				int rightSide = target[mapping[a]].charAt(mapping[b]) - '0';
+28: 
+29: 				// If the sides are not equal, add the pair to the results list.
+30: 				if (leftSide != rightSide) {
+31: 					results.add("(" + a + "," + b + ")");
+32: 				}
+33: 			}
+34: 		}
+35: 
+36: 		// Convert the List to an array and return it.
+37: 		String[] ret = new String[results.size()];
+38: 		for (int i = 0; i < ret.length; i++)  {
+39: 			ret[i] = results.get(i);
+40: 		}
+41: 
+42: 		return ret;
+43: 	}
+44: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The source and target tables map two inputs to a result.  The result of a@b is source[a].charAt(b).  Likewise, the result
+  of a~b is target[a].charAt(b).  Since the value in the table is a char, we need to subtract '0' to get it's int value.
+</p>
+
+<p>
+  We need to determine is if:
+</p>
+
+<p>
+  mapping(a@b) = mapping(a)~mapping(b)
+</p>
+<p>
+  which can be coded as:
+</p>
+<p>
+  mapping[source[a].charAt(b) - '0'] == target[mapping[a]].charAt(mapping[b]) - '0'
+</p>
+<p>
+  Now, just test that for all values of a and b.  For any combination that fails the test, we'll add it to a List.  Once complete, we
+  convert the List to an array, and return it.
+</p>
+<p>
+  Since we loop through a in the outer loop, and then b in the inner loop, entries will be added to the results List in exactly the order
+  we need.  There is no need to sort them to match the expected output.
+</p>
+  
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
