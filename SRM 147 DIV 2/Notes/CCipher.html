@@ -1,0 +1,59 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1667"
+           target="_blank">TopCoder Problem Statement - CCipher</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        A simple Caesar cipher. Take the String given by 'cipherText' and shift each character over by the amount in 'shift'.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
+02: TopCoder
+03: Single Round Match: 147
+04: Division: 2
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&amp;pm=1667
+08:  */
+09:
+10: public class CCipher {
+11:
+12:     public String decode(String cipherText, int shift) {
+13:
+14:         char[] chArray = cipherText.toCharArray();
+15:
+16:         for (int i = 0; i < chArray.length; i++) {
+17:
+18:             int c = chArray[i] - shift;
+19:
+20:             // If before 'A' - wrap around to the end.
+21:             if (c < 'A') {
+22:                 c += 26;
+23:             }
+24:
+25:             chArray[i] = (char) c;
+26:         }
+27:
+28:         return new String(chArray);
+29:     }
+30: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>When working with the individual characters in a String, it's usually easier to convert them to a character array (line 14).</p>
+    <p>You can use the + and - operators on characters.</p>
+    <p>Lines 21-23 handle the case where we wrap around the end of the alphabet.</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

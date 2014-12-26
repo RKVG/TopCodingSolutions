@@ -1,0 +1,165 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1355"
+           target="_blank">TopCoder Problem Statement - GoldenChain</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Find the minimum number of cuts necessary to join a number of sections of chain.
+    </p>
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>001: /*
+002: TopCoder
+003: Single Round Match: 147
+004: Division: 2
+005: Level: 3
+006: Points: 950
+007: Description: http://community.topcoder.com/stat?c=problem_statement&amp;pm=1355
+008:  */
+009:
+010: public class GoldenChain {
+011:
+012:     /*
+013:     Loops through the sections and returns the index of the smallest
+014:     non-zero entry.
+015:      */
+016:     private static int getSmallestSection(int[] sections) {
+017:
+018:         int minVal = Integer.MAX_VALUE;
+019:         int minIdx = -1;
+020:
+021:         for (int i = 0; i < sections.length; i++) {
+022:             if ((sections[i] > 0) && (sections[i] < minVal)) {
+023:                 minVal = sections[i];
+024:                 minIdx = i;
+025:             }
+026:         }
+027:
+028:         return minIdx;
+029:     }
+030:
+031:     /*
+032:     Counts up all of the sections of non-zero length
+033:      */
+034:     private static int getNumSections(int[] sections) {
+035:
+036:         int c = 0;
+037:
+038:         for (int section : sections) {
+039:             if (section > 0) {
+040:                 c++;
+041:             }
+042:         }
+043:
+044:         return c;
+045:     }
+046:
+047:     /*
+048:     Combines the two largest sections. Loops through all of the sections
+049:     and notes the two largest. Then, increments the length of the largest by
+050:      the length of the second larges. Finally, sets the length of the second
+051:      largest to 0.
+052:      */
+053:     private static void combineLargestSections(int[] sections) {
+054:
+055:         // Sizes of the two largest sections seen thus far.
+056:         int large1 = 0;
+057:         int large2 = 0;
+058:
+059:         // Indexes of the two largest sections seen thus far.
+060:         int large1Idx = 0;
+061:         int large2Idx = 0;
+062:
+063:      /*
+064:      When we find a section larger that the current largest, we push the
+065:      current largest size and index down into the second largest.
+066:       */
+067:         for (int i = 0; i < sections.length; i++) {
+068:             if (sections[i] >= large1) {
+069:                 large2 = large1;
+070:                 large2Idx = large1Idx;
+071:                 large1 = sections[i];
+072:                 large1Idx = i;
+073:             } else if (sections[i] > large2) {
+074:                 large2 = sections[i];
+075:                 large2Idx = i;
+076:             }
+077:         }
+078:
+079:         // Combine the two largest into one, and set the other to zero.
+080:         sections[large1Idx] += sections[large2Idx];
+081:         sections[large2Idx] = 0;
+082:     }
+083:
+084:     public int minCuts(int[] sections) {
+085:
+086:         int numCuts = 0;
+087:
+088:         // Continue looping so long as there are more than 1 sections.
+089:         while (getNumSections(sections) >= 1) {
+090:
+091:       /*
+092:       If there is just one section, then cut the end,
+093:       and attach it to the beginning.
+094:        */
+095:             if (getNumSections(sections) == 1) {
+096:                 return numCuts + 1;
+097:             }
+098:
+099:       /*
+100:       Take the smallest section and use it's links to combine the
+101:       larger sections.
+102:        */
+103:             int s = getSmallestSection(sections);
+104:
+105:             while (sections[s] > 0) {
+106:
+107:         /*
+108:         Check to see if the links from the smallest chain can be used
+109:          to join all remaining sections.
+110:          */
+111:                 if (sections[s] == getNumSections(sections) - 1) {
+112:                     numCuts += sections[s];
+113:                     return numCuts;
+114:                 } else if (sections[s] >= getNumSections(sections)) {
+115:                     numCuts += getNumSections(sections);
+116:                     return numCuts;
+117:                 }
+118:
+119:         /*
+120:         If not, remove one link from the smallest section,
+121:         and use it to join the two largest sections.
+122:          */
+123:                 combineLargestSections(sections);
+124:                 numCuts++;
+125:                 sections[s] = sections[s] - 1;
+126:             }
+127:         }
+128:
+129:         return -1;
+130:     }
+131: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>The heart of this algorithm is in the loop in lines 105-126. Here, we start with the smallest section. There are three possibilities:</p>
+
+    <ol>
+        <li>The smallest section contains just enough links to join all of the remaining sections. Line 111. We subtract 1 from the number of sections because we don't need to count the smallest one itself. In this case, we cut all links in the shortest chain and use them to join the longer sections.</li>
+        <li>The smallest section contains more than enough links to join all the remaining sections. Line 114. Here, we cut smallest sections as many times as needed to join all of the remaining sections.</li>
+        <li>The smallest sections does not contain enough links to join all the remaining sections. Lines 123-125. Then, we remove one link from the smallest section and use it to join the two largest sections. Then loop back through and repeat the processes.</li>
+    </ol>
+
+    <p>As a final note, the two returns at lines 113 and 116 should catch every case. The return at line 129 is only needed in order to compile - it's an error if it reaches there.</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+
+</div>
