@@ -1,0 +1,107 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1647"
+                       target="_blank">TopCoder Problem Statement - Iditarod</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 160 Round 1 - Division I, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the average number of minutes contestants needed to complete a multi-day race.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Iditarod {
+02: 	
+03: 	public int avgMinutes(String[] times) {
+04: 
+05: 		int totalMinutes = 0;
+06: 
+07: 		// Add up the total minutes for each finishing time.
+08: 		for (String t : times)  {
+09: 			totalMinutes += calcMinutes(t);
+10: 		}
+11: 
+12: 		// Get the average.
+13: 		double avg = (double) totalMinutes / (double) times.length;
+14: 
+15: 		// Round off by adding .5 and truncating.
+16: 		avg += 0.5;
+17: 		return (int) avg;
+18: 	}
+19: 
+20: 	private static int calcMinutes(String s)  {
+21: 
+22: 		// Format is: hh:mm xM, DAY n
+23: 
+24: 		int hours = Integer.parseInt(s.substring(0,2));
+25: 		int minutes = Integer.parseInt(s.substring(3,5));
+26: 		boolean isPM = (s.charAt(6) == 'P');
+27: 
+28: 		// Handles both 1 and 2 digit day lengths.
+29: 		int day = Integer.parseInt(s.substring(14, s.length()));
+30: 
+31: 		// Handle 12 PM and 12 AM hours
+32: 		if (hours == 12)  {
+33: 			if (isPM)  {
+34: 				hours = 0;
+35: 			} else {
+36: 				hours = 24;
+37: 				day -= 1;
+38: 			}
+39: 		}
+40: 
+41: 		if (isPM) hours += 12;
+42: 
+43: 		// Subtract off the start time.
+44: 		hours -= 8;
+45: 
+46: 		// Minutes per day, times number of days (don't count day 1)
+47: 		int totalMinutes = (24*60) * (day - 1);
+48: 
+49: 		totalMinutes += (60 * hours);
+50: 
+51: 		totalMinutes += minutes;
+52: 
+53: 		return totalMinutes;
+54: 	}
+55: 
+56: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  Not much difficulty here.  avgMinutes() loops through all the finishing times and keeps a running total of the number of minutes for all the competitors
+  to finish.  Then it just divides the today by the number of times - casting to double to avoid losing decimal places.  To round off, just add 0.5 and
+  truncate - a trick everyone should know.  There's no danger of overflow here, so just stick with the simplest thing that works.
+</p>
+
+<p>
+  Calculating the number of minutes for a given time is also pretty simple.  We just need to take care dealing with the 12:00 PM and 12:00 AM hours.  Here,
+  if it's 12 PM, I set the hours to 0.  If it's 12 AM, I set hours to 24, and subtract a day.  Then for any PM times, I add 12 hours.  It may take a minute
+  to think it through, but it's not tough.  Remember to subtract off the 8:00 AM starting time.  Then it's just a matter of adding up the number of minutes
+  in a day, an hour, and the minutes portion.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
