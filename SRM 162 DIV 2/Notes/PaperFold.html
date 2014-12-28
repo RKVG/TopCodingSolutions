@@ -1,0 +1,85 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1846"
+                       target="_blank">TopCoder Problem Statement - PaperFold</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 162 Round 1 - Division I, Level One</td></tr>
+            <tr><td>Single Round Match 162 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the minimum number of folds needed to fit a sheet of paper into a box.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class PaperFold {
+02: 	
+03: 	public int numFolds(int[] paper, int[] box) {
+04: 		
+05: 		int paperMax = Math.max(paper[0], paper[1]);
+06: 		int paperMin = Math.min(paper[0], paper[1]);
+07: 		int boxMax = Math.max(box[0], box[1]);
+08: 		int boxMin = Math.min(box[0], box[1]);
+09: 
+10: 		int f1 = countFolds(paperMax, boxMax) + countFolds(paperMin, boxMin);
+11: 		int f2 = countFolds(paperMax, boxMin) + countFolds(paperMin, boxMax);
+12: 
+13: 		int folds = Math.min(f1, f2);
+14: 
+15: 		return (folds <= 8) ? folds : -1;
+16: 	}
+17: 
+18: 	private static int countFolds(int a, int b)  {
+19: 
+20: 		int folds = 0;
+21: 
+22: 		while (a > b)  {
+23: 			folds++;
+24: 			b *= 2;
+25: 		}
+26: 
+27: 		return folds;
+28: 	}
+29: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  We need to consider two possibilities.  First, that we can fold the paper length-wise and width-wise until it fits in box, and
+  second, that we must first rotate the paper, and then fold it down to fit into the box.  We'll try both ways, and go with the
+  one that takes fewer folds.
+</p>
+
+<p>
+  On line 10, f1 is assigned the number of folds required if the maximum dimension of the paper is aligned with the maximum dimension
+  of the box.  On the next line, f2 is assigned the number of folds if this were rotated 90&deg;.
+</p>
+
+<p>
+  The countFolds() method simply counts how many times the box's dimension needs to be doubled before it can fit the paper.  I choose to
+  double the size of the box rather than halving the size of the paper to avoid having to convert to doubles in order to deal with
+  fractions.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
