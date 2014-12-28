@@ -1,0 +1,108 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1792"
+                       target="_blank">TopCoder Problem Statement - LCMRange</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 162 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Find the Least Common Multiple of a range of numbers.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class LCMRange {
+02: 	
+03: 	public int lcm(int first, int last) {
+04: 
+05: 		/*
+06: 		* The Least Common Multiple must be a multiple of last, so we'll
+07: 		* start there and increment by last to get the next value.
+08: 		*/
+09: 		int lcm = last;
+10: 
+11: 		boolean found = false;
+12: 
+13: 		// Continue until we find the LCM
+14: 		while (!found)  {
+15: 
+16: 			int i = first;
+17: 
+18: 			/*
+19: 			* Check each number between first and last (inclusive) to ensure
+20: 			* that lcm is a multiple.
+21: 			*/
+22: 			while (i <= last)  {
+23: 
+24: 				// If it doesn't divide evenly, skip this number.
+25: 				if ((lcm % i) != 0)  {
+26: 					break;
+27: 				}
+28: 
+29: 				i ++;
+30: 			}
+31: 
+32: 			/*
+33: 			* If we've tested all the numbers, then we've successfully found
+34: 			* a Least Common Multiple
+35: 			*/
+36: 			if (i > last)  {
+37: 				found = true;
+38: 
+39: 			} else  {
+40: 
+41: 				/*
+42: 				* Otherwise try the next number.  We know it must be a
+43: 				* multiple of first, so we can increment by that amount.
+44: 				*/
+45: 				lcm += last;
+46: 			}
+47: 		}
+48: 
+49: 		return lcm;
+50: 	}
+51: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The constraints of this problem make it small enough that a brute-force method works well.  We could just
+        start at 1 and check to see if it is a Least Common Multiple (LCM) of each number in the range.  If not,
+        just increment by 1 and try again.  A simple optimization is to note that our answer must be a multiple
+        of last.  So we can start our search there, and increment by the value of last to get the next number
+        to test.
+    </p>
+
+    <p>
+        The % operator is used to determine if one number divides another evenly.  if ((a % b) == 0) then b
+        evenly divides a.  Or, a is a multiple of b.
+    </p>
+
+    <p>
+        Note the break; statement in the inner-most while loop.  This lets us quit on a potential LCM as soon as we
+        find a number that it is not a multiple of.  When the break is encountered, i will be <= last, and the
+        if statement below will use this to determine if a LCM has been found or not.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
