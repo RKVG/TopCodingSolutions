@@ -1,0 +1,81 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13378"
+                       target="_blank">TopCoder Problem Statement - DoubleLetter</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 630 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Remove double letters from the left side of a String until no more double letters exist.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class DoubleLetter {
+02: 
+03:     public String ableToSolve(String S) {
+04: 
+05:         // A StringBuilder will be much more efficient for deleting characters.
+06:         StringBuilder sb = new StringBuilder(S);
+07: 
+08:         boolean changed = true;
+09: 
+10:         while (changed) {
+11:             changed = false;
+12: 
+13:             for (int i = 0; i < sb.length() - 1; i++) {
+14:                 if (sb.charAt(i) == sb.charAt(i + 1)) {
+15:                     sb.deleteCharAt(i);
+16:                     sb.deleteCharAt(i);
+17:                     changed = true;
+18: 
+19:                     // Start over from the left of the string.
+20:                     break;
+21:                 }
+22:             }
+23:         }
+24: 
+25:         return (sb.length() == 0) ? "Possible" : "Impossible";
+26:     }
+27: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  First, I create a StringBuilder object out of the given String.  This will make deleting characters from the string more efficient.
+  Every time a String is modified in Java, a new object is created.  On the other hand, StringBuilder is mutable.
+</p>
+
+<p>
+  I used the boolean variable changed to note when any characters have been deleted.  If we pass through the entire string with no changes,
+  then we're done.  Note that I call sb.deleteCharAt(i) twice.  The first deletes the first characters, and causes all subsequent characters to
+  shift one place to the left.  The second call deletes the second of the double characters.
+</p>
+
+<p>
+  Upon exiting the while loop, simply check the size of the remaining string, and return Possible or Impossible accordingly.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
