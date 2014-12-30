@@ -1,0 +1,190 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13376"
+                       target="_blank">TopCoder Problem Statement - Egalitarianism3Easy</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 630 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Find the largest set of cities where the distance between any pair of cities is equal to the distance between any other pair.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: public class Egalitarianism3Easy {
+002: 
+003:     /*
+004:     * There's a maximum of 10 cities, and a maximum distance of 1,000.  So,
+005:     * no city can be more than 10,000 away from another.
+006:     */
+007:     private static final int INF_DISTANCE = (10 * 1000) + 1;
+008: 
+009:     public int maxCities(int n, int[] a, int[] b, int[] len) {
+010: 
+011:         // A matrix to hold the distances between any 2 cities.
+012:         int[][] distances = new int[n][n];
+013: 
+014: 		/*
+015:    * Initialize distances.  Distance from any city to itself is 0.
+016: 		* Set distance to all other cities to infinity.
+017: 		*/
+018:         for (int i = 0; i < distances.length; i++) {
+019:             for (int j = 0; j < distances[0].length; j++) {
+020:                 distances[i][j] = (i == j) ? 0 : INF_DISTANCE;
+021:             }
+022:         }
+023: 
+024:         // Set distances from the input parameters
+025:         for (int i = 0; i < a.length; i++) {
+026: 
+027:             // Roads are bi-directional, so set both ways.
+028:             distances[a[i] - 1][b[i] - 1] = len[i];
+029:             distances[b[i] - 1][a[i] - 1] = len[i];
+030:         }
+031: 
+032:         // Floyd-Warshall's algorithm
+033:         for (int k = 0; k < n; k++) {
+034:             for (int i = 0; i < n; i++) {
+035:                 for (int j = 0; j < n; j++) {
+036:                     distances[i][j] = Math.min(distances[i][j],
+037:                             distances[i][k] + distances[k][j]);
+038:                 }
+039:             }
+040:         }
+041: 
+042:         // distances is now populated with the distance between any 2 cities.
+043: 
+044:         /*
+045:         * The maximum number of cities in a set where the distances between
+046:         * them all are equal.  This is the value we'll return.
+047:         */
+048:         int max = 0;
+049: 
+050:         /*
+051:         * This will generate a bit pattern representing every possible subset
+052:         * of cities.
+053:         */
+054:         for (int citySetMask = 0; citySetMask < (1 << n); citySetMask++) {
+055: 
+056:             int citySetDistance = -1;
+057:             boolean allDistancesEqual = true;
+058:             int cityCount = 0;
+059: 
+060:             int city1 = 0;
+061:             while ((city1 < n) & allDistancesEqual) {
+062: 
+063:                 // Make sure city1 is in the set.
+064:                 if ((citySetMask & (1 << city1)) != 0) {
+065: 
+066:                     cityCount++;
+067: 
+068:                     int city2 = 0;
+069:                     while ((city2 < n) & allDistancesEqual) {
+070: 
+071:                         // Make sure city2 is in the set (and != city1)
+072:                         if ((city1 != city2) &&
+073:                                 ((citySetMask & (1 << city2)) != 0)) {
+074: 
+075:                             // Set the distances if this is the first pair.
+076:                             if (citySetDistance == -1) {
+077:                                 citySetDistance = distances[city1][city2];
+078:                             }
+079: 
+080:                             if (distances[city1][city2] != citySetDistance) {
+081:                                 allDistancesEqual = false;
+082:                             }
+083: 
+084:                         }
+085: 
+086:                         city2++;
+087:                     }
+088:                 }
+089: 
+090:                 city1++;
+091:             }
+092: 
+093:             if (allDistancesEqual) {
+094:                 max = Math.max(max, cityCount);
+095:             }
+096: 
+097:         }
+098: 
+099:         return max;
+100:     }
+101: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    
+<p>
+  There's a lot going on in this problem. It's tough for division 2 level 2. The solution uses the Floyd-Warshall algorithm to determine
+  the shortest distance between all pairs of cities.  If you're unfamiliar with the algorighm, check out this video tutorial. 
+  <a href="https://www.youtube.com/watch?v=8TRX85-myD4">Floyd-Warshall Tutorial</a> Take the time to work through the example until you
+  understand what's going on.
+</p>
+
+<p>
+  One thing to be careful of when using this algorithm: you can't set unknown distances to Integer.MAX_VALUE.  The reason is that we
+  need to add two distances together, and this will cause an overflow.  To avoid this, I created INF_DISTANCE which is 1 greater than
+  any possible distance given the constraints of the problem.
+</p>
+
+<p>
+  When the section labeled Floyd-Warshall's algorithm complets, the distances[][] will contain a table that maps the distance from
+  any city to any other city.  Then we just need to find the sets of cities that match the criteria, and determine the largest.
+</p>
+
+<p>
+  The number of possible subsets of all cities is reasonably small.  Just 2^10 = 1024.  So it's very possible to generate all
+  combinations and test each one.  To generate all possible subsets, I used a trick using a bit mask.  It's the first time a solution
+  on this site has used it, so I'll go into some detail as to how it works.
+</p>
+
+<p>
+  Imagine each set of cities is represented as a binary string.  So "0000000111" would represent a set that included cities 0, 1, and 2.  "1000000000"
+  is a set that includes only city 9, and "1111111111" contains all cities.  By simply counting from 0 to 2^n (Where n is the number of cities/bits)
+  we'll get every possible combination of bits.<br/>
+  Note that care must be taken because the cities start at 1 and not 0.  So city 9 is actually represented by the 10th bit from the right. city 0 is
+  in the first bit on the right.
+</p>
+
+<p>
+  Now, to tell if a given city is in the current set, we'll use an expression such as (citySetMask & (1 << city1) where citySetMask is the current binary
+  pattern, and city1 is the city that we're checking.  The << operator taks the value of 1 (...001) and shifts it's bits to the left by the value of city1.
+  Let's say our citySetMask is "0001010111" and city1 is 4.  The << operator will take 1 (0000000001) and shift if over 4 places (0000010000).  We then
+  use the bit-wise and operator & to test the two values.  In this case, the city is in the set.
+</p>
+
+<p>
+  The remainder of the logic if pretty straight forward.  We initialize citySetDistance to -1.  Then when the first other city is found, we'll set that
+  to the distance between those first two cities.  allDistancesEqual is set to false if we ever find a pair of cities whose distances is not what
+  was previously set in citySetDistance.  When allDistancesEqual becomes false, both the inner and outer while loops terminate, and we give up
+  on the current set.  If all cities in the set do have equal distances, then we set max to the larger of max or cityCount.
+</p>
+
+<p>
+  Again, this is pretty tough for a division 2 level 2 problem.  Compared to the early single round matches, like the 100 series, this would
+  be a division 1 level 2 or division 2 level 3 problem at least, but that appears to be the way things are going with these newer problem sets.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

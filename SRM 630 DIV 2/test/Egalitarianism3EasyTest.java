@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 
 public class Egalitarianism3EasyTest {
 	
-	@Test(timeout=2000)
+	@Test
 	public void test0() {
 		int n = 4;
 		int[] a = new int[] {1,1,1};
@@ -12,7 +12,6 @@ public class Egalitarianism3EasyTest {
 		assertEquals(3, new Egalitarianism3Easy().maxCities(n, a, b, len));
 	}
 	
-//	@Test(timeout=2000)
     @Test
 	public void test1() {
 		int n = 6;
@@ -22,7 +21,7 @@ public class Egalitarianism3EasyTest {
 		assertEquals(3, new Egalitarianism3Easy().maxCities(n, a, b, len));
 	}
 	
-	@Test(timeout=2000)
+	@Test
 	public void test2() {
 		int n = 10;
 		int[] a = new int[] {1,1,1,1,1,1,1,1,1};
@@ -31,7 +30,7 @@ public class Egalitarianism3EasyTest {
 		assertEquals(9, new Egalitarianism3Easy().maxCities(n, a, b, len));
 	}
 	
-	@Test(timeout=2000)
+	@Test
 	public void test3() {
 		int n = 2;
 		int[] a = new int[] {1};
@@ -40,7 +39,7 @@ public class Egalitarianism3EasyTest {
 		assertEquals(2, new Egalitarianism3Easy().maxCities(n, a, b, len));
 	}
 	
-	@Test(timeout=2000)
+	@Test
 	public void test4() {
 		int n = 1;
 		int[] a = new int[] {};
