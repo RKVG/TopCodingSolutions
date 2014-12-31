@@ -1,0 +1,73 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13072"
+                       target="_blank">TopCoder Problem Statement - WritingWords</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 618 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count how many key presses are needed to type out a word on a cell phone.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class WritingWords {
+02: 
+03:     public int write(String word) {
+04: 
+05:         int count = 0;
+06: 
+07:         for (int i = 0; i < word.length(); i++) {
+08:             count += word.charAt(i) - 'A' + 1;
+09:         }
+10: 
+11:         return count;
+12:     }
+13: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  This is about as easy as it gets.  It took longer to read the problem description than to actually code it up.
+  Nevertheless, there's still a few things worth noting.
+</p>
+
+<p>
+  Remember that we can use String.charAt(i) to get the character at a given position in the String.  Also chars in java
+  are treated as 16-bit integers, so we can do normal integer arithmetic on them.  The letters 'a' - 'z' are guaranteed to be
+  consecutive, as are 'A' - 'Z'.  So an expression like 'c' - 'a' will yield a value of 2.  In this problem, the actual ascii
+  values of the characters does not matter (A = 65 by the way). 
+</p>
+
+<p>
+  To get the number of key presses for each letter we just subtract 'A' from that letter.  But since, 'A' - 'A' would be 0,
+  we need to add 1 to each value.
+</p>
+
+<p>
+  The variable count is initialized to 0, and then is incremented by the value of each new letter.  The operator +=
+  is just a sort cut for writing "count = count + ..."
+</p>
+     
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
