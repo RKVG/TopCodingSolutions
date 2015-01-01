@@ -1,0 +1,287 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1747"
+           target="_blank">TopCoder Problem Statement - NumberGuessing</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Choose the best number in a guessing game.
+    </p>
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>001: /*
+002: TopCoder
+003: Single Round Match: 148
+004: Division: 1
+005: Level: 3
+006: Points: 1100
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1747
+008:  */
+009:
+010: import java.util.Arrays;
+011: import java.util.HashSet;
+012: import java.util.Set;
+013:
+014: public class NumberGuessing {
+015:
+016:     /*
+017:      * Returns a set of all Integers that should be tried.  If there are no
+018:      * guesses to follow, then the set will be:
+019:      * 1 less than the smallest guess.
+020:      * 1 greater than all previous guesses.
+021:      * If there are more guesses to follow, then return all integers in the
+022:      * range.
+023:      * In either case, do not add any numbers that already appear in guesses.
+024:      */
+025:     public static Set<Integer> getPossibleGuesses(int range, int[] guesses,
+        026:                                                   boolean isLast) {
+        027:
+        028:         Set<Integer> possibleGuesses = new HashSet<>();
+            029:
+            030:         if (isLast) {
+            031:
+            032:             // If there are no guesses, and no guesses to follow, just return 1
+            033:             if (guesses.length == 0) {
+            034:                 possibleGuesses.add(1);
+            035:                 return possibleGuesses;
+            036:
+            037:                 /*
+            038:                 * If there are guesses to follow, return one less than the
+            039:                 * smallest guess, and one greater than all other guesses.
+            040:                 * Be sure to check that we're not adding < 1 or > range.
+            041:                 */
+            042:             } else {
+            043:                 if (guesses[0] > 1) {
+            044:                     possibleGuesses.add(guesses[0] - 1);
+            045:                 }
+            046:
+            047:                 for (int g : guesses) {
+            048:                     if (g < range) {
+            049:                         possibleGuesses.add(g + 1);
+            050:                     }
+            051:                 }
+            052:             }
+            053:
+            054:             /*
+            055:              * If there are guesses to follow, then we'll check every number
+            056:              * in the range that hasn't alredy been guesses.
+            057:              */
+            058:         } else {
+            059:             for (int i = 1; i <= range; i++) {
+            060:                 possibleGuesses.add(i);
+            061:             }
+            062:         }
+            063:
+            064:         for (int i : guesses) {
+            065:             possibleGuesses.remove(i);
+            066:         }
+            067:
+            068:         return possibleGuesses;
+            069:     }
+            070:
+            071:     /*
+            072:      * Makes the best guess possible based on the guesses that have been taken,
+            073:      * and the number of guesses to follow.  Returns an array that equals
+            074:      * guesses, except that the new best guess is inserted.
+            075:      * The best guess is obtained by following these steps.
+            076:      * 1. Obtain possible guesses.
+            077:      * 2. For each possible guess, call makeBestGuess recursively to get how
+            078:      * all the following guessers will respond.
+            079:      * 3. Check what the yield is for that guess (how many numbers = a win)
+            080:      * 4. Repeat for all other possible guesses, keeping track of the largest
+            081:      * yield.
+            082:      */
+            083:     public GuessResults makeBestGuess(int range, int[] guesses,
+            084:                                       int numLeft) {
+            085:
+            086:         // When numLeft < 0, return to break the recursion.
+            087:         if (numLeft < 0) {
+            088:             return new GuessResults(guesses);
+            089:         }
+            090:
+            091:         // Used to keep track of the best guess tried so far and it's result.
+            092:         int maxYield = 0;
+            093:         GuessResults maxResults = new GuessResults();
+            094:
+            095:         Set<Integer> possibleGuesses = getPossibleGuesses(range, guesses,
+                096:                 (numLeft == 0));
+                097:
+                098:         for (int possibleGuess : possibleGuesses) {
+                099:
+                100:             /*
+                101:              * Make a copy of the guesses array, and insert the new guess into
+                102:              * its proper location.
+                103:              */
+                104:             int[] beforeTry = Arrays.copyOf(guesses, guesses.length + 1);
+                105:             beforeTry[beforeTry.length - 1] = possibleGuess;
+                106:             Arrays.sort(beforeTry);
+                107:
+                108:             /*
+                109:              * Recursively call makeBestGuess() using this current guess and
+                110:              * check the results.
+                111:              */
+                112:             GuessResults afterTry = makeBestGuess(range, beforeTry,
+                113:                     numLeft - 1);
+                114:             afterTry.guess = possibleGuess;
+                115:
+                116:             int yield = calculateYield(possibleGuess, afterTry.results, range);
+                117:
+                118:             if ((yield > maxYield) ||
+                119:                     ((yield == maxYield) &&
+                120:                             (possibleGuess < maxResults.guess))) {
+                121:                 maxYield = yield;
+                122:                 maxResults = afterTry;
+                123:             }
+                124:         }
+                125:
+                126:         return maxResults;
+                127:     }
+                128:
+                129:     /*
+                130:      * Given an array of guesses, returns how many numbers result in a win
+                131:      * for the given guess.
+                132:      * The given guess must exist in the array of guesses.
+                133:      */
+                134:     public int calculateYield(int guess, int[] guesses, int range) {
+                135:
+                136:         int yield;
+                137:
+                138:         // Determine the position of guess in the array of guesses.
+                139:         int i = 0;
+                140:         while (guesses[i] != guess) {
+                141:             i++;
+                142:         }
+                143:
+                144:         // This guess is the lowest.
+                145:         if (i == 0) {
+                146:             yield = guess + ((guesses[i + 1] - guess - 1) / 2);
+                147:
+                148:             // This guess is the highest.
+                149:         } else if (i == (guesses.length - 1)) {
+                150:             yield = (range - guess + 1) + ((guess - guesses[i - 1] - 1) / 2);
+                151:
+                152:             // This guess is somewhere in between two other guesses.
+                153:         } else {
+                154:             yield = (((guesses[i + 1] - guess - 1) / 2)
+                155:                     + 1 +
+                156:                     ((guess - guesses[i - 1] - 1) / 2));
+                157:         }
+                158:
+                159:         return yield;
+                160:     }
+                161:
+                162:     /*
+                163:      * Loops through all possible guesses to determine which one results in
+                164:      * the greatest yeild.
+                165:      */
+                166:     public int bestGuess(int range, int[] guesses, int numLeft) {
+                167:
+                168:         // If there is only one number possible, take it and quit early.
+                169:         if (range == 1) {
+                170:             return 1;
+                171:         }
+                172:
+                173:         return makeBestGuess(range, guesses, numLeft).guess;
+                174:     }
+                175:
+                176:     /*
+                177:      * Ties a guess to the resulting array of guesses
+                178:      */
+                179:     private class GuessResults {
+                180:         int[] results;
+                181:         Integer guess;
+                182:
+                183:         GuessResults() {
+                184:             this.results = null;
+                185:             this.guess = Integer.MAX_VALUE;
+                186:         }
+                187:
+                188:         GuessResults(int[] results) {
+                189:             this.results = results;
+                190:             this.guess = Integer.MAX_VALUE;
+                191:         }
+                192:     }
+                193: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        There's a lot of pitfalls waiting in this problem. I'll start with an
+        overview of the solution, and then go into some of the mistakes that I
+        made along the way.
+    </p>
+    <p>
+        The solution first obtains a list of numbers that it should try. It's
+        fairly clear that if there are no guesses to follow, then your guess
+        should either be 1 lower that the lowest guess, or 1 higher than a
+        previous guess. Any number picked between two numbers will yield the
+        same number of wins as any other number picked between those same two
+        numbers, so it's sufficient just to try the lowest in any segment.
+    </p>
+    <p>
+        The first problem comes up when trying to determine which numbers
+        to pick when you're not that last to go. You might just pick numbers
+        that are at the mid-point between two previous guesses.
+        A more sophisticated approach
+        might introduce the number of guesses to follow. So pick the 1/2 point,
+        if there is one guess to follow. Pick 1/4 way points if there are two
+        guesses to follow, etc. This will drive you nuts, and is ultimately
+        unnecessary - maybe - see below.
+    </p>
+    <p>
+        The specs limit the range and number of followers sufficiently so that
+        you can use brute force on any guess that has followers. The numbers to
+        try in this case are just all numbers that haven't been guessed
+        previously.
+    </p>
+    <p>
+        Armed with the list of number to try, we loop through each of them.
+        First, we re-create the guesses[] array adding the current number that we're
+        trying. Then we pass this new array, along with one less follower to
+        makeBestGuess(). This returns an array containing all the responses
+        from all the followers for that guess.
+        Next, we check how many numbers will result in a win with that
+        guess, and finally, store that guess and the results if it yielded more
+        wins than anything previously seen.
+    </p>
+    <p>
+        One thing that was more annoying than difficult is the fact that
+        makeBestGuess() and bestGuess() require two different return values.
+        makeBestGuess() needs an array of ints that represents all of the
+        resulting guesses; while bestGuess() just need the guess itself. To
+        solve this problem, and avoid a lot of duplicate code, I introduced the
+        GuessResults inner class to tie the guess and it's response together.
+    </p>
+    <p>
+        The final difficult part is in calculating the number of wins that a
+        given guess yields. This is handled by the calculateYield() method. It
+        expects an array containing all the guesses, both before and after our
+        guess, as well as our guess and also the range. There are three separate
+        equations: One if our guess is the lowest, one if it's the highest, and
+        one if it falls between two other guesses. Care, and a lot of testing,
+        are needed to get these right.
+    </p>
+    <p>
+        As a final note, the longest running test in the TopCoder arena
+        took 3.7 seconds to complete, which is greater than the 2 seconds
+        they allow. However, on my machine, the same test ran in .4
+        seconds, so I can live with it.
+    </p>
+    <p>
+        I tried some optimizations, such as replacing the calls to Arrays.sort()
+        with a customized sort that took advantage of the fact that
+        there was only one number to add. These didn't add up to much. If I had
+        to get that test down under 2 seconds, I'd need to revisit the
+        getPossibleGuesses() method for guesses that had followers.
+    </p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

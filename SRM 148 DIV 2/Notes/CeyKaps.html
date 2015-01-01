@@ -1,0 +1,99 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1740"
+           target="_blank">TopCoder Problem Statement - CeyKaps</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Decode a message type on a keyboard where the keys have been switched around.
+    </p>
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
+02: TopCoder
+03: Single Round Match: 148
+04: Division: 2
+05: Level: 2
+06: Points: 600
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1740
+08:  */
+09:
+10: public class CeyKaps {
+11:
+12:     // Will hold the key mappings.
+13:     private Character[] keys = new Character[26];
+14:
+15:     public String decipher(String typed, String[] switches) {
+16:
+17:         Character x = 'A';
+18:         int pos = 0;
+19:
+20:         // Initializes all key mappings to the starting values.
+21:         while (x <= 'Z') {
+22:             keys[pos++] = x++;
+23:         }
+24:
+25:         /*
+26:         Loop through all the switches.  For each switch find the positions
+27:         that hold the source and
+28:          */
+29:         for (int i = 0; i < switches.length; i++) {
+30:
+31:             // Get the values to be switched
+32:             Character c1 = switches[i].charAt(0);
+33:             Character c2 = switches[i].charAt(2);
+34:
+35:             int pos1 = -1;
+36:             int pos2 = -1;
+37:
+38:             /*
+39:             Find the keys that have the values equal to what is being
+40:             switched.  Loop until both characters have been found.
+41:              */
+42:             int j = 0;
+43:             while ((pos1 < 0) || (pos2 < 0)) {
+44:                 if (c1.equals(keys[j])) { pos1 = j; }
+45:                 if (c2.equals(keys[j])) { pos2 = j; }
+46:                 j++;
+47:             }
+48:
+49:             // Swap the values.
+50:             Character t = keys[pos1];
+51:             keys[pos1] = keys[pos2];
+52:             keys[pos2] = t;
+53:         }
+54:
+55:         // An array to hold our return value.
+56:         char[] result = new char[typed.length()];
+57:
+58:         // Read each typed character and replace it with it's mapping.
+59:         for (int i = 0; i < typed.length(); i++) {
+60:             Character c = typed.charAt(i);
+61:             int pos3 = c - 'A';
+62:             result[i] = keys[pos3];
+63:         }
+64:
+65:         return new String(result);
+66:     }
+67: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>I found this problem to be a bit tricky to understand. My first thought was to use a HashMap to map the key caps to their underlying values. This is probably the way to go, but I never did get the keys and values to work out right.</p>
+
+    <p>This solution uses an array instead to hold the mappings. Lines 17-23 create the array and initialize it.</p>
+
+    <p>The swaps are handled on lines 29-53. First it gets the characters, and then beginning on line 43 searches through the array to find the positions that hold those two characters. Once the positions are known, the values at those two positions are swapped.</p>
+
+    <p>Finally, it creates a new array to hold the return value, and maps each character in "typed" to its corresponding value in "keys". (I believe here is where my HashMap idea was failing). The "result" array is converted to a String and returned.</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

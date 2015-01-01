@@ -1,0 +1,157 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1738"
+           target="_blank">TopCoder Problem Statement - CircleGame</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Simulate a simple card game.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>01: /*
+02: TopCoder
+03: Single Round Match: 148
+04: Division: 1
+05: Level: 1
+06: Points: 250
+07: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1735
+08:  */
+09: public class CircleGame {
+10:
+11:     // Use this value to represent cards that have been removed.
+12:     private static final int REMOVED = -1;
+13:
+14:     /*
+15:       Given an index into deck, returns the next card that hasn't been removed.
+16:       Handles looping around the end of the array by using the mod operator.
+17:       If we return to the given index without finding a valid card,
+18:       then return -1.
+19:      */
+20:     private static int getNextCardIndex(int start, int[] deck) {
+21:
+22:         int next = (start + 1) % deck.length;
+23:
+24:         while (next != start) {
+25:             if (deck[next] != REMOVED) { return next; }
+26:             next = (next + 1) % deck.length;
+27:         }
+28:
+29:         return -1; // No valid cards found.
+30:     }
+31:
+32:     public int cardsLeft(String deck) {
+33:
+34:         // We'll use an array to represent the deck of cards.
+35:         int[] deckArray = new int[deck.length()];
+36:
+37:         // Convert the characters in deck to an integer array
+38:         for (int i = 0; i < deck.length(); i++) {
+39:             char c = deck.charAt(i);
+40:
+41:             switch (c) {
+42:                 case 'A':
+43:                     deckArray[i] = 1;
+44:                     break;
+45:                 case 'T':
+46:                     deckArray[i] = 10;
+47:                     break;
+48:                 case 'J':
+49:                     deckArray[i] = 11;
+50:                     break;
+51:                 case 'Q':
+52:                     deckArray[i] = 12;
+53:                     break;
+54:                 case 'K':
+55:                     deckArray[i] = REMOVED;  // Don't bother even adding them.
+56:                     break;
+57:                 default:
+58:                     deckArray[i] = c - '0';
+59:             }
+60:         }
+61:
+62:         boolean madeMove = true;
+63:
+64:         /*
+65:         Each time we remove a card, we'll start back from the beginning of
+66:         the deck.  The loop exits when the end of the deck is reached,
+67:         and no moves have been made.
+68:          */
+69:         while (madeMove) {
+70:             madeMove = false;
+71:
+72:             for (int i = 0; i < deckArray.length; i++) {
+73:
+74:                 // Skip past any cards that have been removed.
+75:                 if (deckArray[i] == REMOVED) { continue; }
+76:
+77:                 // -1 if there is no next card.
+78:                 int nextCardIndex = getNextCardIndex(i, deckArray);
+79:
+80:                 if ((nextCardIndex >= 0) &&
+81:                         ((deckArray[i] + deckArray[nextCardIndex]) == 13)) {
+82:                     deckArray[i] = REMOVED;
+83:                     deckArray[nextCardIndex] = REMOVED;
+84:                     madeMove = true;
+85:                     break;  // Start back from the beginning of the deck.
+86:                 }
+87:             }
+88:         }
+89:
+90:         // Count the number of cards remaining.
+91:         int count = 0;
+92:         for (int aDeckArray : deckArray) {
+93:             if (aDeckArray != REMOVED) {
+94:                 count++;
+95:             }
+96:         }
+97:         return count;
+98:     }
+99: }</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        The deck is represented as an array of integers. To initialize the array, we
+        just loop through all the characters in deck and assign them a value using
+        the switch statement. Two things to note here: First, cards that have been
+        removed are represented as a -1. This allows us to easily skip over those
+        cards. No need to use an ArrayList, LinkedList or any other
+        structure where you actually remove elements. Second,
+        since the first action is to remove all Kings, we'll just
+        take care of that up front. Lines 54 and 55 set all K's to -1.
+    </p>
+
+    <p>
+        Next we enter a loop that will terminate only when we go through the entire
+        deck without making a move. The loops always starts from the beginning
+        of the deck skipping any cards that have been removed. When it gets to
+        the first valid card, it then calls getNextCardIndex() get the next card
+        in the deck. getNextCardIndex() handles skipping over removed cards as
+        wells as looping from the end back to the beginning of the deck. If the
+        two cards add up to 13, they're both marked as removed.
+    </p>
+
+    <p>
+        Finally, when no moves could be made, the while loop exits, and we count
+        up the number of cards that have not been marked as removed.
+    </p>
+
+    <p>
+        Perhaps the most difficult part is the logic in
+        getNextCardIndex(). Just be thoughtful about using the mod division
+        operator, test for removed cards, and stop if you've looped all the way
+        throught the deck.
+    </p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>
