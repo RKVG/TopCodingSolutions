@@ -1,0 +1,89 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+    <table>
+        <tr>
+            <td>
+                <a href="http://community.topcoder.com/stat?c=problem_statement&pm=16008"
+                   target="_blank">TopCoder Problem Statement - HappyLetterDiv2</a>
+            </td>
+        </tr>
+        <tr><td>Single Round Match 627 Round 1 - Division II, Level Two</td></tr>
+    </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Eliminate non-matching letters until one remains.  Determine what letters can possibly be left.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class HappyLetterDiv2 {
+02: 
+03:     public char getHappyLetter(String letters) {
+04: 
+05:         // Loop through all letters in the input string.
+06:         for (int i = 0; i < letters.length(); i++) {
+07: 
+08:             char currentChar = letters.charAt(i);
+09: 
+10:             // Count the characters that match the current char.
+11:             int matchingChars = 0;
+12: 
+13:             for (int j = 0; j < letters.length(); j++) {
+14:                 if (letters.charAt(j) == currentChar) {
+15:                     matchingChars++;
+16:                 }
+17:             }
+18: 
+19:             /*
+20:             * If the number of matching characters is greater than half the
+21:             * length of the input string, then we have a happy letter.
+22:             */
+23:             if (matchingChars > (letters.length() / 2)) {
+24:                 return currentChar;
+25:             }
+26: 
+27:         }
+28: 
+29:         return '.';
+30: 
+31:     }
+32: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  In order to be a happy letter, more than half the letters in the string must be that character.  If the frequency
+  of a character is half (or less) the length of the input string, then other characters can be paired up
+  with the current character until all instances of the current character are eliminated.  Conversely, if the frequency
+  is greater than half, then matching all other characters with the current character will be insufficient to eliminate all
+  of the current character.
+</p>
+
+<p>
+  The solution then is just to loop through all the characters in the input string.  For each letter, count the
+  number of times it appears, and if that's greater than half the size of the input string, return it as the
+  happy letter. If no character meets that criteria, return '.'
+</p>
+
+<p>
+  Note that only one character can be a happy letter, because more than half the input string must consist of that character.
+  It's impossible for more than one character to take up more than half the string.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
