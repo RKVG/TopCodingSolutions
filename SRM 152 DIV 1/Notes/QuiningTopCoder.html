@@ -1,0 +1,292 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+    <table>
+        <tr>
+            <td>
+                <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1764"
+                   target="_blank">TopCoder Problem Statement - QuiningTopCoder</a>
+            </td>
+        </tr>
+        <tr><td>Single Round Match 152 Round 1 - Division I, Level Two</td></tr>
+    </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Implement a small programming language, and determine if a program
+        written in this language outputs itself.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.Stack;
+002: 
+003: public class QuiningTopCoder {
+004: 
+005:     private static final int MAX_CYCLES = 80000;
+006:     private static final int MIN_STACK_VAL = -1000000000;
+007:     private static final int MAX_STACK_VAL = 1000000000;
+008: 
+009:     /*
+010:     * A custom version of the standard Stack.  This will return 0 if the user
+011:     * attempts to pop a an empty stack (default behavior is to throw an
+012:     * EmptyStackException).  Also checks the value being pushed to ensure
+013:     * it is between MIN_STACK_VAL and MAX_STACK_VAL.  If not, it throws
+014:     * an illegalArgumentException.
+015:     */
+016:     private class MyStack extends Stack<Integer> {
+017: 
+018:         public Integer pop() {
+019:             return (isEmpty()) ? 0 : super.pop();
+020:         }
+021: 
+022:         public Integer push(Integer i) throws IllegalArgumentException {
+023: 
+024:             if ((i < MIN_STACK_VAL) || (i > MAX_STACK_VAL)) {
+025:                 throw new IllegalArgumentException();
+026:             }
+027:             return super.push(i);
+028:         }
+029:     }
+030: 
+031: 
+032:     // The function for updating the instruction pointer.
+033:     private static int incIp(int n, int ip, int d) {
+034:         return ((3 * n) + ip + d) % n;
+035:     }
+036: 
+037:     // Method called by TopCoder.
+038:     public String testCode(String source) {
+039: 
+040:         int ip = 0;
+041:         int d = 1;
+042:         int cycles = 0;
+043:         int n = source.length();
+044: 
+045:         Stack<Integer> stack = new MyStack();
+046: 
+047:         StringBuilder output = new StringBuilder();
+048: 
+049:         try {
+050: 
+051:             while (cycles <= MAX_CYCLES) {
+052: 
+053:                 char instruction = source.charAt(ip);
+054: 
+055:                 /*
+056:                  * '0'-'9': pushes the number represented by that digit onto
+057:                  * the stack.
+058:                  */
+059:                 if ((instruction >= '0') && (instruction <= '9')) {
+060:                     stack.push(instruction - '0');
+061:                     ip = incIp(n, ip, d);
+062: 
+063:                 } else {
+064: 
+065:                     int x, y;
+066: 
+067:                     switch (instruction) {
+068: 
+069:                         // '$' : pops a value off the stack, and discards it.
+070:                         case '$':
+071:                             stack.pop();
+072:                             ip = incIp(n, ip, d);
+073:                             break;
+074: 
+075:                         /*
+076:                         * ':' : pops a value off the stack, then pushes that
+077:                         * same value onto the stack twice.
+078:                         */
+079:                         case ':':
+080:                             x = stack.pop();
+081:                             stack.push(x);
+082:                             stack.push(x);
+083:                             ip = incIp(n, ip, d);
+084:                             break;
+085: 
+086:                         /*
+087:                         * 'W' : Pops a value A, then pops a value B, then
+088:                         * pushes A, then pushes B.
+089:                         */
+090:                         case 'W':
+091:                             x = stack.pop();
+092:                             y = stack.pop();
+093:                             stack.push(x);
+094:                             stack.push(y);
+095:                             ip = incIp(n, ip, d);
+096:                             break;
+097: 
+098:                         /*
+099:                         * ',' : pops a value X off of the stack, and prints the
+100:                         * (absolute value of X)%Nth character in the source
+101:                         * code.
+102:                         */
+103:                         case ',':
+104:                             x = stack.pop();
+105:                             x = Math.abs(x) % n;
+106:                             output.append(source.charAt(x));
+107: 
+108:                             /*
+109:                             * Whenever the output changes, check to see
+110:                             * if we're done, or at least still on track.
+111:                             * */
+112:                             if (output.toString().equals(source)) {
+113:                                 return "QUINES " + cycles;
+114:                             }
+115:                             if (!source.startsWith(output.toString())) {
+116:                                 return "MISMATCH " + cycles;
+117:                             }
+118: 
+119:                             ip = incIp(n, ip, d);
+120:                             break;
+121: 
+122:                         /*
+123:                         * '+' : pops two values, adds them, and pushes the
+124:                         * result back onto the stack.
+125:                         */
+126:                         case '+':
+127:                             x = stack.pop();
+128:                             y = stack.pop();
+129:                             stack.push(x + y);
+130:                             ip = incIp(n, ip, d);
+131:                             break;
+132: 
+133:                         /*
+134:                         * '-' : pops two values, subtracts the second popped
+135:                         * value from the first, and pushes the result back onto
+136:                         * the stack.
+137:                         */
+138:                         case '-':
+139:                             x = stack.pop();
+140:                             y = stack.pop();
+141:                             stack.push(x - y);
+142:                             ip = incIp(n, ip, d);
+143:                             break;
+144: 
+145:                         // '#' : multiplies D by 2 for this cycle only.
+146:                         case '#':
+147:                             ip = incIp(n, ip, (2 * d));
+148:                             break;
+149: 
+150:                         // 'R' : multiplies D by -1.
+151:                         case 'R':
+152:                             d *= -1;
+153:                             ip = incIp(n, ip, d);
+154:                             break;
+155: 
+156:                         /*
+157:                         * 'S' : pops a value, and if positive pushes a 1, else
+158:                         * pushes a -1.
+159:                         */
+160:                         case 'S':
+161:                             x = stack.pop();
+162: 
+163:                             // 0 is treated at not positive.
+164:                             if (x > 0) {
+165:                                 stack.push(1);
+166:                             } else {
+167:                                 stack.push(-1);
+168:                             }
+169: 
+170:                             ip = incIp(n, ip, d);
+171:                             break;
+172: 
+173:                         // '_' : pops a value X, and sets D to that value X%N.
+174:                         case '_':
+175:                             x = stack.pop();
+176:                             d = x % n;
+177:                             ip = incIp(n, ip, d);
+178:                             break;
+179: 
+180:                         /*
+181:                         * 'J' : pops a value X, and sets IP to the (absolute
+182:                         * value of X)%N. (IP is not incremented after this step)
+183:                         */
+184:                         case 'J':
+185:                             x = stack.pop();
+186:                             ip = Math.abs(x) % n;
+187:                             break;
+188: 
+189:                         /*
+190:                         * '@' : stops the program
+191:                         * It must be a BADEND here, because if the output
+192:                         * had matched the source, then we would have caught it
+193:                         * in the ',' command.
+194:                         */
+195:                         case '@':
+196:                             return "BADEND " + cycles;
+197: 
+198:                         // Should not reach this so long as the input is valid.
+199:                         default:
+200:                             return "ERROR bad command: " + instruction;
+201: 
+202:                     }
+203:                 }
+204:                 cycles++;
+205:             }
+206: 
+207:             // Exceeded MAX_CYCLES
+208:             return "TIMEOUT";
+209: 
+210:         } catch (IllegalArgumentException e) {
+211: 
+212:             // A value outside of MIN_STACK_VAL | MAX_STACK_VAL was pushed.
+213:             return "OVERFLOW " + cycles;
+214:         }
+215:     }
+216: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  This is a pretty straight forward problem.  Just follow the instructions carefully, and you shouldn't run into any problems.
+</p>
+
+<p>
+  To implement the stack, I chose to extend java.util.Stack and override the pop and push methods.  Although the problem doesn't
+  explicitly state it, you can see from the first example that if pop() is called on an empty stack, it should return 0.  The
+  default behavior of java.util.Stack is to throw an EmptyStackException.  I also modified push() to check that the value is
+  between MIN_STACK_VAL (-1000000000) and MAX_STAC_VAL (1000000000) before pushing it.  If the value is outside these bounds,
+  it will throw an IllegalArgumentException.
+</p>
+
+<p>
+  When the ',' command is encountered, a value is popped from the stack and appended to output.  This is the only time that
+  output is modified.  Whenever output changes, we check to see if it now equals source, or failing that, if source starts with
+  output.
+</p>
+
+<p>
+  Since output is only changed by the ',' command, '@' is ever encountered, we return BADEND.  At that point
+  output cannot match the program since we would have caught it when processing the ',' command.
+</p>
+
+<p>
+  The while loop watches the value of cycles (which gets incremented after each command is processed), and terminates
+  when it reaches MAX_CYCLES.
+</p>
+
+<p>
+  The only other exit point is when we catch an IllegalArgumentException from pushing a value outside the legal range onto
+  the stack.  This exception is caught and returns an OVERFLOW message.
+</p>
+
+<p>
+  The rest of the program simply implements the logic given in the problem statement.  Again, be careful and you won't have
+  any problems.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
