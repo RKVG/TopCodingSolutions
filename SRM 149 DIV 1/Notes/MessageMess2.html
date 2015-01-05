@@ -89,72 +89,72 @@
     071:      * through the dictionary tree.
     072:      */
     073:     private Set<String> findWords(LetterNode root, String message) {
-    074:
-    075:         Set<String> wordsFound = new HashSet<>();
-    076:         LetterNode n = root;
-    077:
-    078:         char[] characters = message.toCharArray();
-    079:
-    080:         for (int i = 0; i < characters.length; i++) {
-    081:
-    082:             /*
-    083:              * If the LetterNode is designated as an EndPoint then we've
-    084:              * reached the end of a word.  Recursively call findWords with
-    085:              * the remainder of the message.  Also, continue down the tree at
-    086:              * we may be able to match a longer word instead.
-    087:              */
-    088:             if (n.isEndPoint) {
-    089:                 String newMessage = message.substring(i);
-    090:
-    091:                 /*
-    092:                  * Get all the words that could be formed by the remainder of
-    093:                  * the message, and add them on to the end of this message.
-    094:                  */
-    095:                 Set<String> s2 = findWords(root, newMessage);
-    096:
-    097:                 if (s2 != null) {
-    098:                     for (String s : s2) {
-    099:                         wordsFound.add(message.substring(0, i) + " " + s);
-    100:                     }
-    101:                 }
-    102:             }
-    103:
-    104:             // If we're able to follow the dictionary tree deeper, than do so.
-    105:             if (n.getFollower(characters[i]) == null) {
-    106:                 return wordsFound;
-    107:             }
-    108:
-    109:             n = n.getFollower(characters[i]);
-    110:         }
-    111:
-    112:         if (n.isEndPoint) {
-    113:             wordsFound.add(message);
-    114:             return wordsFound;
-    115:         }
-    116:
-    117:         return null;
-    118:     }
-    119:
-    120:     /*
-    121:      * A node in the dictionary tree.  Notes wehter it marks the end of a
-    122:      * word, and also contains all the letters that follow to form longer
-    123:      * words.
-    124:      */
-    125:     class LetterNode {
-    126:
-    127:         boolean isEndPoint = false;
-    128:
-    129:         LetterNode[] followers = new LetterNode[26];
-    130:
-    131:         void setFollower(Character c, LetterNode n) {
-    132:             followers[c - 'A'] = n;
-    133:         }
-    134:
-    135:         LetterNode getFollower(Character c) {
-    136:             return followers[c - 'A'];
-    137:         }
-    138:     }
-    139: }
+        074:
+        075:         Set<String> wordsFound = new HashSet<>();
+            076:         LetterNode n = root;
+            077:
+            078:         char[] characters = message.toCharArray();
+            079:
+            080:         for (int i = 0; i < characters.length; i++) {
+            081:
+            082:             /*
+            083:              * If the LetterNode is designated as an EndPoint then we've
+            084:              * reached the end of a word.  Recursively call findWords with
+            085:              * the remainder of the message.  Also, continue down the tree at
+            086:              * we may be able to match a longer word instead.
+            087:              */
+            088:             if (n.isEndPoint) {
+            089:                 String newMessage = message.substring(i);
+            090:
+            091:                 /*
+            092:                  * Get all the words that could be formed by the remainder of
+            093:                  * the message, and add them on to the end of this message.
+            094:                  */
+            095:                 Set<String> s2 = findWords(root, newMessage);
+                096:
+                097:                 if (s2 != null) {
+                098:                     for (String s : s2) {
+                099:                         wordsFound.add(message.substring(0, i) + " " + s);
+                100:                     }
+                101:                 }
+                102:             }
+                103:
+                104:             // If we're able to follow the dictionary tree deeper, than do so.
+                105:             if (n.getFollower(characters[i]) == null) {
+                106:                 return wordsFound;
+                107:             }
+                108:
+                109:             n = n.getFollower(characters[i]);
+                110:         }
+                111:
+                112:         if (n.isEndPoint) {
+                113:             wordsFound.add(message);
+                114:             return wordsFound;
+                115:         }
+                116:
+                117:         return null;
+                118:     }
+                119:
+                120:     /*
+                121:      * A node in the dictionary tree.  Notes whether it marks the end of a
+                122:      * word, and also contains all the letters that follow to form longer
+                123:      * words.
+                124:      */
+                125:     class LetterNode {
+                126:
+                127:         boolean isEndPoint = false;
+                128:
+                129:         LetterNode[] followers = new LetterNode[26];
+                130:
+                131:         void setFollower(Character c, LetterNode n) {
+                132:             followers[c - 'A'] = n;
+                133:         }
+                134:
+                135:         LetterNode getFollower(Character c) {
+                136:             return followers[c - 'A'];
+                137:         }
+                138:     }
+                139: }
 </pre>
 
 <div style="margin-top:20px;margin-bottom:5px;font-size:18px;font-weight:bold;text-decoration:underline">

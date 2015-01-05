@@ -8,8 +8,8 @@
 
     <div class="header">Overview:</div>
     <p>
-    Given a dictionary determine the possible word combinations that may be in a message.
-</p>
+        Given a dictionary determine the possible word combinations that may be in a message.
+    </p>
 
     <div class="header">Java Source:</div>
     <div class="code">
@@ -94,70 +94,70 @@
     79:         return solutions[solutions.length - 1].trim();
     80:     }
     81: }</pre>
-</div>
+    </div>
 
     <div class="header">Notes:</div>
 
-<p>
-    In my first attempt at this problem, I used a solution involving tries.
-    Everything went smoothly, it passed all my tests on the first
-    attempt. I submitted to the TopCoder arena, and it passed all their tests -
-    except test #27. There's a 2 second time limit, and my code took about two
-    and a half minutes to pass. Time to scrap the code, and use a better
-    algorithm.
-</p>
+    <p>
+        In my first attempt at this problem, I used a solution involving tries.
+        Everything went smoothly, it passed all my tests on the first
+        attempt. I submitted to the TopCoder arena, and it passed all their tests -
+        except test #27. There's a 2 second time limit, and my code took about two
+        and a half minutes to pass. Time to scrap the code, and use a better
+        algorithm.
+    </p>
 
-<p>
-    The second attempt uses dynamic programming and is a huge
-    improvement performance wise. Test #27 now runs in 0.008 seconds!
-</p>
+    <p>
+        The second attempt uses dynamic programming and is a huge
+        improvement performance wise. Test #27 now runs in 0.008 seconds!
+    </p>
 
-<p>
-    It begins by initializing two arrays: numOfSolutions[] and solutions[].
-    numOfSolutions[x] contains the number of ways that position x in the
-    message can reached starting from the beginning. So, if my dictionary
-    contains {"H", "I", "HI"}, and the message is "HIT" - there are two ways
-    to arrive at the letter T. Either start with H, then use I; or just
-    start with HI.
-    The goal is numOfSolutions[numOfSolutions.length - 1] = 1. That is - there
-    is one, and only one, way to reach the end of the message.
-</p>
+    <p>
+        It begins by initializing two arrays: numOfSolutions[] and solutions[].
+        numOfSolutions[x] contains the number of ways that position x in the
+        message can reached starting from the beginning. So, if my dictionary
+        contains {"H", "I", "HI"}, and the message is "HIT" - there are two ways
+        to arrive at the letter T. Either start with H, then use I; or just
+        start with HI.
+        The goal is numOfSolutions[numOfSolutions.length - 1] = 1. That is - there
+        is one, and only one, way to reach the end of the message.
+    </p>
 
-<p>
-    The second array solutions[] contains the decoded message that
-    led up to that point. Each position is initialized to "IMPOSSIBLE!".
-    The first time a position is reached, solutions[x] gets set to the
-    decoded message at that point. If the position is reached again via
-    another path, then solutions[x] is set to "AMBIGUOUS!".
-</p>
+    <p>
+        The second array solutions[] contains the decoded message that
+        led up to that point. Each position is initialized to "IMPOSSIBLE!".
+        The first time a position is reached, solutions[x] gets set to the
+        decoded message at that point. If the position is reached again via
+        another path, then solutions[x] is set to "AMBIGUOUS!".
+    </p>
 
-<p>
-    Then, it's just a matter of looping through each character in the
-    message. If there was no way to reach that character, or if that
-    character has been reach by more than one path, then we'll skip
-    it - leaving it as either IMPOSSIBLE! or AMBIGUOUS!.
-</p>
+    <p>
+        Then, it's just a matter of looping through each character in the
+        message. If there was no way to reach that character, or if that
+        character has been reach by more than one path, then we'll skip
+        it - leaving it as either IMPOSSIBLE! or AMBIGUOUS!.
+    </p>
 
-<p>
-    If there is one path to that character, then we try appending each
-    dictionary word to our current position. If adding the dictionary word does
-    not take us beyond the end of the message, and it matches the next
-    sequence of characters, then we'll mark the end of the new combined message
-    as having 1 solution if it had 0 before, or 2 if it had 1 before.
-    There's no need to keep incrementing the solution count beyond 2. If the
-    solution count becomes 2, the solution is marked as AMBIGUOS!.
-</p>
+    <p>
+        If there is one path to that character, then we try appending each
+        dictionary word to our current position. If adding the dictionary word does
+        not take us beyond the end of the message, and it matches the next
+        sequence of characters, then we'll mark the end of the new combined message
+        as having 1 solution if it had 0 before, or 2 if it had 1 before.
+        There's no need to keep incrementing the solution count beyond 2. If the
+        solution count becomes 2, the solution is marked as AMBIGUOUS!.
+    </p>
 
-<p>
-    Upon reaching the return statement, the solutions array will contain
-    either IMPOSSIBLE!, AMBIGUOUS!, or a valid solution for every substring of
-    the message that starts at the beginning.  So, it's just a matter of
-    returning the last value, and not forgetting to trim off the final space.
-</p>
+    <p>
+        Upon reaching the return statement, the solutions array will contain
+        either IMPOSSIBLE!, AMBIGUOUS!, or a valid solution for every substring of
+        the message that starts at the beginning.  So, it's just a matter of
+        returning the last value, and not forgetting to trim off the final space.
+    </p>
 
     <div class="footer">
         <p><i>Thank you</i> for taking the time to read this solution. I welcome
             any feedback you may have.</p>
     </div>
-    
+
 </div>
