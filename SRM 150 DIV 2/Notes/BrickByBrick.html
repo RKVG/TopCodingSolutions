@@ -1,0 +1,363 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1751"
+           target="_blank">TopCoder Problem Statement - BrickByBrick</a>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Simulate a BreakOut type game, where a ball bounces around destroying
+        bricks.
+    </p>
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>001: /*
+002: TopCoder
+003: Single Round Match: 150
+004: Division: 2
+005: Level: 3
+006: Points: 1100
+007: Description: http://community.topcoder.com/stat?c=problem_statement&pm=1751
+008:  */
+009:
+010: import java.util.HashSet;
+011: import java.util.Set;
+012:
+013: public class BrickByBrick {
+014:
+015:     /*
+016:      * Prints out the current state of the board and ball.  The ball is
+017:      * represented as an 'o'.
+018:      */
+019:     private static void printState(int[][] board, Ball ball) {
+020:
+021:         System.out.println(ball.toString());
+022:
+023:         for (int y = 0; y < board.length; y++) {
+024:             for (int x = 0; x < board[0].length; x++) {
+025:                 if ((y == ball.y) && (x == ball.x)) {
+026:                     System.out.print('o');
+027:                 } else if (board[y][x] < 0) {
+028:                     System.out.print('#');
+029:                 } else {
+030:                     System.out.print(board[y][x]);
+031:                 }
+032:             }
+033:             System.out.println();
+034:         }
+035:         System.out.println();
+036:     }
+037:
+038:     public int timeToClear(String[] map) {
+039:
+040:         int numBricks = 0;
+041:
+042:         int sizeX = (map[0].length() * 2) + 1;
+043:         int sizeY = (map.length * 2) + 1;
+044:
+045:         int[][] board = new int[sizeY][sizeX];
+046:
+047:         /*
+048:          * Create an indestructible boarder around the board.  Indestructible
+049:          * bricks are represented by a -1.
+050:          */
+051:
+052:         // Top and bottom borders
+053:         for (int x = 0; x < sizeX; x++) {
+054:             board[0][x] = -1;
+055:             board[sizeY - 1][x] = -1;
+056:         }
+057:
+058:         // Right and left borders
+059:         for (int y = 0; y < sizeY; y++) {
+060:             board[y][0] = -1;
+061:             board[y][sizeX - 1] = -1;
+062:         }
+063:
+064:         // Load the board.
+065:         int y = 1;
+066:         for (String s : map) {
+067:             int x = 1;
+068:             for (char c : s.toCharArray()) {
+069:                 switch (c) {
+070:                     case '.':
+071:                         break;
+072:
+073:                     case 'B':
+074:                         numBricks++;
+075:
+076:                         /*
+077:                          * Increase the count on all it's edges.  If the edge
+078:                          * is shared with an indestructible neighbor,
+079:                          * leave it alone
+080:                          */
+081:                         if (board[y - 1][x] >= 0) {
+082:                             board[y - 1][x] += 1;
+083:                         }
+084:                         if (board[y + 1][x] >= 0) {
+085:                             board[y + 1][x] += 1;
+086:                         }
+087:                         if (board[y][x - 1] >= 0) {
+088:                             board[y][x - 1] += 1;
+089:                         }
+090:                         if (board[y][x + 1] >= 0) {
+091:                             board[y][x + 1] += 1;
+092:                         }
+093:                         break;
+094:
+095:                     // Set the edges for an indestructible brick.
+096:                     case '#':
+097:                         board[y - 1][x] = -1;
+098:                         board[y + 1][x] = -1;
+099:                         board[y][x - 1] = -1;
+100:                         board[y][x + 1] = -1;
+101:                 }
+102:                 x += 2;
+103:             }
+104:             y += 2;
+105:         }
+106:
+107:         Ball ball = new Ball();
+108:
+109:         /*
+110:          * Holds a set of integers representing the state of the ball.  If we
+111:          * see the same state again, then declare an infinite loop.
+112:          * The set is cleared whenever a brick is broken.
+113:          */
+114:         final Set<Integer> loopDetector = new HashSet<>();
+        115:
+        116:         int moves = 0;
+        117:
+        118:         // Quit if we've seen this state before.
+        119:         while (!loopDetector.contains(ball.getState())) {
+        120:
+        121:             moves++;
+        122:
+        123:             loopDetector.add(ball.getState());
+        124:
+        125:             // May not pass timing tests if this is enabled.
+        126: //            printState(board, ball);
+        127:
+        128:             ball.move();
+        129:
+        130:             // Space is empty
+        131:             if (board[ball.y][ball.x] == 0) {
+        132:                 continue;
+        133:
+        134:                 // An indestructible brick, just change directions.
+        135:             } else if (board[ball.y][ball.x] < 0) {
+        136:                 ball.changeDir();
+        137:
+        138:                 // Found a brick to break
+        139:             } else {
+        140:
+        141:                 numBricks--;
+        142:                 if (numBricks == 0) { return moves; }
+        143:
+        144:                 loopDetector.clear();  // Reset the infinite loop detector.
+        145:
+        146:                 int brokenBrick_x;
+        147:                 int brokenBrick_y;
+        148:
+        149:                 /*
+        150:                  * Determine if we hit a side of the brick, or the top/bottom.
+        151:                  * Use this to get the position of the middle of the brick.
+        152:                  */
+        153:                 if (ball.isSide) {
+        154:                     brokenBrick_x = ball.x + ball.deltaX;
+        155:                     brokenBrick_y = ball.y;
+        156:                 } else {
+        157:                     brokenBrick_x = ball.x;
+        158:                     brokenBrick_y = ball.y + ball.deltaY;
+        159:                 }
+        160:
+        161:                 /*
+        162:                  * Decrement the count for all the edges of this brick,
+        163:                  * unless the edge is shared with an indestructible brick.
+        164:                  */
+        165:                 if (board[brokenBrick_y][brokenBrick_x + 1] > 0) {
+        166:                     board[brokenBrick_y][brokenBrick_x + 1] -= 1;
+        167:                 }
+        168:                 if (board[brokenBrick_y][brokenBrick_x - 1] > 0) {
+        169:                     board[brokenBrick_y][brokenBrick_x - 1] -= 1;
+        170:                 }
+        171:                 if (board[brokenBrick_y - 1][brokenBrick_x] > 0) {
+        172:                     board[brokenBrick_y - 1][brokenBrick_x] -= 1;
+        173:                 }
+        174:                 if (board[brokenBrick_y + 1][brokenBrick_x] > 0) {
+        175:                     board[brokenBrick_y + 1][brokenBrick_x] -= 1;
+        176:                 }
+        177:
+        178:                 ball.changeDir();
+        179:             }
+        180:         }
+        181:
+        182:         return -1;  // Infinit loop detected.
+        183:     }
+        184:
+        185:     private class Ball {
+        186:
+        187:         int x;
+        188:         int y;
+        189:         short deltaX;
+        190:         short deltaY;
+        191:
+        192:         /*
+        193:          * On every move, the ball alternates between passing through
+        194:          * aTop/Bottom, or a Side
+        195:          */
+        196:         boolean isSide = false;
+        197:
+        198:         // Ball always starts in Top Left square going down and to the right.
+        199:         Ball() {
+        200:             this.x = 1;
+        201:             this.y = 0;
+        202:             this.deltaX = 1;
+        203:             this.deltaY = 1;
+        204:         }
+        205:
+        206:         void move() {
+        207:             x += deltaX;
+        208:             y += deltaY;
+        209:             isSide = !isSide;
+        210:         }
+        211:
+        212:         void changeDir() {
+        213:             if (isSide) {
+        214:                 deltaX *= -1;
+        215:             } else {
+        216:                 deltaY *= -1;
+        217:             }
+        218:         }
+        219:
+        220:         /*
+        221:          * Returns a unique int based on the position and movement of the
+        222:          * ball.  This will be used to determine if we've entered an infinite
+        223:          * loop.  If no bricks have been broken since the last time this
+        224:          * state was seen, then it's time to quit.
+        225:          */
+        226:         int getState() {
+        227:             int state = 1;
+        228:             state = (state * 100) + x;
+        229:             state = (state * 100) + y;
+        230:             state = (state * 10) + deltaX + 1;
+        231:             state = (state * 10) + deltaY + 1;
+        232:             return state;
+        233:         }
+        234:
+        235:         public String toString() {
+        236:             return "X=" + x + " Y=" + y + " deltaX=" + deltaX + " deltaY=" +
+        237:                     deltaY +
+        238:                     " isSide=" + isSide + " state=" + getState();
+        239:         }
+        240:     }
+        241:</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        This was a fun little problem to solve. I've left the printState()
+        method in the source above so you can see the ball bouncing around. Just
+        un-comment line 126 to enable it.
+    </p>
+
+    <p>
+        The first problem was in determining how to represent the board. I
+        choose to use a 2-dimensional array, roughly twice as large (in each
+        dimension) as the input array. First, the board is surrounded with
+        indestructible bricks. This avoids the trouble of detecting
+        when the ball reaches the edge of the plaing area. The two loops at
+        lines 53, and 59 create this border.
+    </p>
+
+    <p>The loop beginning at line 65 sets up the interior of the playing area. Each
+        brick in the input maps to four surrounding edges in the board. The edges
+        are represented as an integer which is a count of the number of bricks
+        that share that edge. Any edge shared with an indestructible brick has
+        a count of -1. The following example helps to illustrate:
+    </p>
+
+    <p>
+			<pre>
+				<u>Inuput:</u>
+				.B
+				BB
+
+				<u>board:</u>
+				-1  o -1 -1 -1
+				-1  .  1  B -1
+				-1  1     2 -1
+				-1  B  2  B -1
+				-1 -1 -1 -1 -1
+
+				o - The ball, at it's starting position.
+
+				(Note: the .'s and B's in board are only present for illustration,
+				they are not stored in the array.)
+			</pre>
+    </p>
+
+    <p>
+        The next problem is how to model the ball's movement. The details of
+        this are captured within the Ball class. There are two variables, x
+        and y, that keep track of it's position. deltaX, and deltaY track how
+        the position changes from move to move. deltaX and deltaY both initially
+        have a value of 1. When the ball bumps into a brick, either deltaX or
+        deltaY is multiplied by -1 to change it's direction.
+    </p>
+
+    <p>
+        An important insight is that on every move, the ball will alternate between
+        passing through a top/bottom and a left/right edge. This state is
+        stored in the Ball class's isSide boolean variable. So, if the ball hits
+        a brick, and isSide is true, then we negate deltaX. If isSide is false,
+        then deltaY is negated.
+    </p>
+
+    <p>
+        Collisions are detected by comparing the ball's position to the matching
+        position in the board. If the board contains a -1, then the brick is
+        indestructible, and we simple call changeDir(). If the board
+        contains a number > 0, then a breakable brick has been hit. First, we
+        decrement the brick count and check to see if all bricks have
+        been destroyed. Failing that, we find the center of the brick that was
+        hit using the ball's position, whether it's hitting a side or
+        top/bottom, and the direction the ball was moving. This logic is done on
+        lines 153-159.  From the center, we decrement the edge count on all
+        surrounding, non-indestructible, bricks.  Note, that the edge the ball
+        struck must now be 0.
+    </p>
+
+    <p>
+        In the illustration above, the ball will move down and right
+        and encounters a 1. isSide will be true, so we know the
+        center of the brick that was struck will either be one spot to the left
+        or one to the right of the ball's current position. By looking at
+        deltaX, we see the ball was moving left-to-right, and therefore, the
+        center is the B on 2nd row from the top. On the next move, the ball will
+        be moving right to left, and will strike the edge while isSide = false.
+        The center of the brick will be the B in the second column from the left.
+    </p>
+
+    <p>
+        So far, we have a ball that will bounce around the arena destroying
+        bricks until there are none left.  The final step is to detect when there
+        are un-reachable bricks.  For this, I created a Set called loopDetector
+        and the Ball class's getState() methods.  On each move, getState() is
+        called and the value is stored in the loopDetector.  If the ball ever
+        returns to the same position, and is moving in the same direction, then
+        getState() will return a value that already exists in the loopDetector set.
+        Declare an infinity loop, and return -1 to quit..  Whenever a brick is
+        broken, the loopDetector set is cleared.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+    </div>
+</div>

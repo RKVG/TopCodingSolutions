@@ -1,55 +1,55 @@
 public class StripePainter {
 
-    private static final char BLANK_COLOR = 'A' - 1;
-    private static final int MAX_COLORS = 27;  // A-Z plus one for blank
+	private static final char BLANK_COLOR = 'A' - 1;
+	private static final int MAX_COLORS = 27;  // A-Z plus one for blank
 
-    /*
+	/*
     * Holds all the combinations of starting position, string size, and color
     * that we've encountered before.  If they come up again, we can return
     * the stored value and avoid re-calculating.
     */
-    int[][][] alreadySeen;
+	int[][][] alreadySeen;
 
-    public int minStrokes(String stripes) {
+	public int minStrokes(String stripes) {
 
-        int length = stripes.length();
+		int length = stripes.length();
 
         /*
         * Initialize the alreadySeen array.  The Java spec guarantees all
         * values will be set to zero.  No need to do it explicitly.
         */
-        alreadySeen = new int[length][length + 1][MAX_COLORS];
+		alreadySeen = new int[length][length + 1][MAX_COLORS];
 
         /*
         * Calculate calculateMinStrokes on the entire stripes String, starting
         * with a blank canvas.
         */
-        return calculateMinStrokes(stripes, 0, length, BLANK_COLOR);
-    }
+		return calculateMinStrokes(stripes, 0, length, BLANK_COLOR);
+	}
 
-    private int calculateMinStrokes(String stripes, int start, int size,
-                                    char color) {
+	private int calculateMinStrokes(String stripes, int start, int size,
+									char color) {
 
-        // Breaks the recursive calls.
-        if (size == 0) return 0;
+		// Breaks the recursive calls.
+		if (size == 0) return 0;
 
         /*
         * If the left-most color matches the given color, then just move
         * on to the next stripe.
         */
-        if (stripes.charAt(start) == color) {
-            return calculateMinStrokes(stripes, start + 1, size - 1, color);
-        }
+		if (stripes.charAt(start) == color) {
+			return calculateMinStrokes(stripes, start + 1, size - 1, color);
+		}
 
         /*
         * If we've already calculated this combination of starting position,
         * string length, and colore; then just return that value.
         */
-        if (alreadySeen[start][size][color - BLANK_COLOR] > 0) {
-            return alreadySeen[start][size][color - BLANK_COLOR];
-        }
+		if (alreadySeen[start][size][color - BLANK_COLOR] > 0) {
+			return alreadySeen[start][size][color - BLANK_COLOR];
+		}
 
-        int min = Integer.MAX_VALUE;
+		int min = Integer.MAX_VALUE;
 
         /*
         * Calculates the minimum number of strokes for all possible
@@ -60,16 +60,16 @@ public class StripePainter {
         * character is added to the first call, and removed from the second
         * call.
         */
-        for (int i = 1; i <= size; i++) {
-            min = Math.min(min, 1 +
-                    calculateMinStrokes(stripes, start + 1, i - 1, stripes.charAt(start)) +
-                    calculateMinStrokes(stripes, start + i, size - i, color));
-        }
+		for (int i = 1; i <= size; i++) {
+			min = Math.min(min, 1 +
+					calculateMinStrokes(stripes, start + 1, i - 1, stripes.charAt(start)) +
+					calculateMinStrokes(stripes, start + i, size - i, color));
+		}
 
-        // Store the calculate value to avoid having to calculate it again.
-        alreadySeen[start][size][color - BLANK_COLOR] = min;
+		// Store the calculate value to avoid having to calculate it again.
+		alreadySeen[start][size][color - BLANK_COLOR] = min;
 
-        return min;
+		return min;
 
-    }
+	}
 }

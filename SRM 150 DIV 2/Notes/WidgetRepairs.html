@@ -8,8 +8,8 @@
 
     <div class="header">Overview:</div>
     <p>
-  Determine the number of days it will take a repair shop to work through the incoming items.
-</p>
+        Determine the number of days it will take a repair shop to work through the incoming items.
+    </p>
 
 
     <div class="header">Java Source:</div>
@@ -57,20 +57,20 @@
 41:         return workingDays;
 42:     }
 43: }</pre>
-</div>
+    </div>
 
     <div class="header">Notes:</div>
-<p>
-  Each day, the repair shop takes in a number of items, and works through some other number of items.  This solution uses the variable queue to store any left over items that built up from previous days.
-</p>
+    <p>
+        Each day, the repair shop takes in a number of items, and works through some other number of items.  This solution uses the variable queue to store any left over items that built up from previous days.
+    </p>
 
-<p>
-  Any day that had items to work on (either from a previous day, or that arrived that day) are counted as a working day.
-</p>
+    <p>
+        Any day that had items to work on (either from a previous day, or that arrived that day) are counted as a working day.
+    </p>
 
-<p>
-  There's just two things to be careful of.  First, when subtracting off the number of items that are processed in a day, make sure the queue doesn't go below zero - Line 32.  And second, after items have stopped arriving, be sure to count the remaining days to work through the backlog - Lines 36-39
-</p>
+    <p>
+        There's just two things to be careful of.  First, when subtracting off the number of items that are processed in a day, make sure the queue doesn't go below zero - Line 32.  And second, after items have stopped arriving, be sure to count the remaining days to work through the backlog - Lines 36-39
+    </p>
 
     <div class="footer">
         <p><i>Thank you</i> for taking the time to read this solution. I welcome

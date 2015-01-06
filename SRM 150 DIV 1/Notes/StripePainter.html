@@ -93,30 +93,30 @@
 
     <div class="header">Notes:</div>
 
-<p>
-  For any given pattern X (where X represents any number of stripes) a new pattern xX (where x is one additional stripe to the left side of X) can be
-  created with just 1 more stroke than the number of strokes neeeded to create X.  We'll use this as an upper-bound. So if the pattern X takes 10 strokes,
-  then xX will take at most 11 - possibly less.
-</p>
+    <p>
+        For any given pattern X (where X represents any number of stripes) a new pattern xX (where x is one additional stripe to the left side of X) can be
+        created with just 1 more stroke than the number of strokes needed to create X.  We'll use this as an upper-bound. So if the pattern X takes 10 strokes,
+        then xX will take at most 11 - possibly less.
+    </p>
 
-<p>
-  The strategy then is to skip the left-most stripe and solve for everything to the right of it.  Then determine if the left-most stripe can be added with 0
-  or 1 additional strokes.  For example: GR takes 2 stroke, but R GR also only needs 2 because the left-most and right-most stripes are the same color (You'd
-  paint R first, and then put a G in the middle of it).  If the ends weren't the same color, as in B GR, then a third stripe would be needed.
-</p>
+    <p>
+        The strategy then is to skip the left-most stripe and solve for everything to the right of it.  Then determine if the left-most stripe can be added with 0
+        or 1 additional strokes.  For example: GR takes 2 stroke, but R GR also only needs 2 because the left-most and right-most stripes are the same color (You'd
+        paint R first, and then put a G in the middle of it).  If the ends weren't the same color, as in B GR, then a third stripe would be needed.
+    </p>
 
-<p>
-  The loop at lines 63-67 divides the substring to the right of the current position into 2 segments.  It then tries every possible combination of these
-  segment's lengths.  So, if the part to the right was 4 characters long, the first segment would be called with lengths 0, 1, 2, 3, and 4 - while the second
-  segement would have lenghts of 4, 3, 2, 1, and 0.  This ensures that each way of dividing up the part to the right is tried.
-</p>
+    <p>
+        The loop at lines 63-67 divides the substring to the right of the current position into 2 segments.  It then tries every possible combination of these
+        segment's lengths.  So, if the part to the right was 4 characters long, the first segment would be called with lengths 0, 1, 2, 3, and 4 - while the second
+        segment would have lengths of 4, 3, 2, 1, and 0.  This ensures that each way of dividing up the part to the right is tried.
+    </p>
 
-<p>
-  The solution also uses the notion of memoization.  This has been discussed in earlier posts (see HillHike).  The idea is that once a particular pattern
-  has been calculated, we'll store it so it never needs to be calculated again.  Line 70 stores each combination of start position, string length, and
-  color that gets calculated.  Then at line 48, we check to see if the combination has been calculated before.  For some tests, it's not possible
-  to finished within the time limit without this technique.
-</p>
+    <p>
+        The solution also uses the notion of memoization.  This has been discussed in earlier posts (see HillHike).  The idea is that once a particular pattern
+        has been calculated, we'll store it so it never needs to be calculated again.  Line 70 stores each combination of start position, string length, and
+        color that gets calculated.  Then at line 48, we check to see if the combination has been calculated before.  For some tests, it's not possible
+        to finished within the time limit without this technique.
+    </p>
 
     <div class="footer">
         <p><i>Thank you</i> for taking the time to read this solution. I welcome
