@@ -248,21 +248,21 @@
 </p>
 
 <p>
-  To implement the stack, I chose to extend java.util.Stack and override the pop and push methods.  Although the problem doesn't
+  To implement the stack, I chose to extend java.util.Stack and override the pop() and push() methods.  Although the problem doesn't
   explicitly state it, you can see from the first example that if pop() is called on an empty stack, it should return 0.  The
   default behavior of java.util.Stack is to throw an EmptyStackException.  I also modified push() to check that the value is
-  between MIN_STACK_VAL (-1000000000) and MAX_STAC_VAL (1000000000) before pushing it.  If the value is outside these bounds,
+  between MIN_STACK_VAL (-1000000000) and MAX_STACK_VAL (1000000000) before pushing it.  If the value is outside these bounds,
   it will throw an IllegalArgumentException.
 </p>
 
 <p>
   When the ',' command is encountered, a value is popped from the stack and appended to output.  This is the only time that
-  output is modified.  Whenever output changes, we check to see if it now equals source, or failing that, if source starts with
-  output.
+  output is modified.  Whenever output changes, we check to see if it now equals source, or failing that, ensure source continues
+  to begin with output.
 </p>
 
 <p>
-  Since output is only changed by the ',' command, '@' is ever encountered, we return BADEND.  At that point
+  Since output is only changed by the ',' command, if '@' is ever encountered, we return BADEND.  At that point
   output cannot match the program since we would have caught it when processing the ',' command.
 </p>
 
