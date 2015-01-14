@@ -2,8 +2,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BombSweeperTest {
-
-	@Test
+	
+	@Test(timeout=2000)
 	public void test0() {
 		String[] board = new String[] {".....",
  ".....",
@@ -12,8 +12,8 @@ public class BombSweeperTest {
  "....."};
 		assertEquals(94.11764705882354, new BombSweeper().winPercentage(board), 1e-9);
 	}
-
-	@Test
+	
+	@Test(timeout=2000)
 	public void test1() {
 		String[] board = new String[] {"BBBBB",
  "B...B",
@@ -22,8 +22,8 @@ public class BombSweeperTest {
  "BBBBB"};
 		assertEquals(5.882352941176471, new BombSweeper().winPercentage(board), 1e-9);
 	}
-
-	@Test
+	
+	@Test(timeout=2000)
 	public void test2() {
 		String[] board = new String[] {".........",
  ".B..B..B.",
@@ -36,8 +36,8 @@ public class BombSweeperTest {
  "........."};
 		assertEquals(0.0, new BombSweeper().winPercentage(board), 1e-9);
 	}
-
-	@Test
+	
+	@Test(timeout=2000)
 	public void test3() {
 		String[] board = new String[] {".........................",
  ".........................",
@@ -45,8 +45,8 @@ public class BombSweeperTest {
  "........................."};
 		assertEquals(100.0, new BombSweeper().winPercentage(board), 1e-9);
 	}
-
-	@Test
+	
+	@Test(timeout=2000)
 	public void test4() {
 		String[] board = new String[] {"......B.......B..B...........................B....",
  "..............B..................BB..B............",
