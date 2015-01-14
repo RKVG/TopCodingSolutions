@@ -8,7 +8,7 @@
 
     <div class="header">Overview:</div>
     <p>
-Determine if any numbers in a set of data do not conform to Benford's law.  That is the number of itmes that start with a 1 should fall within an expected range.  The same goes for numbers starting with 2, 3, ... 9.
+Determine if any numbers in a set of data do not conform to Benford's law.  That is the number of items that start with a 1 should fall within an expected range.  The same goes for numbers starting with 2, 3, ... 9.
 </p>
 
     <div class="header">Java Source:</div>
@@ -40,9 +40,9 @@ Determine if any numbers in a set of data do not conform to Benford's law.  That
 25:         exp[0] = 0.0;
 26:
 27:         /*
-28:          * The probabibility for each position is given by the equation
+28:          * The probability for each position is given by the equation
 29:          * log(base 10) of (1 + 1/D)
-30:          * Multiply this by the number of tranactions to get the expected
+30:          * Multiply this by the number of transactions to get the expected
 31:          * number.
 32:          */
 33:         for (int i = 1; i < 10; i++) {
@@ -97,7 +97,7 @@ Determine if any numbers in a set of data do not conform to Benford's law.  That
 
     <div class="header">Notes:</div>
 <p>
-  There's just two parts to this solution, neigher of which is very challenging.  First we need to determine the number of items we expect to begin with each digit using Benford's law.  calculateExpectedArray() handles this part.  Using the number of transactions, it calculates the number of items we should expect to see for each starting digit.  These expected amounts are returned in an array where position 1 is the number we expect to see starting with the digit 1. position 2 is the number we expect to see starting with the digit 2, and so on up to 9.  We should not get any items starting with 0, but we'll fill that in anyway just as a place holder to avoid having to shift all of our indexes by 1.
+  There's just two parts to this solution, neither of which is very challenging.  First we need to determine the number of items we expect to begin with each digit using Benford's law.  calculateExpectedArray() handles this part.  Using the number of transactions, it calculates the number of items we should expect to see for each starting digit.  These expected amounts are returned in an array where position 1 is the number we expect to see starting with the digit 1. position 2 is the number we expect to see starting with the digit 2, and so on up to 9.  We should not get any items starting with 0, but we'll fill that in anyway just as a place holder to avoid having to shift all of our indexes by 1.
 </p>
 
 <p>
