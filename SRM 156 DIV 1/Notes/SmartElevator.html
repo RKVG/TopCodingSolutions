@@ -50,7 +50,7 @@
 25:         Set<Integer> waiting = new HashSet<>();
 26: 
 27:         // Add everyone to the waiting Set.
-28:         for (int i=0; i<arrivalTime.length; i++)  {
+28:         for (int i = 0; i < arrivalTime.length; i++) {
 29:             waiting.add(i);
 30:         }
 31: 
@@ -64,14 +64,14 @@
 39:     }
 40: 
 41:     private void moveElevator(Set<Integer> waiting, Set<Integer> elevator,
-42:                               int floor, int time)  {
+42:                               int floor, int time) {
 43: 
 44:         /*
 45:         * If there is nobody waiting, and nobody in the elevator, then we're
 46:         * done.  If time is smaller than anything previously seen, set it
 47:         * to our time.
 48:         */
-49:         if (waiting.isEmpty() && elevator.isEmpty())  {
+49:         if (waiting.isEmpty() && elevator.isEmpty()) {
 50:             minFinishTime = Math.min(minFinishTime, time);
 51:         }
 52: 
@@ -80,7 +80,7 @@
 55:         * Recursively call moveElevator().  We'll move one person in turn
 56:         * from the waiting Set to the elevator set.
 57:         */
-58:         for (int i : waiting)  {
+58:         for (int i : waiting) {
 59:             Set<Integer> newWaiting = new HashSet<>(waiting);
 60:             newWaiting.remove(i);
 61: 
@@ -101,7 +101,7 @@
 76:         * Recursively call moveElevator() removing one person from the
 77:         * elevator Set.
 78:         */
-79:         for (int i : elevator)  {
+79:         for (int i : elevator) {
 80:             Set<Integer> newElevator = new HashSet<>(elevator);
 81:             newElevator.remove(i);
 82: 
