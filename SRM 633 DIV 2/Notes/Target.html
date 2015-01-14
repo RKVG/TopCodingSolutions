@@ -1,0 +1,104 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13462"
+                       target="_blank">TopCoder Problem Statement - Target</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 633 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Draw a series of concentric squares.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Target {
+02: 
+03:     private static final char OFF = ' ';
+04:     private static final char ON = '#';
+05: 
+06:     public String[] draw(int n) {
+07: 
+08:         // Create a char[][] and initialize it.
+09:         char[][] target = new char[n][n];
+10: 
+11:         for (int y = 0; y < n; y++) {
+12:             for (int x = 0; x < n; x++) {
+13:                 target[y][x] = OFF;
+14:             }
+15:         }
+16: 
+17:         // Start the recursive calls.
+18:         drawSquare(target, 0);
+19: 
+20:         // Convert the char[][] into a String[] and return it.
+21:         String[] result = new String[n];
+22: 
+23:         for (int y = 0; y < n; y++) {
+24:             result[y] = new String(target[y]);
+25:         }
+26: 
+27:         return result;
+28:     }
+29: 
+30:     private void drawSquare(char[][] target, int topOrLeft) {
+31: 
+32:         int bottomOrRight = target.length - topOrLeft - 1;
+33: 
+34:         if (topOrLeft < bottomOrRight) {
+35:             drawSquare(target, topOrLeft + 2);
+36:         }
+37: 
+38:         for (int i = topOrLeft; i <= bottomOrRight; i++) {
+39:             target[topOrLeft][i] = ON;      // Top Row
+40:             target[bottomOrRight][i] = ON;  // Bottom Row
+41:             target[i][topOrLeft] = ON;      // Left Edge
+42:             target[i][bottomOrRight] = ON;  // Right Edge
+43:         }
+44: 
+45:     }
+46: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The solution uses recursion to draw all of the inner squares, and then completes the outer square.  The draw() method
+  simply initializes a new 2-dimensional char array and then calls drawSquare().  When drawSquare() completes, it just
+  converstion the char[][] back to a String[] and returns it.  The call to drawSquare() passes the char[][] and the index
+  0, which indicates the top-left corner of the outermost square.
+</p>
+
+<p>
+  The drawSquare() method handles all the work on turning on the appropriate locations.  It is passed the top-left corner
+  of the current square, and uses that and the size of the char[][] to determine the location of the bottom-right corner.
+  If these values are not the same, recursively call drawSquare moving the top-left corner in and down by 2.
+</p>
+
+<p>
+  As the recursion unwinds, we have a loop to draw each of the sides.  Note the index representing the top edge will always
+  equal the index of the left edge.  So one variable (topOrLeft) will suffice.  Similarly, the index for the bottom edge
+  will be the same as the index of the right edge - thus bottomOrRight.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
