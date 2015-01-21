@@ -1,0 +1,72 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1799"
+                       target="_blank">TopCoder Problem Statement - Inchworm</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 163 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count the number of leaves an inchworm will stop at and eat before making
+        it's way to the end of a branch.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Inchworm {
+02: 
+03:     public int lunchtime(int branch, int rest, int leaf) {
+04: 
+05:         int meals = 0;
+06: 
+07:         for (int p = 0; p <= branch; p += rest) {
+08:             if ((p % leaf) == 0) meals++;
+09:         }
+10: 
+11:         return meals;
+12:     }
+13: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  This is a simple problem that can be solved in less time that it takes to read the description.
+</p>
+
+<p>
+  We'll use the variable <strong>p</strong> to keep track of the inchworm's current position.  This starts at zero, and get
+  incremented by <strong>rest</strong> until the inchworm goes beyond the end of the branch.
+</p>
+
+<p>
+  At each position, we'll check to see if there's a leaf there, and if so, increment the number of meals eaten.  We can tell
+  if there is a leaf at the current position by using the % operator.  If position is evenly divided by leaf, then we've stopped
+  on a leaf.
+</p>
+
+<p>
+  Once <strong>p</strong> is greater than <strong>branch</strong> we can return the value in meals.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
