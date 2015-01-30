@@ -1,0 +1,114 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1854"
+                       target="_blank">TopCoder Problem Statement - PartySeats</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 164 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the arrangement of guests at a table for a dinner party.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: import java.util.PriorityQueue;
+02: import java.util.Queue;
+03: 
+04: public class PartySeats {
+05: 
+06:     public String[] seating(String[] attendees) {
+07: 
+08:         /*
+09:         * Separate the boys from the girls.  By using a PriorityQueue, we
+10:         * can easily pull out members in ascending order.
+11:         */
+12:         Queue<String> boys = new PriorityQueue<>();
+13:         Queue<String> girls = new PriorityQueue<>();
+14: 
+15:         for (String s : attendees) {
+16:             String[] attendee = s.split("\\s+");
+17:             if ("boy".equals(attendee[1])) {
+18:                 boys.add(attendee[0]);
+19:             } else {
+20:                 girls.add(attendee[0]);
+21:             }
+22:         }
+23: 
+24:         /*
+25:         * Ensure the arrangement is possible.
+26:         * The number of boys and girls must be equal, and both must be an
+27:         * even number.
+28:         */
+29:         if ((boys.size() != girls.size()) || ((boys.size() % 2) != 0)) {
+30:             return new String[0];
+31:         }
+32: 
+33:         String[] result = new String[attendees.length + 2];
+34:         result[0] = "HOST";
+35:         boolean isBoyNext = false;
+36: 
+37:         for (int i = 1; i < result.length; i++) {
+38: 
+39:             // Seat the Hostess at the 1/2 way point.
+40:             if (i == (result.length / 2)) {
+41:                 result[i] = "HOSTESS";
+42: 
+43:             } else {
+44:                 if (isBoyNext) {
+45:                     result[i] = boys.poll();
+46:                 } else {
+47:                     result[i] = girls.poll();
+48:                 }
+49:             }
+50: 
+51:             isBoyNext = !isBoyNext;
+52:         }
+53: 
+54:         return result;
+55:     }
+56: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  We can create a legal arrangmenet if two conditions are met.  First the number of boys must equals the number
+  of girls.  Second, the number of both must be divisible by two.  Since we've already checked that they're equal,
+  we only need to test one.  These two conditions become pretty clear if you draw the solution out on a piece of paper.
+</p>
+
+<p>
+  We'll start by separating the boys from the girst.  We can use Java's String.split() method to get the name
+  and gender of each attendee.  The espression split("\\s+") just splits on the next whitespace.  Then we
+  assign them to the correct Queue.  A PriorityQueue was choosen it because it automatically keeps the entries
+  in a sorted order.  We'll get the names in the order we need them practically for free.
+</p>
+
+<p>
+  Next, we check to see that the two conditions are met.  If so, we can proceed to building the result.  The
+  result String[] will have a length 2 larger than the input - in order to hold the HOST and HOSTESS.  Position
+  0 gets the host, and length / 2 gets the HOSTESS.  Then it's just a matter of alternating between pulling
+  the next girl and then boy off their respective queues until the result array is full.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,233 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1856"
+                       target="_blank">TopCoder Problem Statement - WhatSort</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 164 Round 1 - Division I, Level Two</td></tr>
+            <tr><td>Single Round Match 164 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the sorting method used to arrange a group of people.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.ArrayList;
+002: import java.util.Collections;
+003: import java.util.Comparator;
+004: import java.util.List;
+005: 
+006: 
+007: class Person {
+008: 
+009:     final int age;
+010:     final int weight;
+011:     final String name;
+012: 
+013:     Person(String name, int age, int weight) {
+014:         this.name = name;
+015:         this.age = age;
+016:         this.weight = weight;
+017:     }
+018: }
+019: 
+020: class PersonComparator implements Comparator<Person> {
+021: 
+022:     final String type;
+023: 
+024:     PersonComparator(String type) {
+025:         this.type = type;
+026:     }
+027: 
+028:     @Override
+029:     public int compare(Person p1, Person p2) {
+030: 
+031:         switch (type) {
+032: 
+033:             case "NAW":
+034:                 if (p1.name.compareTo(p2.name) != 0)
+035:                     return p1.name.compareTo(p2.name);
+036:                 if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
+037:                 if (p1.weight != p2.weight)
+038:                     return (p1.age > p2.age) ? -1 : 1;
+039:                 return 0;
+040:             case "NWA":
+041:                 if (p1.name.compareTo(p2.name) != 0)
+042:                     return p1.name.compareTo(p2.name);
+043:                 if (p1.weight != p2.weight)
+044:                     return (p1.weight > p2.weight) ? -1 : 1;
+045:                 if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
+046:                 return 0;
+047:             case "ANW":
+048:                 if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
+049:                 if (p1.name.compareTo(p2.name) != 0)
+050:                     return p1.name.compareTo(p2.name);
+051:                 if (p1.weight != p2.weight)
+052:                     return (p1.weight > p2.weight) ? -1 : 1;
+053:                 return 0;
+054:             case "AWN":
+055:                 if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
+056:                 if (p1.weight != p2.weight)
+057:                     return (p1.weight > p2.weight) ? -1 : 1;
+058:                 if (p1.name.compareTo(p2.name) != 0)
+059:                     return p1.name.compareTo(p2.name);
+060:                 return 0;
+061:             case "WAN":
+062:                 if (p1.weight != p2.weight)
+063:                     return (p1.weight > p2.weight) ? -1 : 1;
+064:                 if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
+065:                 if (p1.name.compareTo(p2.name) != 0)
+066:                     return p1.name.compareTo(p2.name);
+067:                 return 0;
+068:             case "WNA":
+069:                 if (p1.weight != p2.weight)
+070:                     return (p1.weight > p2.weight) ? -1 : 1;
+071:                 if (p1.name.compareTo(p2.name) != 0)
+072:                     return p1.name.compareTo(p2.name);
+073:                 if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
+074:                 return 0;
+075:             default:
+076:                 return 0;
+077:         }
+078: 
+079:     }
+080: }
+081: 
+082: public class WhatSort {
+083: 
+084:     public String sortType(String[] name, int[] age, int[] wt) {
+085: 
+086:         List<Person> inputList = new ArrayList<>();
+087:         List<Person> sortedList = new ArrayList<>();
+088: 
+089:         for (int i = 0; i < name.length; i++) {
+090:             Person p = new Person(name[i], age[i], wt[i]);
+091:             inputList.add(p);
+092:             sortedList.add(p);
+093:         }
+094: 
+095:         String result = null;
+096: 
+097:         Collections.sort(sortedList, new PersonComparator("NAW"));
+098:         if (inputList.equals(sortedList)) {
+099:             result = "NAW";
+100:         }
+101: 
+102:         Collections.sort(sortedList, new PersonComparator("NWA"));
+103:         if (inputList.equals(sortedList)) {
+104:             if (result != null) {
+105:                 return "IND";
+106:             } else {
+107:                 result = "NWA";
+108:             }
+109:         }
+110: 
+111:         Collections.sort(sortedList, new PersonComparator("ANW"));
+112:         if (inputList.equals(sortedList)) {
+113:             if (result != null) {
+114:                 return "IND";
+115:             } else {
+116:                 result = "ANW";
+117:             }
+118:         }
+119: 
+120:         Collections.sort(sortedList, new PersonComparator("AWN"));
+121:         if (inputList.equals(sortedList)) {
+122:             if (result != null) {
+123:                 return "IND";
+124:             } else {
+125:                 result = "AWN";
+126:             }
+127:         }
+128: 
+129:         Collections.sort(sortedList, new PersonComparator("WAN"));
+130:         if (inputList.equals(sortedList)) {
+131:             if (result != null) {
+132:                 return "IND";
+133:             } else {
+134:                 result = "WAN";
+135:             }
+136:         }
+137: 
+138:         Collections.sort(sortedList, new PersonComparator("WNA"));
+139:         if (inputList.equals(sortedList)) {
+140:             if (result != null) {
+141:                 return "IND";
+142:             } else {
+143:                 result = "WNA";
+144:             }
+145:         }
+146: 
+147:         return (result == null) ? "NOT" : result;
+148: 
+149:     }
+150: 
+151: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The approach is to sort the people using each of the six sorting methods described.  If the sort
+  matches the input, then that method may have been used.  Just check zero, or more than one possible
+  solutions.
+</p>
+
+<p>
+  The Person class simply stores the age, weight, and name together; and allows us to create a Comparator
+  to sort them.
+</p>
+
+<p>
+  The PersonComparator class provides the compare method for comparing two Person objects.  The
+  PersonComparator constructor takes a String which determins the sorting method that it will use.  This
+  happens in the switch statement inside the compare() method.  Each of the cases of the switch statement
+  are the same, except that the order of the comparisons varies.
+</p>
+
+<p>
+  Be extra careful here, if p1 should come
+  before p2, then we want to return -1 (or any negative int).  If p1 comes after p2, then we want to return 1
+  (or any positive int).  Since we want age to be ascending, we'll return -1 if p1 is less than p2.  But
+  weight is descending, we we'll return -1 if p1 is <strong>greater than</strong> p2.
+</p>
+
+<p>
+  The sortType() method just creates a List or Person objects using the given input arrays, and then a second
+  list sortedList that we'll sort using each of the sorting methods.  Whenever sortedList equals inputList, we
+  have a possible sorting method.
+</p>
+
+<p>
+  result is initially set to null.  If it's still null at the end, then none of the sorting methods was used.
+  If we attempt to set it to a value, and it was null, then we've found the first possible sorting method.  And
+  if we attempt to set it to a value, but it was not null, then there are multiple possibilities, and
+  we return IND.
+</p>
+
+<p>
+  There was a lot of typing in this solution, but none of it was particularly hard.  Just be careful in
+  the compare() method and it'll work out.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
