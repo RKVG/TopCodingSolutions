@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-
 
 class Person {
 
@@ -28,54 +25,67 @@ class PersonComparator implements Comparator<Person> {
     @Override
     public int compare(Person p1, Person p2) {
 
-        switch (type) {
+        int x;
 
+        switch (type) {
             case "NAW":
-                if (p1.name.compareTo(p2.name) != 0)
-                    return p1.name.compareTo(p2.name);
-                if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
-                if (p1.weight != p2.weight)
-                    return (p1.age > p2.age) ? -1 : 1;
-                return 0;
+                x = compareName(p1, p2);
+                if (x != 0) return x;
+                x = compareAge(p1, p2);
+                if (x != 0) return x;
+                return compareWeight(p1, p2);
+
             case "NWA":
-                if (p1.name.compareTo(p2.name) != 0)
-                    return p1.name.compareTo(p2.name);
-                if (p1.weight != p2.weight)
-                    return (p1.weight > p2.weight) ? -1 : 1;
-                if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
-                return 0;
+                x = compareName(p1, p2);
+                if (x != 0) return x;
+                x = compareWeight(p1, p2);
+                if (x != 0) return x;
+                return compareAge(p1, p2);
+
             case "ANW":
-                if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
-                if (p1.name.compareTo(p2.name) != 0)
-                    return p1.name.compareTo(p2.name);
-                if (p1.weight != p2.weight)
-                    return (p1.weight > p2.weight) ? -1 : 1;
-                return 0;
+                x = compareAge(p1, p2);
+                if (x != 0) return x;
+                x = compareName(p1, p2);
+                if (x != 0) return x;
+                return compareWeight(p1, p2);
+
             case "AWN":
-                if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
-                if (p1.weight != p2.weight)
-                    return (p1.weight > p2.weight) ? -1 : 1;
-                if (p1.name.compareTo(p2.name) != 0)
-                    return p1.name.compareTo(p2.name);
-                return 0;
+                x = compareAge(p1, p2);
+                if (x != 0) return x;
+                x = compareWeight(p1, p2);
+                if (x != 0) return x;
+                return compareName(p1, p2);
+
             case "WAN":
-                if (p1.weight != p2.weight)
-                    return (p1.weight > p2.weight) ? -1 : 1;
-                if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
-                if (p1.name.compareTo(p2.name) != 0)
-                    return p1.name.compareTo(p2.name);
-                return 0;
+                x = compareWeight(p1, p2);
+                if (x != 0) return x;
+                x = compareAge(p1, p2);
+                if (x != 0) return x;
+                return compareName(p1, p2);
+
             case "WNA":
-                if (p1.weight != p2.weight)
-                    return (p1.weight > p2.weight) ? -1 : 1;
-                if (p1.name.compareTo(p2.name) != 0)
-                    return p1.name.compareTo(p2.name);
-                if (p1.age != p2.age) return (p1.age < p2.age) ? -1 : 1;
-                return 0;
+                x = compareWeight(p1, p2);
+                if (x != 0) return x;
+                x = compareName(p1, p2);
+                if (x != 0) return x;
+                return compareAge(p1, p2);
+
             default:
                 return 0;
         }
 
+    }
+
+    private int compareName(Person p1, Person p2) {
+        return p1.name.compareTo(p2.name);
+    }
+
+    private int compareAge(Person p1, Person p2) {
+        return new Integer(p1.age).compareTo(p2.age);
+    }
+
+    private int compareWeight(Person p1, Person p2) {
+        return -1 * new Integer(p1.weight).compareTo(p2.weight);
     }
 }
 
@@ -83,69 +93,40 @@ public class WhatSort {
 
     public String sortType(String[] name, int[] age, int[] wt) {
 
-        List<Person> inputList = new ArrayList<>();
-        List<Person> sortedList = new ArrayList<>();
+        Person[] inputList = new Person[name.length];
 
         for (int i = 0; i < name.length; i++) {
             Person p = new Person(name[i], age[i], wt[i]);
-            inputList.add(p);
-            sortedList.add(p);
+            inputList[i] = p;
         }
 
-        String result = null;
+        String method = null;
 
-        Collections.sort(sortedList, new PersonComparator("NAW"));
-        if (inputList.equals(sortedList)) {
-            result = "NAW";
-        }
+        String[] sortingMethods = new String[]{"NAW", "NWA", "ANW",
+                "AWN", "WAN", "WNA"};
 
-        Collections.sort(sortedList, new PersonComparator("NWA"));
-        if (inputList.equals(sortedList)) {
+        for (String s : sortingMethods) {
+            String result = testSortingMethod(inputList, s);
             if (result != null) {
-                return "IND";
-            } else {
-                result = "NWA";
+                if (method != null) {
+                    return "IND";
+                } else {
+                    method = result;
+                }
             }
         }
 
-        Collections.sort(sortedList, new PersonComparator("ANW"));
-        if (inputList.equals(sortedList)) {
-            if (result != null) {
-                return "IND";
-            } else {
-                result = "ANW";
-            }
-        }
+        return (method == null) ? "NOT" : method;
+    }
 
-        Collections.sort(sortedList, new PersonComparator("AWN"));
-        if (inputList.equals(sortedList)) {
-            if (result != null) {
-                return "IND";
-            } else {
-                result = "AWN";
-            }
-        }
+    private String testSortingMethod(Person[] inputList, String method) {
 
-        Collections.sort(sortedList, new PersonComparator("WAN"));
-        if (inputList.equals(sortedList)) {
-            if (result != null) {
-                return "IND";
-            } else {
-                result = "WAN";
-            }
-        }
+        Person[] sortedList = new Person[inputList.length];
 
-        Collections.sort(sortedList, new PersonComparator("WNA"));
-        if (inputList.equals(sortedList)) {
-            if (result != null) {
-                return "IND";
-            } else {
-                result = "WNA";
-            }
-        }
+        System.arraycopy(inputList, 0, sortedList, 0, inputList.length);
+        Arrays.sort(sortedList, new PersonComparator(method));
 
-        return (result == null) ? "NOT" : result;
-
+        return (Arrays.equals(inputList, sortedList)) ? method : null;
     }
 
 }
