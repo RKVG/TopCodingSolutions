@@ -1,0 +1,84 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13454"
+                       target="_blank">TopCoder Problem Statement - MountainRanges</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 634 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count the number of peaks in a series of integers.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class MountainRanges {
+02: 
+03:     public int countPeaks(int[] heights) {
+04: 
+05:         int peaks = 0;
+06: 
+07:         // If there are no elements, there can be no peaks.
+08:         if (heights.length == 0)  return 0;
+09: 
+10:         /*
+11:          * If there is just one element, it is bigger than it's (non-existent)
+12:          * neighbors; and therefore a peak.
+13:          */
+14:         if (heights.length == 1) return 1;
+15: 
+16:         // Lengths must be at least 2 if we've reached this point.
+17: 
+18:         // Check left edge.
+19:         if (heights[0] > heights[1]) peaks++;
+20: 
+21:         // Check right edge.
+22:         if (heights[heights.length - 1] > heights[heights.length - 2]) peaks++;
+23: 
+24: 
+25:         // Check everything in between
+26:         for (int i = 1; i < heights.length - 1; i++) {
+27:             if ((heights[i] > heights[i - 1]) && (heights[i] > heights[i + 1]))
+28:                 peaks++;
+29:         }
+30: 
+31:         return peaks;
+32:     }
+33: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  First, check the special cases where the length of heights is either 0 or 1.  Now that we know the length of heights must be
+  at least 2, we having to check that our index is in bounds.
+</p>
+
+<p>
+  We check to see if the left edge is a peak, and then check the right edge.
+</p>
+
+<p>
+  Finally, we loop through each of the values in between.  Not much to this problem.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

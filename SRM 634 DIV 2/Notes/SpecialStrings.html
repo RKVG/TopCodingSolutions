@@ -1,0 +1,104 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13233"
+                       target="_blank">TopCoder Problem Statement - SpecialStrings</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 634 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Find the next string in lexicographical order that meets a given condition.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class SpecialStrings {
+02: 
+03:     public String findNext(String current) {
+04: 
+05:         // Work from right to left looking for the next '0'
+06:         for (int i = current.length() - 1; i >= 0; i--) {
+07:             if (current.charAt(i) == '0') {
+08: 
+09:                 /*
+10:                 * Create a copy of the currentArray.  Each position
+11:                 * less than i will match the corresponding position in
+12:                 * currentArray, each position greater than i will equal '1'
+13:                 */
+14:                 char[] copyOfCurrent = new char[current.length()];
+15:                 for (int j = 0; j < current.length(); j++) {
+16:                     copyOfCurrent[j] = (j < i) ? current.charAt(j) : '1';
+17:                 }
+18: 
+19:                 /*
+20:                 * We've found a special string.  Let's see if we can do
+21:                 * better by changing some characters to the right from
+22:                 * 1's to 0's.
+23:                 */
+24:                 if (isSpecial(new String(copyOfCurrent))) {
+25:                     
+26:                     for (int j = i + 1; j < copyOfCurrent.length; j++) {
+27:                         copyOfCurrent[j] = '0';
+28: 
+29:                         // If not special, change it back.
+30:                         if (!isSpecial(new String(copyOfCurrent))) {
+31:                             copyOfCurrent[j] = '1';
+32:                         }
+33:                     }
+34: 
+35:                     return new String(copyOfCurrent);
+36:                 }
+37:             }
+38:         }
+39: 
+40:         return "";
+41:     }
+42: 
+43:     private static final boolean isSpecial(String s) {
+44: 
+45:         for (int i = 1; i < s.length(); i++) {
+46:             if (s.substring(0, i).compareTo(s.substring(i)) >= 0) return false;
+47:         }
+48:         return true;
+49:     }
+50: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  Since we're looking for the next special string that follows current, it makes sense to work
+  from right to left replacing  0's with 1's to find our next candidate.  When we encounter a
+  0, we'll replace it with a 1, and then test to see if this new string is special.  If is not,
+  we move on to the next zero.  If it is, we keep everything to the left, and set everything
+  to the right to a 1.  This gives us an upper bound on what the next special string could
+  be.
+ </p>
+ 
+ <p>
+  With that upper bound, we then begin setting each position to the right to a 0, and then testing
+  to see if that results in a special string.  If it does, good, we'll leave it at 0 and carry on.
+  If setting it to zero does not result in a special string, then we must change it back to a 1.
+  When we reach the end of copyOfCurrent, we'll have the next special string ready to be returned.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
