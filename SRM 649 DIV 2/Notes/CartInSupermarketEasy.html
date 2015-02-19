@@ -1,0 +1,84 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13370"
+                       target="_blank">TopCoder Problem Statement - CartInSupermarketEasy</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 649 Round 1 - Division I, Level Three</td></tr>
+            <tr><td></td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the shortest time to remove a chain of shopping carts.  In each unit of time,
+        a chain of carts can either be split, or have a cart removed from the segment.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+CODE GOES HERE
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+	This solution is a great example of Dynamic Programming.  We'll begin with the minimum amount of time required
+  to process a simple chain of carts (0, 1, or 2 cart chains), and then use that to calculate the time for larger
+  chains.  We continue using what we've already calculated to build up larger chains until we've reached our goal.
+</p>
+
+<p>
+	  We start by declaring an int[][] knownTimes.  The first dimension holds a number of carts, the second
+	  dimension is a number of splits allowed, and the value is the best time that we can achieve under
+	  those constraints.  The array is initialized as follows:
+	  <ol>
+	  	<li>If the number of carts is 0, 1, or 2; then we can trivially remove all carts in 1 minute per cart</li>
+	  	<li>If there a 0 splits, then all we can do is remove 1 cart per minute.</li>
+	  	<li>In all other cases, we set the value to -1 to denote that we'll need to calculate the value</li>
+	  </ol>       
+</p>
+
+<p>
+	The real work is done in the solve() method.  First, check to see if we already know the solution for
+	the given number of carts and splits.  If so, just return that.  Otherwise, we'll need to calculate it.
+	Note that at this point, the number of splits must be at least one, becase we've initialized knowTimes
+	with vaues for whenever the number of splits is 0.
+</p>
+
+<p>
+	We now have two options - we can either remove a cart, or try to split the chain.  If we choose to remove
+	a cart, our time will be solve(numCarts - 1, numSplits) plus 1 additional minute.  This is the longest
+	we could possibly need.
+</p>
+
+<p>
+	If we choose to split the carts, we can do so in many different ways.  For a chain of x carts, the splits
+	could result in segments of size (1, x-1), (2, x-2), ... (x-1, 1).  And for each of these combinations,
+	the number of splits can be divided up in numerous ways between the two resulting segments.  The nested
+	for loops work through all possibled combinations.
+</p>
+
+<p>
+	For each split that is considered, our time to solve will be the maximum of the time it takes to solve
+	the two child segments, plus one additional minute (to perform the split).  As each solution is
+	calculated, we compare it to what we already have and keep the minimum.  When done, we store the
+	minimum time in knownTimes for future use, and then return it.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

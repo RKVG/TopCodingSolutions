@@ -1,0 +1,88 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13656"
+                       target="_blank">TopCoder Problem Statement - DecipherabilityEasy</a>
+                </td>
+            </tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine if a string can be formed from another, by dropping a single character.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class DecipherabilityEasy {
+02: 
+03:     public String check(String s, String t) {
+04: 
+05:         // Make sure s has one character more than t
+06:         if (s.length() != t.length() + 1) return "Impossible";
+07: 
+08:         int sIdx = 0;
+09:         int tIdx = 0;
+10: 
+11:         // Walk through each letter in t.
+12:         while (tIdx < t.length()) {
+13:             if (s.charAt(sIdx) != t.charAt(tIdx)) {
+14: 
+15:                 /*
+16:                 * If the characters don't match up, it's ok the first time.
+17:                 * Skip a letter in s and move on.  If it happens again,
+18:                 * return Impossible.
+19:                 */
+20:                 if (sIdx == tIdx) {
+21:                     sIdx++;
+22:                 } else {
+23:                     return "Impossible";
+24:                 }
+25: 
+26:             } else {
+27:                 sIdx++;
+28:                 tIdx++;
+29:             }
+30:         }
+31: 
+32:         return "Possible";
+33: 
+34:     }
+35: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+	To solve this problem, we'll use two indexes sIdx and tIdx to walk through the Strings s and t.  The indexes both start at
+	position 0.  So long as the characters are equal, the indexes increment together.  If the character in s does not match
+	the corresponding position in t, we'll advance sIdx - so long as sIdx and tIdx were previously equal.  If the indexes
+	were not equal, then we've found a second mismatch, so return "Impossible".
+</p>
+
+<p>
+	If we make it all the way to tIdx == t.length(), then return possible.
+</p>
+
+<p>
+	A check at the beginning of the method ensures that the length of s is exactly one character longer than t.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
