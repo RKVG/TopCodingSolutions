@@ -5,12 +5,11 @@
         <table>
             <tr>
                 <td>
-                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13370"
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13659"
                        target="_blank">TopCoder Problem Statement - CartInSupermarketEasy</a>
                 </td>
             </tr>
             <tr><td>Single Round Match 649 Round 1 - Division I, Level Three</td></tr>
-            <tr><td></td></tr>
         </table>
     </p>
 
@@ -24,33 +23,96 @@
     <div class="header">Java Source:</div>
     <div class="code">
 <pre>
-CODE GOES HERE
+01: public class CartInSupermarketEasy {
+02: 
+03: 	int[][] knownTimes;
+04: 
+05: 	public int calc(int numCarts, int numSplits)  {
+06: 
+07: 		knownTimes = new int[numCarts + 1][numSplits + 1];
+08: 
+09: 		for (int i = 0; i <= numCarts; i++)  {
+10: 			for (int j = 0; j <= numSplits; j++)  {
+11: 
+12: 				/*
+13: 				* It's clear that:
+14: 				* 0 carts will take 0 minutes
+15: 				* 1 cart will take 1 minute
+16: 				* 2 carts will take 2 minutes.
+17: 				*/
+18: 				knownTimes[i][j] = (i <= 2) ? i : -1;
+19: 
+20: 				/*
+21: 				* If there are no splits, the solution
+22: 				* is just the number of carts.
+23: 				*/
+24: 				if (j == 0)  knownTimes[i][j] = i;
+25: 			}
+26: 		}
+27: 
+28: 		int result = solve(numCarts, numSplits);
+29: 
+30: 		return result;
+31: 	}
+32: 
+33: 	private int solve(int numCarts, int numSplits)  {
+34: 
+35: 
+36: 		if (knownTimes[numCarts][numSplits] != -1)  {
+37: 			return knownTimes[numCarts][numSplits];
+38: 		}
+39: 
+40: 		/*
+41: 		* In the worst case, we can solve this by removing 1 cart.
+42: 		* This will take 1 additional minute.
+43: 		*/
+44: 		int time = solve(numCarts - 1, numSplits) + 1;
+45: 
+46: 		/*
+47: 		* Try all combinations of splitting the carts and of dividing
+48: 		* up the number of splits remaining.  The time to handle
+49: 		* the whole segment will be the larger of the times it takes
+50: 		* to handle the two resulting split segments.
+51: 		*/
+52: 		for (int x = 1; x < numCarts; x++)  {
+53: 			for (int y = 0; y < numSplits; y++)  {
+54: 				int timeSeg1 = solve(x, y);
+55: 				int timeSeg2 = solve(numCarts - x, numSplits - y - 1);
+56: 				int timeToProcessSegments = Math.max(timeSeg1, timeSeg2) + 1;
+57: 				time = Math.min(time, timeToProcessSegments);
+58: 			}
+59: 		}
+60: 
+61: 		knownTimes[numCarts][numSplits] = time;
+62: 		return time;
+63: 	}
+64: }
 </pre>
     </div>
 
     <div class="header">Notes:</div>
 <p>
 	This solution is a great example of Dynamic Programming.  We'll begin with the minimum amount of time required
-  to process a simple chain of carts (0, 1, or 2 cart chains), and then use that to calculate the time for larger
-  chains.  We continue using what we've already calculated to build up larger chains until we've reached our goal.
+  to process a simple chain of carts (0, 1, or 2 cart chains), and then use that to calculate the time for longer
+  chains.  We continue using what we've already calculated to build up longer chains until we've reached our goal.
 </p>
 
 <p>
 	  We start by declaring an int[][] knownTimes.  The first dimension holds a number of carts, the second
-	  dimension is a number of splits allowed, and the value is the best time that we can achieve under
+	  dimension is the number of splits allowed, and the value is the best time that we can achieve under
 	  those constraints.  The array is initialized as follows:
 	  <ol>
-	  	<li>If the number of carts is 0, 1, or 2; then we can trivially remove all carts in 1 minute per cart</li>
-	  	<li>If there a 0 splits, then all we can do is remove 1 cart per minute.</li>
-	  	<li>In all other cases, we set the value to -1 to denote that we'll need to calculate the value</li>
+	  	<li>If the number of carts is 0, 1, or 2; then we can trivially remove all carts in 1 minute per cart.</li>
+	  	<li>If there are 0 splits, then all we can do is remove 1 cart per minute.</li>
+	  	<li>In all other cases, we set the value to -1 to denote that we'll need to calculate the value.</li>
 	  </ol>       
 </p>
 
 <p>
 	The real work is done in the solve() method.  First, check to see if we already know the solution for
 	the given number of carts and splits.  If so, just return that.  Otherwise, we'll need to calculate it.
-	Note that at this point, the number of splits must be at least one, becase we've initialized knowTimes
-	with vaues for whenever the number of splits is 0.
+	Note that at this point, the number of splits must be at least one, because we've initialized knownTimes
+	with values for whenever the number of splits is 0.
 </p>
 
 <p>
