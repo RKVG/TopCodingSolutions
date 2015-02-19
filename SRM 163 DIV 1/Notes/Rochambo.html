@@ -1,0 +1,111 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1810"
+                       target="_blank">TopCoder Problem Statement - Rochambo</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 163 Round 1 - Division I, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine how many rounds will be won in a Rochambo (rock, paper, scissors)
+        match by following a given strategy.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Rochambo {
+02: 
+03:     public int wins(String opponent) {
+04: 
+05:         int numWins = 0;
+06:         char previous2;
+07:         char previous1;
+08:         char current;
+09: 
+10:         for (int round = 0; round < opponent.length(); round++) {
+11: 
+12:             current = opponent.charAt(round);
+13: 
+14:             /*
+15:             * First two moves are always Rock.  So if the opponent plays
+16:             * Scissors, we win.
+17:             */
+18:             if (round < 2) {
+19:                 if (current == 'S') numWins++;
+20: 
+21:             } else {
+22: 
+23:                 // Get opponents last 2 moves.
+24:                 previous2 = opponent.charAt(round - 2);
+25:                 previous1 = opponent.charAt(round - 1);
+26: 
+27:                 /*
+28:                 * If the current move matches the last 2, we win by playing
+29:                 * whatever would have beaten the last 2.
+30:                 */
+31:                 if ((previous2 == current) && (previous1 == current))  {
+32:                     numWins++;
+33: 
+34:                     /*
+35:                     * If the current and last 2 moves are all different, we
+36:                     * win by playing what beats that which was not played in
+37:                     * the previous 2 rounds.
+38:                     */
+39:                 } else if ((previous2 != previous1) &&
+40:                         (current != previous1) &&
+41:                         (current != previous2))  {
+42:                     numWins++;
+43:                 }
+44:             }
+45:         }
+46: 
+47:         return numWins;
+48:     }
+49: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+    Surprisingly easy for a Division 1 problem.  All you need to do is look at the current, and previous
+    2 rounds played by your opponent.
+</p>
+
+<p>
+  If the current, 1st previous, and 2nd previous rounds all match then we'll win.  We see the first
+  two come in the same, and guess that the third will be the same, so we play whatever beats it.
+</p>
+
+<p>
+  If the current, 1st previous, and 2nd previous are all different, we will win here too.  After
+  seeing that the last two don't match, we'll play whatever beats the 3rd object.
+</p>
+
+<p>
+  In the first two rounds, we always play Rock.  So if the opponent plays Scissors we win there too.
+</p>
+ 
+<p>
+  That's all there is to it.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

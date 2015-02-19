@@ -1,0 +1,78 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13458"
+                       target="_blank">TopCoder Problem Statement - ShoppingSurveyDiv2</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 634 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Given a count of how many of each item was purchased, and the number
+        of customers, determine the smallest number of customers that could
+        have purchased one of each item.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class ShoppingSurveyDiv2 {
+02: 
+03:     public int minValue(int N, int[] s) {
+04: 
+05:         int numItemsPurchased = 0;
+06: 
+07:         for (int i : s) {
+08:             numItemsPurchased += i;
+09:         }
+10: 
+11:         int maxItemsPurchasedWithNoBigShoppers = (s.length - 1) * N;
+12: 
+13:         int numBigShoppers =
+14:                 numItemsPurchased - maxItemsPurchasedWithNoBigShoppers;
+15: 
+16:         return (numBigShoppers < 0) ? 0 : numBigShoppers;
+17: 
+18:     }
+19: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  First, we'll count the total number of items that have been purchased.  This is stored in the variable numItemsPurchased.
+</p>
+
+<p>
+  Next, we calculate the number of items that could be purchased if every customer stopped just short of buying one of each.  That is
+  each customer, buys (s.length -1) items.  We'll call that maxItemsPurchasedWithNoBigShoppers.
+</p>
+
+<p>
+  The number of BigShoppers that we'll need is now just the difference between numItemsPurchased and maxItemsPurchasedWithNoBigShoppers.
+  This value may be negative, in which case we'll return zero.
+</p>
+
+<p>
+  This problem is a bit difficult to understand, but once you get it, the code is really easy.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

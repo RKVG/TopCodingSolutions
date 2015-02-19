@@ -1,0 +1,211 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1856"
+                       target="_blank">TopCoder Problem Statement - WhatSort</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 164 Round 1 - Division I, Level Two</td></tr>
+            <tr><td>Single Round Match 164 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the sorting method used to arrange a group of people.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.Arrays;
+002: import java.util.Comparator;
+003: 
+004: class Person {
+005: 
+006:     final int age;
+007:     final int weight;
+008:     final String name;
+009: 
+010:     Person(String name, int age, int weight) {
+011:         this.name = name;
+012:         this.age = age;
+013:         this.weight = weight;
+014:     }
+015: }
+016: 
+017: class PersonComparator implements Comparator<Person> {
+018: 
+019:     final String type;
+020: 
+021:     PersonComparator(String type) {
+022:         this.type = type;
+023:     }
+024: 
+025:     @Override
+026:     public int compare(Person p1, Person p2) {
+027: 
+028:         int x;
+029: 
+030:         switch (type) {
+031:             case "NAW":
+032:                 x = compareName(p1, p2);
+033:                 if (x != 0) return x;
+034:                 x = compareAge(p1, p2);
+035:                 if (x != 0) return x;
+036:                 return compareWeight(p1, p2);
+037: 
+038:             case "NWA":
+039:                 x = compareName(p1, p2);
+040:                 if (x != 0) return x;
+041:                 x = compareWeight(p1, p2);
+042:                 if (x != 0) return x;
+043:                 return compareAge(p1, p2);
+044: 
+045:             case "ANW":
+046:                 x = compareAge(p1, p2);
+047:                 if (x != 0) return x;
+048:                 x = compareName(p1, p2);
+049:                 if (x != 0) return x;
+050:                 return compareWeight(p1, p2);
+051: 
+052:             case "AWN":
+053:                 x = compareAge(p1, p2);
+054:                 if (x != 0) return x;
+055:                 x = compareWeight(p1, p2);
+056:                 if (x != 0) return x;
+057:                 return compareName(p1, p2);
+058: 
+059:             case "WAN":
+060:                 x = compareWeight(p1, p2);
+061:                 if (x != 0) return x;
+062:                 x = compareAge(p1, p2);
+063:                 if (x != 0) return x;
+064:                 return compareName(p1, p2);
+065: 
+066:             case "WNA":
+067:                 x = compareWeight(p1, p2);
+068:                 if (x != 0) return x;
+069:                 x = compareName(p1, p2);
+070:                 if (x != 0) return x;
+071:                 return compareAge(p1, p2);
+072: 
+073:             default:
+074:                 return 0;
+075:         }
+076: 
+077:     }
+078: 
+079:     private int compareName(Person p1, Person p2) {
+080:         return p1.name.compareTo(p2.name);
+081:     }
+082: 
+083:     private int compareAge(Person p1, Person p2) {
+084:         return new Integer(p1.age).compareTo(p2.age);
+085:     }
+086: 
+087:     private int compareWeight(Person p1, Person p2) {
+088:         return -1 * new Integer(p1.weight).compareTo(p2.weight);
+089:     }
+090: }
+091: 
+092: public class WhatSort {
+093: 
+094:     public String sortType(String[] name, int[] age, int[] wt) {
+095: 
+096:         Person[] inputList = new Person[name.length];
+097: 
+098:         for (int i = 0; i < name.length; i++) {
+099:             Person p = new Person(name[i], age[i], wt[i]);
+100:             inputList[i] = p;
+101:         }
+102: 
+103:         String method = null;
+104: 
+105:         String[] sortingMethods = new String[]{"NAW", "NWA", "ANW",
+106:                 "AWN", "WAN", "WNA"};
+107: 
+108:         for (String s : sortingMethods) {
+109:             String result = testSortingMethod(inputList, s);
+110:             if (result != null) {
+111:                 if (method != null) {
+112:                     return "IND";
+113:                 } else {
+114:                     method = result;
+115:                 }
+116:             }
+117:         }
+118: 
+119:         return (method == null) ? "NOT" : method;
+120:     }
+121: 
+122:     private String testSortingMethod(Person[] inputList, String method) {
+123: 
+124:         Person[] sortedList = new Person[inputList.length];
+125: 
+126:         System.arraycopy(inputList, 0, sortedList, 0, inputList.length);
+127:         Arrays.sort(sortedList, new PersonComparator(method));
+128: 
+129:         return (Arrays.equals(inputList, sortedList)) ? method : null;
+130:     }
+131: 
+132: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The approach is to sort the people using each of the six sorting methods described.  If the sort
+  matches the input, then that method may have been used.  Just for check zero, or more than one possible
+  solutions.
+</p>
+
+<p>
+  The Person class simply stores the age, weight, and name together; and allows us to create a Comparator
+  to sort them.
+</p>
+
+<p>
+  The PersonComparator class provides the compare() method for comparing two Person objects.  The
+  PersonComparator constructor takes a String which determines the sorting method that it will use.  This
+  happens in the switch statement inside the compare() method.  Each of the cases of the switch statement
+  are the same, except that the order of the comparisons varies.
+</p>
+
+<p>
+  Be extra careful here to make sure that the items are getting sorted in the proper order.  We can
+  String.compare() and Integer.compare() for the name and age.  However, since we want to sort weight
+  in descending order, we need to multiple the result of the compare by -1 first before returning.
+ </p>
+
+<p>
+  The sortType() method just creates an array of Person objects using the given input arrays, and then calls
+  testSortingMethod() for each method, keep tracking of valid sorting methods along the way.
+</p>
+
+<p>
+  In the testSortingMethod() method, we make a copy of the original array, and then sort it using the
+  given method.  After it's sorted, we compare the copy to the original.  Be sure to use
+  Arrays.equals() to test to see if the two arrays contain the same elements in the same order.
+  array1.equals(array2) will not work.
+
+<p>
+  There was a lot of typing in this solution, but none of it was particularly hard.  Just be careful in
+  the compare() method and it'll work out.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

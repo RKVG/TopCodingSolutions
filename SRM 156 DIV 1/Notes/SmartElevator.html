@@ -1,0 +1,174 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1788"
+                       target="_blank">TopCoder Problem Statement - SmartElevator</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 156 Round 1 - Division I, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        An elevator must pick up and drop off a number of people.  Determine
+        the earliest this can be completed.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: import java.util.HashSet;
+02: import java.util.Set;
+03: 
+04: public class SmartElevator {
+05: 
+06:     private int minFinishTime = Integer.MAX_VALUE;
+07: 
+08:     private int[] startingFloors;
+09:     private int[] destinationFloors;
+10:     private int[] arrivalTimes;
+11: 
+12:     public int timeWaiting(int[] arrivalTime, int[] startingFloor,
+13:                            int[] destinationFloor) {
+14: 
+15:         // Make these accessible to other methods.
+16:         this.startingFloors = startingFloor;
+17:         this.destinationFloors = destinationFloor;
+18:         this.arrivalTimes = arrivalTime;
+19: 
+20:         /*
+21:         * Initialize the simulation.  Creates Sets representing people
+22:         * waiting for the elevator (regardless of their arrival time) and
+23:         * people currently on the elevator.
+24:         */
+25:         Set<Integer> waiting = new HashSet<>();
+26: 
+27:         // Add everyone to the waiting Set.
+28:         for (int i = 0; i < arrivalTime.length; i++) {
+29:             waiting.add(i);
+30:         }
+31: 
+32:         Set<Integer> elevator = new HashSet<>();
+33:         int floor = 1;
+34:         int time = 0;
+35: 
+36:         moveElevator(waiting, elevator, floor, time);
+37: 
+38:         return minFinishTime;
+39:     }
+40: 
+41:     private void moveElevator(Set<Integer> waiting, Set<Integer> elevator,
+42:                               int floor, int time) {
+43: 
+44:         /*
+45:         * If there is nobody waiting, and nobody in the elevator, then we're
+46:         * done.  If time is smaller than anything previously seen, set it
+47:         * to our time.
+48:         */
+49:         if (waiting.isEmpty() && elevator.isEmpty()) {
+50:             minFinishTime = Math.min(minFinishTime, time);
+51:         }
+52: 
+53:         /*
+54:         * Picking up people.
+55:         * Recursively call moveElevator().  We'll move one person in turn
+56:         * from the waiting Set to the elevator set.
+57:         */
+58:         for (int i : waiting) {
+59:             Set<Integer> newWaiting = new HashSet<>(waiting);
+60:             newWaiting.remove(i);
+61: 
+62:             Set<Integer> newElevator = new HashSet<>(elevator);
+63:             newElevator.add(i);
+64: 
+65:             int newFloor = startingFloors[i];
+66:             int travelTime = Math.abs(floor - newFloor);
+67: 
+68:             // Max of when elevator gets there, and when person arrives.
+69:             int newTime = Math.max((time + travelTime), arrivalTimes[i]);
+70: 
+71:             moveElevator(newWaiting, newElevator, newFloor, newTime);
+72:         }
+73: 
+74:         /*
+75:         * Dropping off people.
+76:         * Recursively call moveElevator() removing one person from the
+77:         * elevator Set.
+78:         */
+79:         for (int i : elevator) {
+80:             Set<Integer> newElevator = new HashSet<>(elevator);
+81:             newElevator.remove(i);
+82: 
+83:             int newFloor = destinationFloors[i];
+84:             int travelTime = Math.abs(floor - newFloor);
+85:             int newTime = time + travelTime;
+86: 
+87:             moveElevator(waiting, newElevator, newFloor, newTime);
+88:         }
+89: 
+90:     }
+91: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+    The current state can be described fully with the following variables:
+    <ul>
+        <li>A set of passengers waiting to be picked up.</li>
+        <li>A set of passengers currently in the elevator.</li>
+        <li>The floor the elevator is currently on.</li>
+        <li>How much time has elapsed.</li>
+    </ul>
+</p>
+<p>
+  At any point, the elevator can either move to pick someone up, or move to drop
+  them off.  This solution uses recursion to try every possible combination.
+</p>
+<p>
+  The timeWaiting() method just initializes the simulations with an empty elevator,
+  everyone in the waiting Set, and the elevator on floor 1 at time 0.
+</p>
+<p>
+  In moveElevator() we first check to see if we're done - that is, the elevator is
+  empty and nobody is waiting to be picked up.  If that's the case, then we'll
+  update minFinishTime to the smaller of it's current value and our current time.
+</p>
+<p>
+  If we're not done, then we'll recursively call moveElevator with every possible
+  combination of picking up or dropping off a passenger.
+</p>
+<p>
+  To simulate picking up a passenger, we create a newWaiting set that contains all
+  the members of the current waiting set, except for the person that we're picking up.
+  We then create a newElevator set using the contents of the current elevator set and add
+  the new passenger.  The travel time is calculated between floors, and our newTime
+  becomes the greater of the time when the elevator arrives, and the arrival time
+  for that person.  moveElevator() is then recursively callled with the new parameters.
+</p>
+<p>
+  Similarly, to drop someone off, we create a newElevator set that contains everyone from
+  the current elevator set except the person that we dropped off.  There is no need
+  to create a newWaiting set, since that will not have changed.  Again, the times
+  are calculated moveElevator() gets called recursively.
+</p>
+<p>
+  When all of the scenarios have completed, minFinishTime will contain the shortest
+  time in which all passengers can be serviced, so we just return that.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

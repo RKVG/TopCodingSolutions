@@ -1,0 +1,74 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1757"
+                       target="_blank">TopCoder Problem Statement - Justifier</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 164 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Right justify a set of Strings so that their edges line up.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Justifier {
+02: 
+03:     public String[] justify(String[] textIn) {
+04: 
+05:         int longest = 0;
+06: 
+07:         // Find the longest string.
+08:         for (int i = 0; i < textIn.length; i++)  {
+09:             longest = Math.max(longest, textIn[i].length());
+10:         }
+11: 
+12:         String[] result = new String[textIn.length];
+13: 
+14:         // Loop through each of the strings.
+15:         for (int i = 0; i < textIn.length; i++)  {
+16:             StringBuilder s = new StringBuilder(textIn[i]);
+17: 
+18:             // Insert spaces at the beginning until length == longest.
+19:             while (s.length() < longest)  {
+20:                 s.insert(0, " ");
+21:             }
+22: 
+23:             result[i] = s.toString();
+24:         }
+25: 
+26: 
+27:         return result;
+28:     }
+29: 
+30: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  We can solve this easily in two steps.  First, loop through all the Strings in textIn and make note
+  of the longest.  Then loop through each of the Strings again, and pad them with spaces at the
+  beginning until their length matches the longest found in the first step.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

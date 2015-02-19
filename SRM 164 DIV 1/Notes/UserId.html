@@ -1,0 +1,219 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1754"
+                       target="_blank">TopCoder Problem Statement - UserId</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 164 Round 1 - Division I, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Create a userId based on first, middle, and last names.  Ensure there are no duplicates.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.Arrays;
+002: import java.util.List;
+003: 
+004: public class UserId {
+005: 
+006:     private static final String BAD_DATA = "BAD DATA";
+007:     private static final int ID_MAX_LENGTH = 8;
+008: 
+009:     public String id(String[] inUse, String first, String middle, String last) {
+010: 
+011:         // Check for invalid characters.
+012:         String fullName = first + middle + last;
+013:         for (int i = 0; i < fullName.length(); i++) {
+014:             if (!isValidChar(fullName.charAt(i))) return BAD_DATA;
+015:         }
+016: 
+017:         // Check for short first and last name;
+018:         if (numLetters(first) < 2) return BAD_DATA;
+019:         if (numLetters(last) < 2) return BAD_DATA;
+020: 
+021:         // Remove spaces, apostrophes, and convert to lowercase.
+022:         first = normalizeName(first);
+023:         middle = normalizeName(middle);
+024:         last = normalizeName(last);
+025: 
+026:         // This will make it easier to see if the id is already in use.
+027:         List<String> inUseList = Arrays.asList(inUse);
+028: 
+029:         String userId;
+030: 
+031:         // Contains truncated last name, so the entire ID is <= than 8 chars.
+032:         String shortLast;
+033: 
+034:         // Try [first initial][last name]
+035:         if (last.length() > (ID_MAX_LENGTH - 1)) {
+036:             shortLast = last.substring(0, ID_MAX_LENGTH - 1);
+037:         } else {
+038:             shortLast = last;
+039:         }
+040: 
+041:         userId = first.substring(0, 1) + shortLast;
+042:         if (!inUseList.contains(userId)) return userId;
+043: 
+044:         // Try [first initial][middle initial][last name];
+045:         if ((middle != null) && (middle.length() >= 1)) {
+046: 
+047:             if (last.length() > (ID_MAX_LENGTH - 2)) {
+048:                 shortLast = last.substring(0, ID_MAX_LENGTH - 2);
+049:             } else {
+050:                 shortLast = last;
+051:             }
+052: 
+053:             userId = first.charAt(0) + (middle.charAt(0) + shortLast);
+054: 
+055: //            userId = first.substring(0, 1) + middle.substring(0, 1) + shortLast;
+056:             if (!inUseList.contains(userId)) return userId;
+057:         }
+058: 
+059:         // Try [first initial][last name][digit][digit]
+060:         if (last.length() > (ID_MAX_LENGTH - 3)) {
+061:             shortLast = last.substring(0, ID_MAX_LENGTH - 3);
+062:         } else {
+063:             shortLast = last;
+064:         }
+065: 
+066:         int x = 1;
+067:         while (x < 100) {
+068:             String digits = String.format("%02d", x);
+069:             userId = first.substring(0, 1) + shortLast + digits;
+070:             if (!inUseList.contains(userId)) return userId;
+071:             x++;
+072:         }
+073: 
+074:         return null;
+075:     }
+076: 
+077:     /*
+078:     * Removes apostrophes and spaces, and converts upper-case
+079:     * letters to lower case.
+080:     */
+081:     private static String normalizeName(String s) {
+082: 
+083:         if (s == null) return null;
+084: 
+085:         StringBuilder sb = new StringBuilder(s.length());
+086: 
+087:         for (int i = 0; i < s.length(); i++) {
+088:             char c = s.charAt(i);
+089: 
+090:             if (c == ' ') continue;
+091:             if (c == '\'') continue;
+092:             if ((c >= 'A') && (c <= 'Z')) {
+093:                 c = (char)(c + 'a' - 'A');
+094:             }
+095:             sb.append(c);
+096:         }
+097: 
+098:         return sb.toString();
+099:     }
+100: 
+101:     // Counts the number of characters in the String.
+102:     private static int numLetters(String s) {
+103: 
+104:         int count = 0;
+105: 
+106:         for (int i = 0; i < s.length(); i++) {
+107:             char c = s.charAt(i);
+108:             if ((c >= 'a') && (c <= 'z')) count++;
+109:             else if ((c >= 'A') && (c <= 'Z')) count++;
+110:         }
+111: 
+112:         return count;
+113: 
+114:     }
+115: 
+116:     /*
+117:     * Valid characters are a-z, A-Z, apostrophe, and space.
+118:     */
+119:     private static boolean isValidChar(char c) {
+120: 
+121:         if ((c >= 'a') && (c <= 'z')) return true;
+122:         if ((c >= 'A') && (c <= 'Z')) return true;
+123:         if (c == ' ') return true;
+124:         if (c == '\'') return true;
+125:         return false;
+126: 
+127:     }
+128: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  We'll start by validating the input against invalid characters.  first, middle, and last are
+  concatenated into one fullName String.  Then we step through each character in fullName calling
+  isValidChar().
+</p>
+
+<p>
+  Next, verify that first and last contain at least two letters.  Be careful here, you can't
+  just use String.length().  The problem specifically states that the name must have two letters - so
+  "A' " would not be valid.
+</p>
+
+<p>
+  Note that Java's Character and String classes have methods for determining if a character
+  is a letter and for converting to lower case.  However, these get a bit tricky with non-ASCII
+  characters, and different Locales.  To avoid any surprises, I chose to write these out.
+</p>
+
+<p>
+  The method normalizeName() converts all letters to lower case, and removes all spaces and
+  apostrophes.  The conversion to lower case is easy, if it's an upper case letter (between
+  'A' and 'Z') we can add 'a' and then subtract 'A'.  Note that we need to cast this back to
+  a character, because the compiler will treat the expression as an int.
+</p>
+
+<p>
+  At this point, we're ready to begin building the userId.  This is just a matter of following
+  the rules given in the problem statement.  Just two things to be aware of.  First, make
+  sure that the last name is truncated to a size that will make the userId no more than
+  8 characters.  The variable shortLast is used here to store the first 5, 6, or 7 characters
+  depending on the case.
+</p>
+
+<p>
+  Second, in the second case ([first initial][middle initial][last name]) you may be tempted to
+  write something like this:
+</p>
+
+<p>
+<code>
+  first.charAt(0) + middle.charAt(0) + shortLast
+</code>
+</p>
+
+<p>
+  With this, you'll get something like "202jones" instead of the expected "bhjones".  The reason
+  is that the first two arguments are characters and are being added as if they are ints.  The
+  result of the addition is 202, which then gets added to the last name String.  You can avoid
+  this by putting parenthesis around the last two arguments, or use the String.substring() method
+  to get a String type instead of a character.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
