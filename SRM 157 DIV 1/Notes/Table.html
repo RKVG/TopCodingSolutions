@@ -1,0 +1,204 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1781"
+                       target="_blank">TopCoder Problem Statement - Table</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 157 Round 1 - Division I, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Build a table given a number of cells which may span multiple rows and columns.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+001: import java.util.ArrayList;
+002: import java.util.List;
+003: 
+004: public class Table {
+005: 
+006:     private class Cell {
+007:         private int colSpan;
+008:         private int rowSpan;
+009:         private char value;
+010: 
+011:         public Cell(String s) {
+012: 
+013:             if ((s == null) || (s.length() == 0)) {
+014:                 this.colSpan = 0;
+015:                 this.rowSpan = 0;
+016:                 this.value = 0;
+017:             } else {
+018:                 s = s.replaceAll("[()]", "");  // Remove parentheses
+019:                 String[] elements = s.split(",");
+020:                 this.colSpan = Integer.parseInt(elements[0]);
+021:                 this.rowSpan = Integer.parseInt(elements[1]);
+022:                 this.value = elements[2].charAt(0);
+023:             }
+024:         }
+025:     }
+026: 
+027:     int tableWidth;
+028:     List<char[]> table = new ArrayList<>();
+029: 
+030:     public String[] layout(String[] tbl) {
+031: 
+032:         tableWidth = calcTableWidth(tbl);
+033: 
+034:         for (int row = 0; row < tbl.length; row++) {
+035: 
+036:             // Add new row if necessary.
+037:             while (table.size() <= row) {
+038:                 table.add(row, new char[tableWidth]);
+039:             }
+040: 
+041:             // Skip over any empty rows.
+042:             if (isRowEmpty(tbl[row])) continue;
+043: 
+044:             int col = 0;
+045: 
+046:             Cell[] cells = parseCells(tbl[row]);
+047: 
+048:             for (int i = 0; i < cells.length; i++) {
+049: 
+050:                 // Skip over any columns that are already occupied.
+051:                 col = getNextOpenCol(row, col);
+052: 
+053:                 // Write the cell's value into all locations that it occupies.
+054:                 for (int r = 0; r < cells[i].rowSpan; r++) {
+055:                     for (int c = 0; c < cells[i].colSpan; c++) {
+056:                         tableInsert(row + r, col + c, cells[i].value);
+057:                     }
+058:                 }
+059:             }
+060:         }
+061: 
+062:         return tableToArray();
+063:     }
+064: 
+065:     private int calcTableWidth(String[] s) {
+066: 
+067:         for (int i = 0; i < s.length; i++) {
+068: 
+069:             if (isRowEmpty(s[i])) {
+070:                 continue;
+071: 
+072:             } else {
+073: 
+074:                 // Add up all the colSpans and return the sum.
+075:                 Cell[] cells = parseCells(s[i]);
+076: 
+077:                 int width = 0;
+078: 
+079:                 for (Cell c : cells) {
+080:                     width += c.colSpan;
+081:                 }
+082: 
+083:                 return width;
+084:             }
+085:         }
+086: 
+087:         return 0;
+088:     }
+089: 
+090:     private void tableInsert(int row, int col, char value) {
+091: 
+092:         // Add additional rows if necessary.
+093:         while (table.size() <= row) {
+094:             table.add(row, new char[tableWidth]);
+095:         }
+096: 
+097:         table.get(row)[col] = value;
+098:     }
+099: 
+100:     private int getNextOpenCol(int row, int col) {
+101: 
+102:         while (table.get(row)[col] != 0) {
+103:             col++;
+104:         }
+105: 
+106:         return col;
+107:     }
+108: 
+109:     private String[] tableToArray() {
+110: 
+111:         String[] ret = new String[table.size()];
+112: 
+113:         for (int i = 0; i < table.size(); i++) {
+114:             ret[i] = new String(table.get(i));
+115:         }
+116: 
+117:         return ret;
+118:     }
+119: 
+120:     private Cell[] parseCells(String s) {
+121: 
+122:         // Split on )(
+123:         String[] elements = s.split("\\)\\(");
+124: 
+125:         Cell[] cells = new Cell[elements.length];
+126: 
+127:         for (int i = 0; i < elements.length; i++) {
+128:             cells[i] = new Cell(elements[i]);
+129:         }
+130: 
+131:         return cells;
+132: 
+133:     }
+134: 
+135:     // Consider a row empty if it does not contain any parenthesis.
+136:     private boolean isRowEmpty(String s) {
+137:         return !s.contains("(");
+138:     }
+139: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  The solution presented here is perhaps more difficult than it needs to be.  The problem's constraints limit the table's size
+  to 50x50.  This solution, however, works for an arbitrary sized table.  Not knowing the table's maximum dimensions makes
+  things more complicated.
+</p>
+
+<p>
+  The first step is to determine the width of the table.  Since each row must be the same width, we can simply look
+  for the first non-empty row, and add up all of the colspan values.  This is handled in the calcTableWidth() method.
+</p>
+
+<p>
+  Now, the table can be represented as a List of arrays of chars, where each array of chars is sized to the table's width.
+</p>
+
+<p>
+  Then, we loop through each row, parse out the cell information and insert the cell's values into the appropriate rows
+  and columns in the table.  If a cell dips down into a row that doesn't yet exist in the table, we'll need to ensure
+  that a new row is created first.
+</p>
+
+</p>
+  After each cell is inserted, getNextOpenCol() is called to advance to the next available column.  This will allow us to skip over
+  any cells that have already been added, especially cells that may have dipped down into the current row from earlier rows.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
