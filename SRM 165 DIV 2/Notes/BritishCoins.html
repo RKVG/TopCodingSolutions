@@ -1,0 +1,82 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1862"
+                       target="_blank">TopCoder Problem Statement - BritishCoins</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 165 Round 1 - Division II, Level One</td></tr>
+            <tr><td>Single Round Match 232 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Convert the given number of pence into pounds, shillings, and pennies.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class BritishCoins {
+02: 
+03:     private static final int SHILLINGS_PER_POUND = 20;
+04:     private static final int PENNIES_PER_SHILLING = 12;
+05: 
+06:     private static final int PENNIES_PER_POUND =
+07:             PENNIES_PER_SHILLING * SHILLINGS_PER_POUND;
+08: 
+09:     public int[] coins(int pence)  {
+10: 
+11:         int[] ret = new int[3];
+12: 
+13:         ret[0] = pence / PENNIES_PER_POUND;
+14:         ret[1] = (pence % PENNIES_PER_POUND) / PENNIES_PER_SHILLING;
+15:         ret[2] = pence % PENNIES_PER_SHILLING;
+16: 
+17:         return ret;
+18:     }
+19: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  Start by declaring constants to hold the number of shillings in a pound and the number of pennies in a shillings.  Using that,
+  we can calculate the number of pennies in a shilling (20 * 12 = 240).  From here we can use simple math to derive our answer.
+</p>
+
+<p>
+  Remember that in Java, integer division chops off the remainder.  so 10 / 3 = 3.  Therefore, the number of pounds, is simply the
+  number of pence / PENNIES_PER_POUND.
+</p>
+
+<p>
+  The moduls operator % gives us the remainder.  To calculate the number of shillings, we first get the remainder of after taking
+  out as many pounds as possible (pence % PENNIES_PER_POUND).  Then, just as before, we divide that by PENNIES_PER_SHILLING to get
+  the number of shillings.
+</p>
+
+<p>
+  The number of pennies remaining is just pence % PENNIES_PER_SHILLING.
+</p>
+
+<p>
+  Just store each of those values in the correct location of an int[] and the problem is solved.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
