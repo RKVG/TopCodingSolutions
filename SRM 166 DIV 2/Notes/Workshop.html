@@ -1,0 +1,84 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1880"
+                       target="_blank">TopCoder Problem Statement - Workshop</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 166 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the number of triangles that can be formed given a set of lengths.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class Workshop {
+02: 
+03:     public int pictureFrames(int[] pieces) {
+04: 
+05:         int count = 0;
+06: 
+07:         /*
+08:         * Loop through all possible combinations of side1, side2, and side3
+09:         */
+10:         for (int side1 = 0; side1 < pieces.length - 2; side1++) {
+11:             int s1 = pieces[side1];
+12: 
+13:             for (int side2 = side1 + 1; side2 < pieces.length - 1; side2++) {
+14:                 int s2 = pieces[side2];
+15: 
+16:                 for (int side3 = side2 + 1; side3 < pieces.length; side3++) {
+17:                     int s3 = pieces[side3];
+18: 
+19:                     // Ensure the sum of any 2 sides is greater than the 3rd.
+20:                     if (
+21:                             ((s1 + s2) > s3) &&
+22:                             ((s1 + s3) > s2) &&
+23:                             ((s2 + s3) > s1)
+24:                         ) count++;
+25: 
+26:                 }
+27:             }
+28:         }
+29: 
+30:         return count;
+31:     }
+32: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    
+    <p>
+      There are at most 50 possibilities for side 1, 49 for side 2, and 48 for side 3.  This give 117,600 combinations, small enough for
+      a brute force solution.
+    </p>
+    
+    <p>
+      The nested for loops work through each possible combinations.  Inside the loops we check so see if the sides form a legal triangle.
+      This is true if and only if the length of any two sides is greater than the third.
+    </p>
+    
+    <p>
+      If it's a valid triangle, increment count.  Then return count at the end.
+    </p>
+    
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
