@@ -1,0 +1,168 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1914"
+                       target="_blank">TopCoder Problem Statement - Animation</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 167 Round 1 - Division I, Level One </td></tr>
+            <tr><td>Single Round Match 167 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Simulate particles moving both left and right through a chamber.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: import java.util.ArrayList;
+02: import java.util.List;
+03: 
+04: public class Animation {
+05: 
+06: 	public static final char EMPTY_POSITION = '.';
+07: 	public static final char OCCUPIED_POSITION = 'X';
+08: 	public static final char RIGHT = 'R';
+09: 	public static final char LEFT = 'L';
+10: 
+11: 	// If the position contains both a R and L moving particle.
+12: 	public static final char BOTH = 'B';
+13: 
+14: 	public String[] animate(int speed, String init) {
+15: 
+16: 		List<String> result = new ArrayList<>();
+17: 
+18: 		result.add(init);
+19: 
+20: 		String prevFrame = init;
+21: 
+22: 		while(!isEmptyChamber(prevFrame))  {
+23: 			char[] nextFrame = new char[init.length()];
+24: 
+25: 			// Initialize the chamber to all empty;
+26: 			for (int i = 0; i < nextFrame.length; i++)  {
+27: 				nextFrame[i] = EMPTY_POSITION;
+28: 			}
+29: 
+30: 			for (int i = 0; i < prevFrame.length(); i++)  {
+31: 				if (prevFrame.charAt(i) != EMPTY_POSITION)  {
+32: 
+33: 					if ((prevFrame.charAt(i) == RIGHT) || (prevFrame.charAt(i) == BOTH))  {
+34: 						int newPos = i + speed;
+35: 						if (newPos < nextFrame.length)  {
+36: 							if (nextFrame[newPos] == LEFT) {
+37: 								nextFrame[newPos] = BOTH;
+38: 							} else  {
+39: 								nextFrame[newPos] = RIGHT;
+40: 							}
+41: 						}
+42: 					}
+43: 
+44: 					if ((prevFrame.charAt(i) == LEFT) || (prevFrame.charAt(i) == BOTH))  {
+45: 						int newPos = i - speed;
+46: 						if (newPos >= 0)  {
+47: 							if (nextFrame[newPos] == RIGHT)  {
+48: 								nextFrame[newPos] = BOTH;
+49: 							} else  {
+50: 								nextFrame[newPos] = LEFT;
+51: 							}
+52: 						}
+53: 					}
+54: 
+55: 				}
+56: 			}
+57: 
+58: 			String s = new String(nextFrame);
+59: 			result.add(s);
+60: 			prevFrame = s;
+61: 
+62: 		}
+63: 
+64: 		// Convert the List into a String[] and return it.
+65: 		String[] resultList = new String[result.size()];
+66: 
+67: 		for (int i = 0; i < result.size(); i++)  {
+68: 			resultList[i] = markOccupied(result.get(i));
+69: 		}
+70: 		return resultList;
+71: 	}
+72: 
+73: 	/*
+74: 	* Replaces any position marked with a 'R', 'L', or 'B'
+75: 	* with an 'X'
+76: 	*/
+77: 	private static String markOccupied(String s)  {
+78: 
+79: 		StringBuilder sb = new StringBuilder(s.length());
+80: 
+81: 		for (int i = 0; i < s.length(); i++)  {
+82: 			sb.append((s.charAt(i) == EMPTY_POSITION) ? EMPTY_POSITION : OCCUPIED_POSITION);
+83: 		}
+84: 
+85: 		return sb.toString();
+86: 	}
+87: 
+88: 	/*
+89: 	* Returns true iff the chamber is empty.
+90: 	*/
+91: 	private static boolean isEmptyChamber(String s)  {
+92: 
+93: 		for (int i = 0; i < s.length(); i++)  {
+94: 			if (s.charAt(i) != EMPTY_POSITION)  return false;
+95: 		}
+96: 
+97: 		return true;
+98: 	}
+99: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+  This is a pretty simple simulation.  In each iteration of the loop, we use the current state to create the next state.  At
+  the end of the loop, we set the current state equal to next, and repeat.
+</p>
+
+<p>
+  At the start of each loop, check to see if the chamber is empty.  The isEmptyChamber() just looks at the input String
+  one character at a time.  As soon as it finds any character that is not EMPTY_POSITION, it returns false.  If it reaches
+  the end of the String, it returns true.
+</p>
+
+<p>
+  If we have a non-empty chamber, then we iterate through each position.  The value at any position will either be 'L'
+  for a left moving particle, 'R' for a right moving particle, 'B' if a 'R' and 'L' overlap, or a '.' if the position
+  is empty.  For either a 'L' or an 'R', we calculate the new position by either adding or subtracting speed, checking
+  to make sure we stay within the bounds of the array.  If the position is marked 'B', then a particle will be placed
+  both to the left and to the right.
+</p>
+
+<p>
+  Because we don't know how large the return String[] will be, it is maintained as a List<String> and then converted
+  at the end.  During this covnersion, we also change all 'L', 'R', and 'B' characters to just 'X'.
+</p>
+
+<p>
+  The only difficulty here is being careful to manage positions where left and right moving particles overlap, and ensuring
+  that you don't try to move a particle outside the bounds of the array.
+</p>
+
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
