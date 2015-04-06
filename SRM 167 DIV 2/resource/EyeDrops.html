@@ -1,0 +1,83 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1750"
+                       target="_blank">TopCoder Problem Statement - EyeDrops</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 167 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine a schedule for taking medication.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class EyeDrops {
+02:
+03:     public double closest(int sleepTime, int k) {
+04:
+05:         double interval = 24.0 * 60.0 / (double) k;
+06:
+07:         if (interval > (sleepTime * 60)) return interval;
+08:
+09:         return 60.0 * (24 - sleepTime) / (double) (k - 1);
+10:     }
+11: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        There are two cases to consider here.  One in which our calculated interval is shorter than
+        the sleep time.  The other is when the interval is longer.
+    </p>
+
+    <p>
+        Begin by calculating the interval by dividing the day up into k equal segments (line 5) - ignoring
+        sleepTime for the moment.  If the sleepTime fits entirely within one of those intervals,
+        then simply return the interval.  In this case, the person could take the drops, remain
+        awake for a period of time, then sleep, wake back up, and take the drops again.
+        The interval is the same just as if they had never slept.
+    </p>
+
+    <p>
+        For example, if the drops needed to be taken twice per day and you slept for 8 hours per day,
+        them the drops would be taken every 12 hours, and the sleep time would not affect the schedule.
+    </p>
+
+    <p>
+        In the second case, we need to subtract the sleepTime off the length of the day, and then
+        divide the remainder of the day by k-1 to get the interval.
+    </p>
+
+    <p>
+        An example of this case is if the person sleeps for 8 hours and then needs to take the drops
+        5 times.  Here, they'd take the first drop as soon as the woke up (say 8:00 AM).  They'd take
+        the remaining drops at 12:00PM, 4:00PM, 8:00PM, and finally at 12:00AM (just before going back
+        to sleep).
+    </p>
+
+    <p>
+        Be careful to cast ints to doubles where needed.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

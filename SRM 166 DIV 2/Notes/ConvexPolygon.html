@@ -1,0 +1,93 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1660"
+                       target="_blank">TopCoder Problem Statement - ConvexPolygon</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 166 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the area of a convex polygon.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+01: public class ConvexPolygon {
+02: 
+03:     public double findArea(int[] x, int[] y)  {
+04: 
+05:         double area = 0.0;
+06: 
+07:         /*
+08:         * Sum the areas of the triangles {0,1,2}, {0,2,3}, ... {0,n-1,n}
+09:         */
+10:         for (int v = 2; v < x.length; v++)  {
+11:             area += areaOfTriangle(x[0], y[0], x[v-1], y[v-1], x[v], y[v]);
+12:         }
+13: 
+14:         return area;
+15:     }
+16: 
+17:     /*
+18:     * Given the coordinates of the three vertices, the area of a triangle is
+19:     * given by:
+20:     *
+21:     * area = abs((X1(Y2-Y3) + X2(Y3 - Y1) + X3(Y1-Y2)) / 2)
+22:     *
+23:     */
+24:     private double areaOfTriangle(int x1, int y1,
+25:                                   int x2, int y2,
+26:                                   int x3, int y3) {
+27: 
+28:         double term1 = x1 * (y2 - y3);
+29:         double term2 = x2 * (y3 - y1);
+30:         double term3 = x3 * (y1 - y2);
+31: 
+32:         double result = (term1 + term2 + term3) / 2.0;
+33: 
+34:         return Math.abs(result);
+35: 
+36:     }
+37: 
+38: }
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+<p>
+  The simple formula for the area of a triangle (A = (b * h) / 2) won't help us much.  Instead we use a formula like the one given
+  <a href="http://www.mathopenref.com/coordtrianglearea.html">here</a>
+</p>
+
+<p>
+  The area of the polygon can be calculated by dividing it up into triangles.  For a polygon with n points, the area is the sum
+  of the triangles formed by the points {0,1,2} + {0,2,3} + ... {0,n-1,n}.  This becomes obvious is you draw any convex polygon
+  on a piece of paper.
+</p>
+
+<p>
+  An alternate approach is to carve off a triangle (and calculate its area), and then recursively call findArea() to get the area
+  of the remaining polygon.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
