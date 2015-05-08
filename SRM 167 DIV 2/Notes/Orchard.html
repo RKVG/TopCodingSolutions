@@ -92,31 +92,35 @@
     68	
     69	            // Reduce neighbors above and to the left.
     70	            for (int dx = 0; col - dx >= 0; dx++)  {
-    71	                distances[row - dy][col - dx] = Math.min(distances[row - dy][col - dx], dx + dy);
-    72	            }
-    73	
-    74	            // Reduce neighbors above and to the right.
-    75	            for (int dx = 0; col + dx < size; dx++)  {
-    76	                distances[row - dy][col + dx] = Math.min(distances[row - dy][col +dx], dx + dy);
-    77	            }
-    78	        }
-    79	
-    80	        // Works the area below the tree
-    81	        for (int dy = 0; row + dy < size; dy++)  {
-    82	
-    83	            // Reduce neighbors below and to the left.
-    84	            for (int dx = 0; col - dx >= 0; dx++)  {
-    85	                distances[row + dy][col - dx] = Math.min(distances[row + dy][col - dx], dx + dy);
-    86	            }
-    87	
-    88	            // Reduce neighbors below and to the right.
-    89	            for (int dx = 0; col + dx < size; dx++)  {
-    90	                distances[row + dy][col + dx] = Math.min(distances[row + dy][col +dx], dx + dy);
-    91	            }
-    92	        }
-    93	    }
-    94	
-    95	}
+    71	                distances[row - dy][col - dx] =
+    72                       Math.min(distances[row - dy][col - dx], dx + dy);
+    73	            }
+    74	
+    75	            // Reduce neighbors above and to the right.
+    76	            for (int dx = 0; col + dx < size; dx++)  {
+    77	                distances[row - dy][col + dx] =
+    78                       Math.min(distances[row - dy][col +dx], dx + dy);
+    79	            }
+    80	        }
+    81	
+    82	        // Works the area below the tree
+    83	        for (int dy = 0; row + dy < size; dy++)  {
+    84	
+    85	            // Reduce neighbors below and to the left.
+    86	            for (int dx = 0; col - dx >= 0; dx++)  {
+    87	                distances[row + dy][col - dx] =
+    88                       Math.min(distances[row + dy][col - dx], dx + dy);
+    89	            }
+    90	
+    91	            // Reduce neighbors below and to the right.
+    92	            for (int dx = 0; col + dx < size; dx++)  {
+    93	                distances[row + dy][col + dx] =
+    94                       Math.min(distances[row + dy][col +dx], dx + dy);
+    95	            }
+    96	        }
+    97	    }
+    98	
+    99	}
 
 </pre>
     </div>
@@ -130,7 +134,7 @@
 <p>
 The idea is to create an NxN array that holds the distances from each point to and edge or a tree, then we can just scan
 through the distances array looking for the largest value.  The loops on lines 18 - 25 initialize the array so that all
-elements on the outer edge have a value of 1.  Then each concentric square working inward gets increasing values.  A
+elements on the outer edge have a value of 1.  Then each concentric square moving inward gets increasing values.  A
 5x5 square, would look like this:
 </p>
 
@@ -144,9 +148,9 @@ elements on the outer edge have a value of 1.  Then each concentric square worki
 
 <p>
 Next, each tree is dropped into the matrix.  The placeTree() method handles reducing the distance values in the matrix based on their
-proximity to the new tree.  The method begins at the tree's location and the works by going upward one row at a time, first working
+proximity to the new tree.  The method begins at the tree's location and then works by going upward one row at a time, first working
 to the left and then right.  At each new location it determines if that distance should be reduced to the distance back to the tree,
-or left alone if its value was already smaller.  After reaching the top of the matrix, the method starts over from the tree's location
+or left alone because its value was already smaller.  After reaching the top of the matrix, the method starts over from the tree's location
 and works down to the bottom.  Using the above example, a tree placed at location 2,1 would update the matrix to be:
 </p>
 
