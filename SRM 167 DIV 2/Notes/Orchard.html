@@ -1,0 +1,173 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1859"
+                       target="_blank">TopCoder Problem Statement - Orchard</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 167 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the position in an NxN array that is furthest from the edges, and from any tree.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class Orchard {
+     2	
+     3	    int size;
+     4	    int[][] distances;
+     5	
+     6	    public int[] nextTree(String[] orchard) {
+     7	
+     8	        size = orchard.length;
+     9	
+    10	        distances = new int[size][size];
+    11	
+    12	        /*
+    13	        * Mark distances from the edges.
+    14	        * This create concentric squares with the distance
+    15	        * at the edges = 1, and the value increasing by
+    16	        * 1 as the squares move inward.
+    17	        */
+    18	        for (int i = 0; i < (size + 1) / 2; i++) {
+    19	            for (int j = i; j < (size - i); j++) {
+    20	                distances[i][j] = i + 1;                // Top Row
+    21	                distances[size - 1 - i][j] = i + 1;     // Bottom Row
+    22	                distances[j][i] = i + 1;                // Left Column
+    23	                distances[j][size - 1 - i] = i + 1;     // Right Column
+    24	            }
+    25	        }
+    26	
+    27	        /*
+    28	        * Add trees into the mix
+    29	        * Updates the values in the distance matrix.
+    30	        */
+    31	        for (int row = 0; row < size; row++)  {
+    32	            for (int col = 0; col < size; col++)  {
+    33	                if ('T' == orchard[row].charAt(col))  {
+    34	                    placeTree(row,col);
+    35	                }
+    36	            }
+    37	        }
+    38	
+    39	        /*
+    40	        * Find and return the greatest distance
+    41	        */
+    42	        int maxDistance = 0;
+    43	        int[] retValues = new int[] {1, 1};
+    44	
+    45	        for (int y = 0; y < size; y++)  {
+    46	            for (int x = 0; x < size; x++)  {
+    47	                if (distances[y][x] > maxDistance)  {
+    48	                    maxDistance = distances[y][x];
+    49	                    retValues[0] = y + 1;
+    50	                    retValues[1] = x + 1;
+    51	                }
+    52	            }
+    53	        }
+    54	
+    55	        return retValues;
+    56	    }
+    57	
+    58	
+    59	    /*
+    60	    * Places a tree at the given coordinate.  Then works outward from the
+    61	    * tree's location reducing the distances of it's neighboring squares.
+    62	    * Here's where all the work of updating the distances matrix is done.
+    63	    */
+    64	    private void placeTree(int row, int col)  {
+    65	
+    66	        // Work the area above the tree.
+    67	        for (int dy = 0; row - dy >= 0; dy++)  {
+    68	
+    69	            // Reduce neighbors above and to the left.
+    70	            for (int dx = 0; col - dx >= 0; dx++)  {
+    71	                distances[row - dy][col - dx] = Math.min(distances[row - dy][col - dx], dx + dy);
+    72	            }
+    73	
+    74	            // Reduce neighbors above and to the right.
+    75	            for (int dx = 0; col + dx < size; dx++)  {
+    76	                distances[row - dy][col + dx] = Math.min(distances[row - dy][col +dx], dx + dy);
+    77	            }
+    78	        }
+    79	
+    80	        // Works the area below the tree
+    81	        for (int dy = 0; row + dy < size; dy++)  {
+    82	
+    83	            // Reduce neighbors below and to the left.
+    84	            for (int dx = 0; col - dx >= 0; dx++)  {
+    85	                distances[row + dy][col - dx] = Math.min(distances[row + dy][col - dx], dx + dy);
+    86	            }
+    87	
+    88	            // Reduce neighbors below and to the right.
+    89	            for (int dx = 0; col + dx < size; dx++)  {
+    90	                distances[row + dy][col + dx] = Math.min(distances[row + dy][col +dx], dx + dy);
+    91	            }
+    92	        }
+    93	    }
+    94	
+    95	}
+
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+    There are several way to go about solving this problem.  I've seen it solved using breadth-first search from every point
+    in the grid.  But, I believe this solution takes a far easier approach.
+    </p>
+
+<p>
+The idea is to create an NxN array that holds the distances from each point to and edge or a tree, then we can just scan
+through the distances array looking for the largest value.  The loops on lines 18 - 25 initialize the array so that all
+elements on the outer edge have a value of 1.  Then each concentric square working inward gets increasing values.  A
+5x5 square, would look like this:
+</p>
+
+<table>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+<tr><td>1</td><td>2</td><td>3</td><td>2</td><td>1</td></tr>
+<tr><td>1</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+
+<p>
+Next, each tree is dropped into the matrix.  The placeTree() method handles reducing the distance values in the matrix based on their
+proximity to the new tree.  The method begins at the tree's location and the works by going upward one row at a time, first working
+to the left and then right.  At each new location it determines if that distance should be reduced to the distance back to the tree,
+or left alone if its value was already smaller.  After reaching the top of the matrix, the method starts over from the tree's location
+and works down to the bottom.  Using the above example, a tree placed at location 2,1 would update the matrix to be:
+</p>
+
+<table>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>2</td><td>2</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>2</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>2</td><td>2</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+
+<p>
+After all the trees have been placed, then it's a simple matter of looping through the distances array, and finding the largest value.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
