@@ -1,0 +1,177 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1919"
+                       target="_blank">TopCoder Problem Statement - WindowWasher</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 168 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the shortest amount of time needed for a team of window washers to
+		wash all the windows of a building.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class WindowWasher {
+     2		
+     3		public int fastest(int width, int height, int[] washTimes) {
+     4	
+     5	
+     6	        /*
+     7	        * Holds which washer a column is assigned to.  The column
+     8	        * will be assigned to the washer that can complete it first
+     9	        * taking into consideration any previous columns that
+    10	        * the washer may have been assigned to.
+    11	        */
+    12			int[] assignedColumns = new int[width];
+    13	
+    14	        // Begin with all columns unassigned.
+    15	        for (int i = 0; i < assignedColumns.length; i++)  {
+    16	            assignedColumns[i] = -1;
+    17	        }
+    18	
+    19	
+    20	        for (int w = 0; w < width; w++)  {
+    21	
+    22	            /*
+    23	            * Determine the time at which each washer could complete
+    24	            * the current column.
+    25	            */
+    26	            int[] completionTimes = calcCompletionTimes(assignedColumns, w, washTimes);
+    27	
+    28	            /*
+    29	            * Assign the current column to whomever could complete
+    30	            * it the earliest.
+    31	            */
+    32	            int minCompletionTime = Integer.MAX_VALUE;
+    33	            int minCompletionTimeWasher = -1;
+    34	
+    35	            for (int i = 0; i < completionTimes.length; i++)  {
+    36	                if (completionTimes[i] < minCompletionTime)  {
+    37	                    minCompletionTime = completionTimes[i];
+    38	                    minCompletionTimeWasher = i;
+    39	                }
+    40	            }
+    41	
+    42	            assignedColumns[w] = minCompletionTimeWasher;
+    43	
+    44	        }
+    45	
+    46	        /*
+    47	        * Holds the time at which each washer will be done with their
+    48	        * last assigned column.
+    49	        */
+    50	        int[] completionTimes = new int[washTimes.length];
+    51	
+    52	        // Holds the maximum of the finishing times.
+    53	        int maxCompletionTime = -1;
+    54	
+    55	        for (int c = 0; c < assignedColumns.length; c++)  {
+    56	            int columnAssignedTo = assignedColumns[c];
+    57	
+    58	            // Here's the first (and only) time that the height comes into play.
+    59	            completionTimes[columnAssignedTo] += (washTimes[columnAssignedTo] * height);
+    60	
+    61	            // See if this pushes the maxCompletionTime out.
+    62	            if (completionTimes[columnAssignedTo] > maxCompletionTime)  {
+    63	                maxCompletionTime = completionTimes[columnAssignedTo];
+    64	            }
+    65	        }
+    66	
+    67	        return maxCompletionTime;
+    68	
+    69		}
+    70	
+    71	    /*
+    72	    * Calculates the times at which each washer could complete the current column
+    73	    * taking into account all previous columns that have been assigned to the
+    74	    * washer.
+    75	    * Note that at this point, the height of the building does not matter.  If a
+    76	    * washer could complete a 1 story column before another washer could, then
+    77	    * they could complete an N story column before the other.  Therefore,
+    78	    * completion times assume a height of 1.
+    79	    */
+    80	    private int[] calcCompletionTimes(int[] assignedColumns, int currentColumn, int[] washTimes)  {
+    81	
+    82	        int[] completionTimes = new int[washTimes.length];
+    83	
+    84	
+    85	        /*
+    86	        * Completion time is at least the time it would take the washer
+    87	        * to do one window.
+    88	        */
+    89	        for (int i = 0; i < completionTimes.length; i++)  {
+    90	            completionTimes[i] = washTimes[i];
+    91	        }
+    92	
+    93	        /*
+    94	        * Now, add in time for previously assigned columns.
+    95	        */
+    96	        for (int i = 0; i < currentColumn; i++)  {
+    97	            completionTimes[assignedColumns[i]] += washTimes[assignedColumns[i]];
+    98	        }
+    99	
+   100	        return completionTimes;
+   101	
+   102	    }
+   103	}
+
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+The idea is to start with a building of width w == 1, and add columns until w == width.  Each
+new column will be assigned to the washer that can complete it the earliest.  The assignedColumns[]
+array will hold the index of the washer assigned to that column.  Note that at this point, the height
+of the building doesn't matter, and we can ignore the constraint that the washers cannot cross each
+other, since we're really just trying to determine the number of columns that each washer will do.
+</p>
+
+<p>
+The method calcCompletionTimes() determines the time the each washer could complete the next column,
+taking into consideration all columns that the washer already has assigned to them.  For example,
+if a washer has no columns assigned, then it's just the time that it takes the washer to do a column.
+If there are other columns assigned, we sum the time it takes to complete those, and add that to
+the time it takes to complete the column.
+</p>
+
+<p>
+For our purpose here, it's safe to assume that all columns have a height 1.  That is, if a window washer
+could complete a column of of height 1 before another washer; then they could complete the column
+earlier if the height had any other value.
+</p>
+
+<p>
+After calculating the completion times, the loop on line 35 simply identifies the washer that could complete
+the column the earliest, and assigns it to them.
+</p>
+
+<p>
+Once we've worked up to the entire width of the building, we just need to look for the washer that would
+complete their work last.  This part is pretty trivial.  We just have an array that holds the completion
+times for each washer.  Then work through each of the assignedColumns, and increment the washer's
+completion time by the time it takes them to complete the column - all the while keeping track of the
+maximum completion time.
+</p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

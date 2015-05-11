@@ -1,0 +1,81 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1937"
+                       target="_blank">TopCoder Problem Statement - StairClimb</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 168 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count the number of strides it takes to get up several flights of stairs.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class StairClimb {
+     2	
+     3	        public int stridesTaken(int[] flights, int stairsPerStride) {
+     4	
+     5	        int totalStrides = 0;
+     6	
+     7	        for (int f = 0; f < flights.length; f++)  {
+     8	
+     9	            // Get the number of strides in this flight.
+    10	            totalStrides += flights[f] / stairsPerStride;
+    11	
+    12	            /*
+    13	            * If the last stride does not end evenly at the landing,
+    14	            * then we'll need one more stride.
+    15	            */
+    16	            if (flights[f] % stairsPerStride != 0) totalStrides++;
+    17	
+    18	            // Add the two steps to turn at the landing.
+    19	            totalStrides += 2;
+    20	        }
+    21	
+    22	        // We don't need to count the turn at the top.  Remove those strides.
+    23	        totalStrides -= 2;
+    24	
+    25	        return (totalStrides < 0) ? 0 : totalStrides;
+    26	    }
+    27	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+	Start with totalStrides equal to zero.  Then for each flight of stairs, do the following:
+		<ol>
+			<li>Get the whole number of strides that fits into this flight of stairs.</li>
+			<li>If there are any remaining stairs, add one more stride to cover those.</li>
+			<li>Add two strides to make the turn at the landing.</li>
+		</ol>
+	</p>
+	<p>
+		Next, remove two strides because we don't need to count the strides on the last landing.
+	</p>
+	<p>
+		Finally, make sure that we don't return less than 0.  This could happen if the
+		length of the flights array was 0.
+	</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

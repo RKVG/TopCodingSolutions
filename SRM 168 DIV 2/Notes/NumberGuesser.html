@@ -1,0 +1,144 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1869"
+                       target="_blank">TopCoder Problem Statement - NumberGuesser</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 168 Round 1 - Division I, Level One </td></tr>
+            <tr><td>Single Round Match 168 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the starting number given the output of a specified algorithm.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class NumberGuesser {
+     2	
+     3		public int guess(String leftOver) {
+     4	
+     5			/*
+     6			* Loop through all positions in leftOver, inserting the digits
+     7			* 1..9 at each position.
+     8			*/
+     9			for (int position = 0; position <= leftOver.length(); position++) {
+    10				for (int digitToInsert = 1; digitToInsert < 10; digitToInsert++) {
+    11	
+    12					// Add digit back into leftOver
+    13					String beforeRemovingDigit =
+    14							leftOver.substring(0, position) +
+    15									digitToInsert +
+    16									leftOver.substring(position, leftOver.length());
+    17	
+    18					// Larger number - Smaller number = z
+    19					int z = Integer.parseInt(beforeRemovingDigit);
+    20	
+    21					/*
+    22					* Call larger number y
+    23					* Call smaller number x
+    24					* y - x = z or y = x + z
+    25					*/
+    26					for (int x = 1; x < 5000; x++) {
+    27						int y = x + z;
+    28	
+    29						// See if x and y have the same set of digits
+    30						Integer i = missingDigit(x, y);
+    31	
+    32						if (missingDigit(x,y) == null) {
+    33							return missingDigit(z, Integer.parseInt(leftOver));
+    34						}
+    35					}
+    36				}
+    37			}
+    38	
+    39			return -1;
+    40		}
+    41	
+    42		/*
+    43		* Return the first digit found that is in x, but not in y;
+    44		* or in y but not in x.
+    45		* Returns null if all the digits in x are in y and vice-versa.
+    46		* Does not consider the digit 0.
+    47		*/
+    48		private Integer missingDigit(int x, int y)  {
+    49	
+    50	
+    51			int[] digits = new int[10];
+    52	
+    53			// Add the digits found in x
+    54			while (x > 0)  {
+    55				int i = x % 10;	// Get the last digit
+    56				digits[i]++;
+    57				x /= 10;
+    58			}
+    59	
+    60			// Subtract the digits found in y
+    61			while (y > 0)  {
+    62				int i = y % 10;
+    63				digits[i]--;
+    64				y /= 10;
+    65			}
+    66	
+    67			// Skip over the digit 0
+    68			for (int i = 1; i < 10; i++)  {
+    69				if (digits[i] != 0) return i;
+    70			}
+    71	
+    72			// Numbers have the same combination of digits.
+    73			return null;
+    74	
+    75		}
+    76	
+    77	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+<p>
+I found this 500 point question more challenging than the 1100 point problem.  Apparently, if
+you know the "trick" to it (see <a href="http://community.topcoder.com/tc?module=Static&d1=match_editorials&d2=srm168">here</a>),
+you can solve this in just a few lines.  This solution works
+through the problem for those that don't know the trick.
+</p>
+
+<p>
+First, note that the algorithm calls for two numbers x and y, such that y - x = z.  Or, more conveniently y = x + z.
+The loops on lines 9 and 10 will generate every possible value for z by inserting the digits 1 through 9
+into each position of the given leftOver string.  Then we loop through all possible values of x.  With candidates
+for x and z, we also have a candidate for y.
+</p>
+
+<p>
+Now, if x and y are composed of the same digits, we get our answer.  z must have been the number before the digit
+was removed.  So, we just need to determine what digit is in z that is not in leftOver.
+</p>
+
+<p>
+The method missingDigit() is used for both of these cases.  If x and y are composed of the same digits, it will return
+null, otherwise it will return a digit that exists in one number but not the other.  It works by creating an array
+to hold a count of each digit encountered.  It loops through the first number and increments the count for each
+digit.  Then it loops through the second number, and decrements the count for each digit there.  If the numbers
+use the same set of digits, then everything should end up back at zero.  Otherwise, return the digit with the first
+non-zero tally.
+</p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
