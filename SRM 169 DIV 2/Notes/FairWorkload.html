@@ -1,0 +1,278 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1901"
+                       target="_blank">TopCoder Problem Statement - FairWorkload</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 169 Round 1 - Division I, Level Two</td></tr>
+            <tr><td>Single Round Match 169 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the minimum time needed to search through a set of folders given a number of workers.
+        The workers must search a contiguous set of folders, and each folder may take a varying amount
+        of time to process.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class FairWorkload {
+     2
+     3		public int getMostWork(int[] folders, int workers) {
+     4
+     5	        /*
+     6	        * Stores the best time that we can complete a given
+     7	        * number of folders with a given number workers.
+     8	        */
+     9			int[][] times = new int[workers][folders.length];
+    10
+    11	        /*
+    12	        * With just 1 worker, the completion time
+    13	        * of folder f will be the sum of the times
+    14	        * it takes to process each folder up to and
+    15	        * including f.
+    16	        */
+    17	        for (int f = 0; f < folders.length; f++)  {
+    18	            times[0][f] = sumSections(0, f+1, folders);
+    19	        }
+    20
+    21	        for (int w = 1; w < workers; w++)  {
+    22	            for (int f = 0; f < folders.length; f++)  {
+    23
+    24	                // Cannot have less folders than workers
+    25	                if (f < w)  {
+    26	                    times[w][f] = -1;
+    27
+    28	                } else  {
+    29
+    30	                    int minCompletionTime = Integer.MAX_VALUE;
+    31
+    32	                    /*
+    33	                    * Try all combinations of splitting the
+    34	                    * folders between previous workers and
+    35	                    * the current worker.  d - marks
+    36	                    * the division point, where the current
+    37	                    * worker begins.
+    38	                    */
+    39	                    for (int d = w; d <= f; d++)  {
+    40
+    41	                        int completionTime = Math.max(
+    42	                                times[w-1][d-1],
+    43	                                sumSections(d, f+1, folders));
+    44
+    45	                        minCompletionTime = Math.min(
+    46	                                minCompletionTime,
+    47	                                completionTime);
+    48	                    }
+    49
+    50	                    times[w][f] = minCompletionTime;
+    51	                }
+    52	            }
+    53	        }
+    54
+    55	        return times[workers - 1][folders.length - 1];
+    56		}
+    57
+    58	    /*
+    59	    * Return the sum of the elements in the nums array
+    60	    * starting at s and stopping just before e.
+    61	    */
+    62	    private int sumSections(int s, int e, int[] nums)  {
+    63	        int sum = 0;
+    64
+    65	        for (int x = s; x < e; x++)  {
+    66	            sum += nums[x];
+    67	        }
+    68
+    69	        return sum;
+    70	    }
+    71
+    72	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        FairWorkload is a problem that begs for a dynamic programming solution.  To solve this, we'll build up a table
+        that holds the best finishing time we can achieve given a number of workers and a number of folders.  We'll
+        start with the trivial case of just one worker.  Using that information, we'll add additional workers and
+        folders until we've completed the table.  The result will be the table shown below.  With that, we can just
+        return the value of the cell in the bottom right corner.
+    </p>
+    <p>
+        Don't be confused by the number of workers; I've labeled the table using its indexes, so "Workers 0" is the
+        case with one worker.  Same goes for folders across the top.
+    </p>
+
+    <p>
+        The table is initialized by filling in the top row.  With just one worker, the number of sections searched
+        is just the sum of the sections in all previous folders, plus the number of sections in the current folder.
+        This could have been done more efficiently by keeping a running total of the number of sections, but since I
+        needed a sumSections() method anyway, I chose to rely on that here.
+    </p>
+
+    <p>
+        Note that we cannot satisfy the constraints of the problem if there are fewer folders than their are workers.
+        These cases are noted with a -1, although that never really comes into play.
+    </p>
+
+    <p>
+        Things begin to get interesting with the second worker.  With 2 workers and 2 folders, we know that 1 worker
+        must look through 10 sections to complete 1 folder, and that worker 2 must look through 20 sections to complete
+        the next folder.  Therefore the minimum number of sections is 20.
+    </p>
+
+    <p>
+        With 2 workers and three folders we have a choice in how to complete the task.  We can either assign the
+        first 2 folders to worker 1, and the third to worker 2 (scenario 1)- or we can assign just the first folder to
+        worker 1, and the remaining two to worker 2 (scenario 2).  We need to check both cases and see with gives the
+        better result.  Scenario 1 gives 10 + 20 = 30 sections to worker 1 and 30 sections to worker 2.  Scenario 2
+        gives 10 sections to worker 1 and 20 + 30 = 50 sections to worker 2.  The max of 30 in scenario 1 is better
+        than the max of 50 in scenario 2, so 30 is our value here.
+    </p>
+
+    <p>
+        The loop on line 39 works through each scenario. In general, we want to minimize the maximum value of sections
+        as we move the dividing line across the range of folders.  The dividing line separates the work done by
+        previous workers on one side (which can be pulled right out of the table), and the work done by the latest
+        worker, which is the sum of the number of sections remaining.
+    </p>
+
+    <table border="2">
+        <tr>
+            <td />
+            <td colspan="9">Folder / Number of Sections</td>
+        </tr>
+        <tr>
+            <td/>
+            <td>0/10</td>
+            <td>1/20</td>
+            <td>2/30</td>
+            <td>3/40</td>
+            <td>4/50</td>
+            <td>5/60</td>
+            <td>6/70</td>
+            <td>7/80</td>
+            <td>8/90</td>
+        </tr>
+        <tr>
+            <td>Workers<br/>0</td>
+            <td>10</td>
+            <td>30</td>
+            <td>60</td>
+            <td>100</td>
+            <td>150</td>
+            <td>210</td>
+            <td>280</td>
+            <td>360</td>
+            <td>450</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>-1</td>
+            <td>20</td>
+            <td>30</td>
+            <td>60</td>
+            <td>90</td>
+            <td>110</td>
+            <td>150</td>
+            <td>210</td>
+            <td>240</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>30</td>
+            <td>40</td>
+            <td>60</td>
+            <td>90</td>
+            <td>110</td>
+            <td>150</td>
+            <td>170</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>40</td>
+            <td>50</td>
+            <td>60</td>
+            <td>90</td>
+            <td>110</td>
+            <td>150</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>50</td>
+            <td>60</td>
+            <td>70</td>
+            <td>90</td>
+            <td>110</td>
+        </tr>
+    </table>
+
+    <p>
+        This is a great problem to hone you dynamic programming skills.  Please take the time to make sure that you
+        understand what's going on.  It's a great tool to have for many TopCoder problems.
+    </p>
+
+    <p>
+        To help make it as clear as I can, let me walk through the final cell.  Imagine that the bottom right cell
+        was not yet filled in.  From the previous row, we know the best solutions for each number of folders with one
+        less worker.  Since each worker must have at least one folder, we can divide the 9 folders up as follows:
+    </p>
+    <p>
+        Folders 0 - 3 processed by workers 0 - 3 / Folders 4 - 8 processed by Worker 4.  From the table, we know
+        the previous workers would have a max of 40 sections.  But this leaves 50 + 60 + 70 + 80 + 90 = 350 sections
+        for the last worker.
+    </p>
+    <p>
+        We then try...
+    </p>
+    <p>
+        Folders 0 - 4 processed by workers 0 - 3 / Folders 5 - 8 processed by Worker 4.  Again from the table, the
+        previous workers can do folders 0 - 4 with a max of 50.  Worker 4 has 60 + 70 + 80 + 90 = 300 sections.  Better
+        than before, but still not the best we can do.
+    </p>
+
+    <p>
+        Folders 0 - 5 processed by workers 0 - 3 / Folders 6 - 8 processed by Worker 4.  The previous workers have
+        a max of 60, and Worker 4 has 70 + 80 + 90 = 240.  Better still.
+    </p>
+
+    <p>
+        Folders 0 - 6 processed by workers 0 - 3 / Folders 7 - 8 processed by Worker 4.  The previous workers now have
+        a max of 90, and Worker 5 has 80 + 90 = 170.
+    </p>
+
+    <p>
+        It turns out the best solution is to have Folders 0 - 7 processed by workers 0 - 3 / and just Folder 8 processed
+        by worker 4.  The previous workers have a max of 110 sections, and Worker 4 has just 90 sections.  The
+        max of 110 is the best we can do, so that's what goes into the bottom right cell.
+    </p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
