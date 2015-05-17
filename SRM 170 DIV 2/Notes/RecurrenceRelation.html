@@ -1,0 +1,148 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1915"
+                       target="_blank">TopCoder Problem Statement - RecurrenceRelation</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 170 Round 1 - Division I, Level One</td></tr>
+            <tr><td>Single Round Match 170 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Solve for the value of X[n] where X[n] is based on X[n-1], X[n-2], ...
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class RecurrenceRelation {
+     2
+     3		public int moduloTen(int[] coefficients, int[] initial, int N) {
+     4
+     5	        int K = coefficients.length;
+     6
+     7	        /*
+     8	        * Stores the solution to the previous K problems.
+     9	        */
+    10			int[] X = new int[K];
+    11
+    12	        /*
+    13	        * Initialize X to contain the values given
+    14	        * in initial.  We need to mod these first.
+    15	        */
+    16	        for (int i = 0; i < X.length; i++)  {
+    17	            X[i] = myMod(initial[i], 10);
+    18	        }
+    19
+    20	        // If we already have the answer, just return it.
+    21	        if (N < K)  return X[N];
+    22
+    23	        int n = K;
+    24
+    25	        while (n <= N)  {
+    26
+    27	            /*
+    28	            * Add up the previous K solutions.
+    29	            */
+    30	            int sum = 0;
+    31
+    32	            for (int k = 0; k < K; k++)  {
+    33	                sum += coefficients[k] * X[k];
+    34	            }
+    35
+    36	            sum = myMod(sum, 10);
+    37
+    38	            /*
+    39	            * We have our answer, so shuffle everything down to
+    40	            * make room for it - dropping the olds solution off
+    41	            * since we won't need it any more.
+    42	            */
+    43
+    44	            for (int i = 0; i < (K - 1); i++)  {
+    45	                X[i] = X[i + 1];
+    46	            }
+    47
+    48	            // Insert the current solution into the end of the array.
+    49	            X[K - 1] = sum;
+    50
+    51	            // Start working on the next solution.
+    52	            n++;
+    53	        }
+    54
+    55	        // Return the most recently solved.
+    56	        return X[K - 1];
+    57	   }
+    58
+    59	    /*
+    60	    * This handles mod'ing negative numbers, and is taken
+    61	    * straight out of the problem definition.
+    62	    */
+    63	    private static int myMod(int i, int m)  {
+    64
+    65	        if (i >= 0) return i % m;
+    66
+    67	        return ((m - ((-1 * i) % m)) % m);
+    68	    }
+    69	}
+
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The wording of this problem makes it sound much more difficult than it actually is.  You may need to read
+        the description several times in order to understand what it's getting at.  Basically, you're asked to
+        solve for the value of X[n], where X[n] is based on the values of X[n-1], X[n-2], etc.  The number of
+        previous elements that combine to create the value of X[n] is K, where K is the length of both the
+        coefficients and initial arrays.
+    </p>
+
+    <p>
+        Start by creating an array of ints, X[], to hold these values.  Then we initialize X[] using the values
+        from initial[].  Note that we need to perform the mod operation as described int the problem statement
+        before inserting any value into X[].  Also note that if the number we're being asked to solve for (N) is less
+        than, or equal to, the length of the initial[] array (N <= K), then we already have our answer.  We can
+        just return the the value in X[N].
+    </p>
+
+    <p>
+        Otherwise, we need to solve for each value of X[n] up to n = N.  To get the next value we multiply each
+        value in X[] by it's corresponding value in coefficients[] and note their sum.  Then we shift all elements
+        in X[] down by 1 (dropping off the value in X[0]) and insert our new value into the right-most position - after
+        running it through the mod operation.
+    </p>
+
+    <p>
+        Once n == N, we have solved for the number that was asked for.  The value we need is the most recent
+        solution found which is stored in the greatest element of X.
+    </p>
+
+    <p>
+        The method myMod() simply implements the mod function as described in the problem statement.  It is the normal
+        % function, modified to handle negative numbers.
+    </p>
+
+    <p>
+        Again, the toughest part of the problem is just reading through the problem statement making sense of it.  I
+        actually thought this was harder than the 1000 point problem
+        <a href="/2015/05/poetry.html">Poetry</a>.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

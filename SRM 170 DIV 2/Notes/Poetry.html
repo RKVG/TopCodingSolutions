@@ -1,0 +1,185 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1835"
+                       target="_blank">TopCoder Problem Statement - Poetry</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 170 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the rhyme scheme of a poem.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	import java.util.HashMap;
+     2	import java.util.Map;
+     3
+     4	public class Poetry {
+     5
+     6		public String rhymeScheme(String[] poem) {
+     7
+     8	        // The label we'll assign to the next rhyme.
+     9	        char nextRhymeLabel = 'a';
+    10
+    11	        /*
+    12	        * We'll fill in this array as we go, and ultimately
+    13	        * return it.
+    14	        */
+    15	        char[] result = new char[poem.length];
+    16
+    17	        // Maps and ending sound to a label.
+    18	        Map<String, Character> endings = new HashMap<>();
+    19
+    20
+    21	        for (int line = 0; line < poem.length; line++)  {
+    22
+    23	            // Split the line on whitespace characters
+    24	            String[] words = poem[line].trim().split("\\s+");
+    25
+    26	            /*
+    27	            * If the line was empty (or just spaces), words will
+    28	            * have a length of 1, and the only entry will have
+    29	            * a length of 0.
+    30	            */
+    31	            if ((words.length == 1) && (words[0].length() == 0))  {
+    32	                result[line] = ' ';
+    33
+    34	            } else  {
+    35
+    36	                String lastWord = words[words.length - 1];
+    37	                String ending = getWordEnding(lastWord.toLowerCase());
+    38
+    39	                if (endings.containsKey(ending))  {
+    40
+    41	                    /*
+    42	                    * We've already seen this ending, so just
+    43	                    * look up the label.
+    44	                    */
+    45	                    result[line] = endings.get(ending);
+    46
+    47	                } else  {
+    48
+    49	                    /*
+    50	                    * This is a new ending, so store
+    51	                    * it, and increment to the next label.
+    52	                    */
+    53	                    endings.put(ending, nextRhymeLabel);
+    54	                    result[line] = nextRhymeLabel;
+    55
+    56	                    if (nextRhymeLabel == 'z') {
+    57	                        nextRhymeLabel = 'A';
+    58	                    } else  {
+    59	                        nextRhymeLabel += 1;
+    60	                    }
+    61	                }
+    62	            }
+    63	        }
+    64
+    65	        return new String(result);
+    66
+    67		}
+    68
+    69	    private String getWordEnding(String word)  {
+    70
+    71	        int i = word.length() - 1;
+    72
+    73	        // Work backward until we reach the first vowel.
+    74	        while ((i >= 0) && (!isVowel(word.charAt(i), i, word.length())))  {
+    75	            i--;
+    76	        }
+    77
+    78	        /*
+    79	        * Continue so long as it remains a vowel.  Don't
+    80	        * go past the beginning of the word.
+    81	        */
+    82	        while ((i >= 0) && (isVowel(word.charAt(i), i, word.length())))  {
+    83	            i--;
+    84	        }
+    85
+    86	        // Return the ending of word starting at position i+1
+    87	        return word.substring(i+1);
+    88
+    89
+    90	    }
+    91
+    92	    /*
+    93	    * Returns true if c is one of: a, e, i, o, or u.
+    94	    * Also returns true if c is y and not the first or last
+    95	    * letter of the word.  Otherwise, returns false.
+    96	    */
+    97	    private boolean isVowel(char c, int position, int wordLength)  {
+    98
+    99	        if ((c == 'a') ||
+   100	                (c == 'e') ||
+   101	                (c == 'i') ||
+   102	                (c == 'o') ||
+   103	                (c == 'u')) return true;
+   104
+   105	        if ((c == 'y') &&
+   106	                ((position != 0) && (position != (wordLength - 1)))) return true;
+   107
+   108	        return false;
+   109
+   110	    }
+   111	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        Easier than the 500 point solution <a href="/2015/05/recurrencerelation.html">RecurrenceRelation</a>, Poetry
+        is pretty straight forward.  There's just three things to take care of:
+    </p>
+
+    <p>
+        First, we need to split each line of the input up into words, and then examine the last word of the line.
+        Splitting it up is easy with the String.split() method, using the "\\s+" regular expression.  Then
+        we need to check to make sure it wasn't an empty line.  The word we're interested in is the last element
+        of the result of the split.
+    </p>
+
+    <p>
+        Next we need to determine the ending of the word.  For this, we start at the end of the word and work
+        backward until we reach the first vowel.  Then we continue backward so long as we continue getting vowels, and
+        we don't run past the beginning of the String.
+    </p>
+
+    <p>
+        Finally, we need a method to determine if a character is a vowel.  This is trivial for characters other
+        than 'y'.  'y' is a vowel unless it is the first or last character of the word.
+    </p>
+
+    <p>
+        With that in place, the rest is just housekeeping.  We create a char[] named result to hold the label for
+        each line.  nextRhymeLabel holds the character we'll use for the next previously unseen word ending.  When
+        a new ending is encountered, we assign it the value in nextRhymeLabel, and then increment nextRhymeLabel, or
+        set it to 'A' if it has reached 'z'.  We use a HashMap to map endings that we've seen to the labels that
+        were assigned to them.
+    </p>
+
+    <p>
+        There's really nothing difficult about this problem.  I'm really surprised that it was not just Division 2 -
+        500 points.
+    </p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
