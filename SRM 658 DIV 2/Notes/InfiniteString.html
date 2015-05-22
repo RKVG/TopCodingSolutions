@@ -1,0 +1,92 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13783"
+                       target="_blank">TopCoder Problem Statement - InfiniteString</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 658 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        OVERVIEW
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class InfiniteString {
+     2
+     3		public String equal(String s, String t) {
+     4
+     5			int ptrS = 0;
+     6			int ptrT = 0;
+     7
+     8			/*
+     9			* Continue looping one character at a time until
+    10			* we reach both the end of String s and the end
+    11			* of String t at the same time.
+    12			*/
+    13			while ((ptrS < s.length()) || (ptrT < t.length()))  {
+    14
+    15				/*
+    16				* If at the end of a String, start over at
+    17				* the beginning.
+    18				*/
+    19				ptrS %= s.length();
+    20				ptrT %= t.length();
+    21
+    22				// Return "Not Equal" if characters do not match
+    23				if (s.charAt(ptrS) != t.charAt(ptrT)) return "Not equal";
+    24
+    25				ptrS++;
+    26				ptrT++;
+    27			}
+    28
+    29			return "Equal";
+    30		}
+    31	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+
+    <p>
+        Imagine creating two Strings s1 and t1 such that s1 = s + s + s ... and t1 = t + t + t + t + ...
+        and the length of both s1 and t1 is equal to the least common multiple of the lengths of s and t.
+    </p>
+
+    <p>
+        For example if s = "ababab" and t = "abab", then the length of s is 6, the length of t is 4, and their
+        least common multiple is 12.  Therefore, s1 = s + s = "abababababab" and t1 = t + t + t = "abababababab".
+        Since s1 == t1 we should return "Equal"
+    </p>
+
+    <p>
+        The important point is that if we step through the Strings s and t one character at a time, and loop
+        back to the beginning of the String when we reach the end; then we can stop when we reach the end
+        of both s and t at the same time.  That's the condition that is checked for in the while loop.
+    </p>
+
+    <p>
+        The rest is just a matter of checking that the characters match at each position, and incrementing
+        and resetting the pointer to the current character.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
