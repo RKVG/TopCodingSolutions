@@ -1,0 +1,152 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=13782"
+                       target="_blank">TopCoder Problem Statement - MutaliskEasy</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 658 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Given attacks that do 9,3, and 1 point of damage, determine the fewest number of rounds
+        needed to take out an opponent.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class MutaliskEasy {
+     2
+     3	    private static final int[] ATTACKS = {9, 3, 1};
+     4	    private static final int MAX_HP = 60;
+     5
+     6	    int[][][] results = new int[MAX_HP + 1][MAX_HP + 1][MAX_HP + 1];
+     7
+     8		public int minimalAttacks(int[] x) {
+     9
+    10	        // Nothing to do.
+    11	        if (x.length == 0) return 0;
+    12
+    13	        // Just divide by the maximum attack value.
+    14	        if (x.length == 1)  {
+    15	            if (x[0] % ATTACKS[0] == 0)  {
+    16	                return x[0] / ATTACKS[0];
+    17	            } else  {
+    18	                return x[0] / ATTACKS[0] + 1;
+    19	            }
+    20	        }
+    21
+    22	        /*
+    23	        * The problem does not fall into one of the easy cases,
+    24	        * so we'll have to do some work...
+    25	        */
+    26
+    27	        // Initialize results.
+    28	        for (int i = 0; i <= MAX_HP; i++)  {
+    29	            for (int j = 0; j <= MAX_HP; j++)  {
+    30	                for (int k = 0; k <= MAX_HP; k++)  {
+    31	                    results[i][j][k] = -1;
+    32	                }
+    33	            }
+    34	        }
+    35	        results[0][0][0] = 0;
+    36
+    37	        /*
+    38	        * We'll treat a length of 2 the same as if it had 3.  Just
+    39	        * give the 3rd element a value of 0.
+    40	        */
+    41	        if (x.length == 2) return minimalAttacks(x[0], x[1], 0);
+    42	        if (x.length == 3) return minimalAttacks(x[0], x[1], x[2]);
+    43
+    44	        return -1;  // Length of x must be >= 0 and <= 3
+    45
+    46	    }
+    47
+    48	    private int minimalAttacks(int x, int y, int z)  {
+    49
+    50	        // Don't allow values to go below 0.
+    51	        if (x < 0) x = 0;
+    52	        if (y < 0) y = 0;
+    53	        if (z < 0) z = 0;
+    54
+    55
+    56	        // If we've already calculated this result, just return it.
+    57	        if (results[x][y][z] >= 0) return results[x][y][z];
+    58
+    59	        int minAttacks = Integer.MAX_VALUE;
+    60
+    61	        // Try all possible combinations.
+    62	        for (int i = 0; i < ATTACKS.length; i++)  {
+    63
+    64	            for (int j = 0; j < ATTACKS.length; j++)  {
+    65	                if (j == i) continue;
+    66
+    67	                for (int k = 0; k < ATTACKS.length; k++)  {
+    68	                    if ((k == i) || (k == j))  continue;
+    69
+    70	                    minAttacks = Math.min(minAttacks,
+    71	                            minimalAttacks(
+    72	                                    x - ATTACKS[i],
+    73	                                    y - ATTACKS[j],
+    74	                                    z - ATTACKS[k]));
+    75	                }
+    76	            }
+    77	        }
+    78
+    79	        results[x][y][z] = minAttacks + 1;
+    80	        return minAttacks + 1;
+    81
+    82	    }
+    83
+    84	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        My first approach was a simple greedy algorithm.  I sorted the opponents according to the amount of hit points
+        they had remaining, and then assigned the biggest attack to the opponent with most hit points remaining, the
+        next biggest attack to the next strongest opponent, and the last attack to the third strongest opponent.  Then
+        I re-sorted the opponents, and repeated.  As the first test shows, this approach does not work.
+    </p>
+
+    <p>
+        Instead, we'll need to try every possible combination.
+    </p>
+
+    <p>
+        The minimalAttacks(int,int,int) method begins by ensuring we don't allow the hit point values to go below 0.
+        Then it checks to see if we've already solved for this combination of x, y, and z.  If so, then we can just
+        return that value  This technique is called memoization, and allows up to skip the calculations that follow if
+        they've already been carried out.
+    </p>
+
+    <p>
+        If we don't already have a result, then the loops on lines 62-77 will recursively call minimalAttacks with
+        every possible combination of assigning attacks to the various opponents.  We keep track of the best result
+        in the minAttacks variable, and then store this in the results matrix before returning it.
+    </p>
+
+    <p>
+        The minimalAttacks(int[]) method checks for a few easy cases (length of x is 0 or 1), and failing that
+        initializes the results matrix, and then uses minimalAttacks(int, int, int) to calculate the result.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
