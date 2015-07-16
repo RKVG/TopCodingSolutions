@@ -1,0 +1,173 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1950"
+                       target="_blank">TopCoder Problem Statement - CrossCountry</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 171 Round 1 - Division I, Level One </td></tr>
+            <tr><td>Single Round Match 171 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the order that teams place in a cross country meet given the finishing positions
+        of each runner.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	import java.util.ArrayList;
+     2	import java.util.Collections;
+     3	import java.util.List;
+     4
+     5	public class CrossCountry {
+     6
+     7	    private static final int MIN_FINISHERS = 5;
+     8	    private static final int TIE_BREAKER_PLACE = MIN_FINISHERS + 1;
+     9
+    10	    /*
+    11	    * The Team class represents a team and contains methods for calculating
+    12	    * it's score and comparing it to other teams.
+    13	    */
+    14	    class Team implements Comparable<Team> {
+    15
+    16	        char name;
+    17	        int score;
+    18	        int numFinishers;
+    19	        int tieBreaker;
+    20
+    21	        public Team(char name) {
+    22	            this.name = name;
+    23	        }
+    24
+    25	        public void addFinisher(int score) {
+    26
+    27	            // Only the top 5 runner contribute to the score.
+    28	            if (numFinishers < MIN_FINISHERS) {
+    29	                this.score += score;
+    30
+    31	                // Store the 6th finisher's position in tieBreaker.
+    32	            } else if (numFinishers == MIN_FINISHERS) {
+    33	                tieBreaker = score;
+    34	            }
+    35
+    36	            numFinishers++;
+    37	        }
+    38
+    39	        // Assumes that both Teams have at least five finishers.
+    40	        @Override
+    41	        public int compareTo(Team o) {
+    42
+    43	            if (this.score != o.score) return new Integer(score).compareTo(o.score);
+    44
+    45	            // This team does not have a 6th place finisher, but the other does.
+    46	            if ((numFinishers < TIE_BREAKER_PLACE) && (o.numFinishers >= TIE_BREAKER_PLACE)) return 1;
+    47
+    48	            // This team has a 6th place finisher, but the other team does not.
+    49	            if ((numFinishers >= TIE_BREAKER_PLACE) && (o.numFinishers < TIE_BREAKER_PLACE)) return -1;
+    50
+    51	            // Both teams have a 6th place finisher.
+    52	            if ((numFinishers >= TIE_BREAKER_PLACE) && (o.numFinishers >= TIE_BREAKER_PLACE))
+    53	                return new Integer(tieBreaker).compareTo(o.tieBreaker);
+    54
+    55	            // Neither team has a 6th place finisher.
+    56	            return new Character(name).compareTo(o.name);
+    57
+    58	        }
+    59	    }
+    60
+    61
+    62	    public String scoreMeet(int numTeams, String finishOrder) {
+    63
+    64	        Team[] teams = new Team[numTeams];
+    65
+    66	        // Initialize an ArrayList with a Team object for each team.
+    67	        char name = 'A';
+    68	        for (int i = 0; i < numTeams; i++) {
+    69	            teams[i] = (new Team(name++));
+    70	        }
+    71
+    72	        int score = 1;
+    73
+    74	        /*
+    75	        * Work left to right through the finishOrder string.  For each
+    76	        * character, determine corresponding team by subtracting the value
+    77	        * of 'A' from the character to get it's index in the teams list.
+    78	        */
+    79	        for (int i = 0; i < finishOrder.length(); i++) {
+    80	            char c = finishOrder.charAt(i);
+    81	            teams[c - 'A'].addFinisher(score++);
+    82	        }
+    83
+    84	        // Holds only those teams with 5 or more finishers.
+    85	        List<Team> qualifyingTeams = new ArrayList<>();
+    86
+    87	        for (int i = 0; i < teams.length; i++)  {
+    88	            if (teams[i].numFinishers >= MIN_FINISHERS) {
+    89	                qualifyingTeams.add(teams[i]);
+    90	            }
+    91	        }
+    92
+    93	        // Use the Team.compareTo() method to sort the teams out.
+    94	        Collections.sort(qualifyingTeams);
+    95
+    96	        /*
+    97	        * Build our return string by going through the sorted list
+    98	        * and adding the team names.
+    99	        */
+    100	        StringBuilder sb = new StringBuilder(qualifyingTeams.size());
+    101
+    102	        for (Team t : qualifyingTeams) {
+    103	            sb.append(t.name);
+    104	        }
+    105
+    106	        return sb.toString();
+    107	    }
+    108	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        I've created a class Team the implements Comparable so that we can use Java's built-in sort capabilities.
+        All the logic necessary for sorting the teams is contained in the Team.compareTo() method.
+    </p>
+
+    <p>
+        With that, it's just a matter of creating the team objects, and adding their finishing places.  Lines 67-70
+        create an array of teams and assign each one it's name.  Then the loop on lines 79-82 works through each of
+        the letters in finishOrder and calls addFinisher() on the corresponding team.  We can get the correct team
+        by subtracting 'A' from the current letter.  For example, if the letter is 'C', the 'C' - 'A' = 2, which
+        is the position in the teams array of team C.
+    </p>
+
+    <p>
+        The addFinisher() method handles the logic of determining if this runner's score counts toward the team's
+        score (it's a top 5 runner), or if we should store this score in tieBreaker (if it's the 6th runner for
+        that team).
+    </p>
+
+    <p>
+        Once all the team data is populated, we add only those teams with 5 or more runners to the qualifyingTeams
+        list, sort the list, and then add each team's name in order to the string that we return.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
