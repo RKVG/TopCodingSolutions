@@ -1,0 +1,147 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1942"
+                       target="_blank">TopCoder Problem Statement - TextEditor</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 171 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+       Format text into 2 columns. 
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	import java.util.ArrayList;
+     2	import java.util.List;
+     3	
+     4	public class TextEditor {
+     5	
+     6	    public String[] twoColumn(String[] text, int width) {
+     7	
+     8	        List<String> allWords = new ArrayList<>();
+     9	
+    10	        /*
+    11	        * Put all words together into one long list.
+    12	        */
+    13	        for (String line : text) {
+    14	            String[] wordsOnLine = line.trim().split("\\s+");
+    15	            for (String word : wordsOnLine) {
+    16	                allWords.add(word);
+    17	            }
+    18	        }
+    19	
+    20	        /*
+    21	        * Break the words up into lines so that no
+    22	        * line is longer than the given width.
+    23	        */
+    24	        List<String> oneColumn = new ArrayList<>();
+    25	
+    26	        StringBuilder sb = new StringBuilder(width);
+    27	
+    28	        for (String word : allWords) {
+    29	
+    30	            /*
+    31	            * Nothing we can do if a word by itself cannot
+    32	            * fit onto a line with the given width.
+    33	            */
+    34	            if (word.length() > width) {
+    35	                throw new IllegalArgumentException(
+    36	                        "Word is too long to fit into column: " + word);
+    37	            }
+    38	
+    39	            /*
+    40	            * If it's the first word, then always add it to
+    41	            * the current line.
+    42	            */
+    43	            if (sb.length() == 0) {
+    44	                sb.append(word);
+    45	
+    46	            /*
+    47	            * If a space plus the word would fit on the current
+    48	            * line, then add it.
+    49	            */
+    50	            } else if (sb.length() + word.length() < width) {
+    51	                sb.append(" ");
+    52	                sb.append(word);
+    53	
+    54	            /*
+    55	            * Otherwise, start a new line.
+    56	            */
+    57	            } else {
+    58	                oneColumn.add(sb.toString());
+    59	                sb = new StringBuilder(width);
+    60	                sb.append(word);
+    61	            }
+    62	        }
+    63	
+    64	        /*
+    65	        * If there's anything left over, add it to
+    66	        * the final line.
+    67	        */
+    68	        if (sb.length() != 0) {
+    69	            oneColumn.add(sb.toString());
+    70	        }
+    71	
+    72	        int i = 0;
+    73	
+    74	        String[] result = new String[oneColumn.size()];
+    75	
+    76	        /*
+    77	        * Fill in the even numbered positions first, when
+    78	        * the end is reached, come back and fill in the odds.
+    79	        */
+    80	        for (String s : oneColumn) {
+    81	            result[i] = s;
+    82	            i += 2;
+    83	            if (i >= oneColumn.size()) i = 1;
+    84	        }
+    85	
+    86	        return result;
+    87	    }
+    88	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        A pretty easy problem for a Division 2 - Level 3.  There's just two tricky things to take care of.  First, we
+        need to divide the input into columns that are no wider than the given width.  To do this, I create a single
+        list that contained all of the words.  Note that the lines may have trailing and/or leading whitespace which
+        we want to remove.  Combining trim() with .split("\\s+") gives us the individual words nicely.
+    </p>
+
+    <p>
+        Next, I divide the words by line into one column, such that the length of each line is less than or equal
+        to width.  This is done easily enough by the loop on lines 28 - 62.  We just test the length of the current
+        line plus a space plus the length of the next word.  If that is greater than width, cut the line off and
+        put the word at the beginning of the next line.
+    </p>
+
+    <p>
+        Finally, we need to split the one column up into two columns with the lines interleaved.  The easiest way
+        to do this is to assign all the even numbered positions first.  Then upon reaching the end of the list,
+        come back to position 1, and start filling in the odd positions.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
