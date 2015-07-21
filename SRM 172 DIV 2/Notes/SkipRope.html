@@ -1,0 +1,113 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1968"
+                       target="_blank">TopCoder Problem Statement - SkipRope</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 172 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Find the two numbers in an array that are closest to the given number.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	import java.util.Arrays;
+     2
+     3	public class SkipRope {
+     4
+     5	    public int[] partners(int[] candidates, int height) {
+     6
+     7	        int[] heights = {Integer.MAX_VALUE, Integer.MAX_VALUE};
+     8
+     9	        for (int c : candidates) {
+    10	            if (isCloser(c, heights[0], height)) {
+    11
+    12					/*
+    13	                * If closer that the closest, then bump the closest
+    14					* into 2nd place, and set the candidate to be
+    15					* the new closest.
+    16					*/
+    17	                heights[1] = heights[0];
+    18	                heights[0] = c;
+    19
+    20	            } else if (isCloser(c, heights[1], height)) {
+    21
+    22	                // Set 2nd place to be the candidate.
+    23	                heights[1] = c;
+    24	            }
+    25	        }
+    26
+    27	        Arrays.sort(heights);
+    28
+    29	        return heights;
+    30	    }
+    31
+    32	    /*
+    33	    * Returns true if the candidate is closer in height than the current
+    34	    * person.  If the two are the same distance apart, then ties go
+    35	    * to the taller person.
+    36	    */
+    37	    private static boolean isCloser(int candidate, int current, int height) {
+    38
+    39	        int diffCandidate = Math.abs(height - candidate);
+    40	        int diffCurrent = Math.abs(height - current);
+    41
+    42	        if (diffCandidate < diffCurrent) return true;
+    43
+    44	        if (diffCandidate > diffCurrent) return false;
+    45
+    46	        // Ties go to the taller person.
+    47	        return candidate > current;
+    48
+    49	    }
+    50	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The solution starts by creating an array (heights) to store the two closest numbers.  It sets
+        their initial values to Integer.MAX_VALUE to ensure they're far enough away from our height
+        that the first two numbers seen are guaranteed to be closers.
+    </p>
+
+    <p>
+        Then we make one pass through the list of candidate heights.  If the height is closer than
+        the value in position 0, we move the closest into the second closest position, and insert
+        our candidate in position 0 as the next closest height.
+    </p>
+
+    <p>
+        If the height is not the closest, but it is closer than the second closest, then we simply
+        replace the the height in position 1 with our current candidate's height.
+    </p>
+
+    <p>
+        The method isCloser determines if the value is candidate is closer to height than the value of
+        current.  Note that we must take the absolute value of the difference.  In the event of  a tie
+        closer is determined by if candidate is greater than current.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
+
