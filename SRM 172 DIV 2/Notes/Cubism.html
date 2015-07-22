@@ -1,0 +1,172 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1815"
+                       target="_blank">TopCoder Problem Statement - Cubism</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 172 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count the number of lines that can be formed in a cube where the line's length
+        equals the length of a side of the cure, and all location along the line
+        match a given color.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1
+     2
+     3	public class Cubism {
+     4
+     5		public int lines(String[] lattice, String color) {
+     6
+     7			int size = lattice.length;
+     8	        char c = "black".equals(color) ? 'B' : 'W';
+     9
+    10	        /*
+    11	        * The problem becomes much easier if we transform the
+    12	        * given String[] into a 3-Dimensional array
+    13	        * of chars.
+    14	        */
+    15			char[][][] cube = new char[size][size][size];
+    16
+    17	        for (int x = 0; x < size; x++)  {
+    18	            for (int y = 0; y < size; y++)  {
+    19	                for (int z = 0; z < size; z++)  {
+    20	                    cube[x][y][z] = lattice[x].charAt((y * size) + z);
+    21	                }
+    22	            }
+    23	        }
+    24
+    25	        int numLines = 0;
+    26
+    27	        /*
+    28	        * Count the number of lines that begin at each location.
+    29	        */
+    30	        for (int x = 0; x < size; x++)  {
+    31	            for (int y = 0; y < size; y++)  {
+    32	                for (int z = 0; z < size; z++)  {
+    33	                    numLines += countLinesStartingAt(cube, x, y, z, c);
+    34	                }
+    35	            }
+    36	        }
+    37
+    38	        /*
+    39	        * Each line will be counted twice, once starting from
+    40	        * each end point, so divide the result in half.
+    41	        */
+    42	        return numLines / 2;
+    43		}
+    44
+    45	    /*
+    46	    * Count the number of lines starting from the given coordinate.  The line
+    47	    * must be of the given color c.
+    48	    */
+    49	    private static int countLinesStartingAt(char[][][] cube,
+    50	                                            int x, int y, int z,
+    51	                                            char c)  {
+    52
+    53	        int numLines = 0;
+    54
+    55	        /*
+    56	        * We'll generate the 27 directions that the row could stretch out in
+    57	        * by using deltaX, deltaY, and deltaZ.
+    58	        */
+    59	        for (int deltaX = -1; deltaX < 2; deltaX++)  {
+    60	            for (int deltaY = -1; deltaY < 2; deltaY++)  {
+    61	                for (int deltaZ = -1; deltaZ < 2; deltaZ++)  {
+    62	                    if (isLine(cube, x, y, z, deltaX, deltaY, deltaZ, c))  {
+    63	                        numLines++;
+    64	                    }
+    65	                }
+    66	            }
+    67	        }
+    68	        return numLines;
+    69	    }
+    70
+    71	    /*
+    72	    * Returns true if a line originating at (x,y,z) of size cube.length and moving
+    73	    * in the direction given by deltaX, deltaY, and deltaZ can be formed.
+    74	    * All position along the line must match color c.
+    75	    */
+    76	    private static boolean isLine(char[][][] cube,
+    77	                                  int x, int y, int z,
+    78	                                  int deltaX, int deltaY, int deltaZ,
+    79	                                  char c)  {
+    80
+    81	        // It's not a line if we never move from the origin.
+    82	        if ((deltaX == 0) && (deltaY == 0) && (deltaZ == 0)) return false;
+    83
+    84	        for (int i = 0; i < cube.length; i++)  {
+    85
+    86	            // Check that we stay within bounds.
+    87	            if ((x < 0) || (x >= cube.length)) return false;
+    88	            if ((y < 0) || (y >= cube.length)) return false;
+    89	            if ((z < 0) || (z >= cube.length)) return false;
+    90
+    91	            // Check the color matches.
+    92	            if (cube[x][y][z] != c) return false;
+    93
+    94	            // Move to the next location.
+    95	            x += deltaX;
+    96	            y += deltaY;
+    97	            z += deltaZ;
+    98	        }
+    99
+   100	        return true;
+   101	    }
+   102	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        This problem becomes very easy once you break it down into smaller steps.  The first task
+        is to take the unwieldly String[] and convert it into an easy to use 3 dimensional array
+        of chars.  This is handled on lines 15-23.  Nothing trick here, except for a little bit
+        of math to get the right character out of the String.
+    </p>
+
+    <p>
+        With our 3-D array, we can now loop through each position and count the number of lines
+        starting at that position.  Note that we'll count each row twice.  Once starting from
+        each end and going to the other.
+    </p>
+
+    <p>
+        The countLinesStartingAt() method does just that.  Given a 3-D coordinate, it returns
+        the number of lines starting from that position.  Rather than writing out the 27 directions
+        that we could move out from for any given position, I have three nested loops and the
+        variables deltaX, deltaY, and deltaZ.  Each of these variables moves from -1 to 1.
+    </p>
+
+    <p>
+        With that, we call isLine() providing the staring point, direction, and color.  isLine()
+        just checks that we stay within the confines of the cube and stay on the correct color
+        as we move along the line.
+    </p>
+
+    <p>
+        Nothing really difficult here.  It could probably have been a Division 2 Level 2.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1969"
+                       target="_blank">TopCoder Problem Statement - BadClock</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 172 Round 1 - Division I, Level One</td></tr>
+            <tr><td>Single Round Match 172 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine how many hours it will take a clock to show the correct time given how
+        far off it is initially and how many seconds it gains/loses per hour.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1
+     2
+     3	public class BadClock {
+     4
+     5	    public double nextAgreement(
+     6	            String trueTime, String skewTime, int hourlyGain) {
+     7
+     8	        String[] trueString = trueTime.split(":");
+     9	        String[] skewString = skewTime.split(":");
+    10
+    11	        /*
+    12	        * Number of seconds that skewTime is behind trueTime.
+    13	        * If skewSeconds is negative, then skewTime is ahead
+    14	        * of trueTime.
+    15	        */
+    16	        int skewSeconds = 0;
+    17
+    18	        skewSeconds =
+    19	                (Integer.parseInt(trueString[0]) -
+    20	                        Integer.parseInt(skewString[0])) * 60 * 60;
+    21
+    22	        skewSeconds +=
+    23	                (Integer.parseInt(trueString[1]) -
+    24	                        Integer.parseInt(skewString[1])) * 60;
+    25
+    26	        skewSeconds += Integer.parseInt(trueString[2]) -
+    27	                Integer.parseInt(skewString[2]);
+    28
+    29	        if (skewSeconds == 0) return 0.0;
+    30
+    31	        if ((skewSeconds > 0) && (hourlyGain < 0)) {
+    32	            // Clock is behind, and losing.
+    33	            skewSeconds -= 12 * 60 * 60;  // Move skewTime ahead 12 hours
+    34
+    35	        } else if ((skewSeconds < 0) && (hourlyGain > 0)) {
+    36	            // Clock is ahead, and gaining
+    37	            skewSeconds += 12 * 60 * 60;  // Move skewTime behind 12 hours
+    38	        }
+    39
+    40	        return (double) skewSeconds / (double) hourlyGain;
+    41
+    42	    }
+    43	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The first step is to determine how many seconds the skewed clock is away from the true time.  This
+        is calculated on lines 18-27 and is stored in skewSeconds.  Note that if skewSeconds is positive
+        then the skewed clock is behind true time.  If skewSeconds is negative, then the skewed clock is
+        ahead of the true time.
+    </p>
+
+    <p>
+        If skewSeconds is 0, then we can simply return 0.  Otherwise, we'll want to divide the number of seconds
+        the two clocks are off by the hourlyGain.  This is fine if the skewed clock is ahead and hourlyGain is
+        negative; or if the skewed clock is behin and hourlyGain is positive.  But we must account for two other
+        cases as well.
+    </p>
+
+    <p>
+        If the skewed clock is ahead, and the hourlyGain is positive, then it's distance ahead will keep increasing.
+        To fix this, we can just set the skewed clock back 12 hours.  Similary, if the skewed clock is behind, and
+        the hourlyGain is negative, we can adjust the skewed clock ahead 12 hours.  Be careful with the signs here,
+        it can get a little confusing.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
