@@ -1,0 +1,105 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1975"
+                       target="_blank">TopCoder Problem Statement - ProgressBar</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 173 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Fill in a progress bar to show the fraction of completed time vs. total time estimated
+        to complete a task.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class ProgressBar {
+     2
+     3		public static final int NUM_MARKERS = 20;
+     4		private static final char FILL_CHAR = '#';
+     5		private static final char EMPTY_CHAR = '.';
+     6
+     7
+     8		public String showProgress(int[] taskTimes, int tasksCompleted) {
+     9
+    10			int totalTime = 0;
+    11			int completedTime = 0;
+    12
+    13			/*
+    14			* Count the time for all completed tasks and the
+    15			* overall total time.
+    16			*/
+    17			for (int i = 0; i < taskTimes.length; i++)  {
+    18				totalTime += taskTimes[i];
+    19
+    20				if (tasksCompleted > i)  {
+    21					completedTime = totalTime;
+    22				}
+    23			}
+    24
+    25			int numberToFill = NUM_MARKERS * completedTime / totalTime;
+    26
+    27			/*
+    28			* Create our return array.  Fill in the characters that should
+    29			* be filled in, then mark the rest as empty.
+    30			*/
+    31			char[] chars = new char[NUM_MARKERS];
+    32
+    33			for (int i = 0; i < numberToFill; i++)  {
+    34				chars[i] = FILL_CHAR;
+    35			}
+    36
+    37			for (int i = numberToFill; i < NUM_MARKERS; i++)  {
+    38				chars[i] = EMPTY_CHAR;
+    39			}
+    40
+    41			return new String(chars);
+    42		}
+    43	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The first step is to sum the time taken so far and the total time.  This can be done in
+        one pass of the given taskTimes array.
+    </p>
+
+    <p>
+        With these, we can determine the number of characters that must be filled in using the
+        formula:
+    </p>
+    <p>
+        NUM_MARKERS * completedTime / totalTime
+    </p>
+    <p>
+        Note that this is using integer division, so the result will automatically be rounded
+        down for us.
+    </p>
+
+    <p>
+        Then it's just a matter of filling in the first numberToFill characters, and setting
+        the rest to empty.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
