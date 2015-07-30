@@ -1,0 +1,102 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm="
+                       target="_blank">TopCoder Problem Statement - WordForm</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 173 Round 1 - Division I, Level One</td></tr>
+            <tr><td>Single Round Match 173 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Detect vowels and consonants in a word.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class WordForm {
+     2
+     3		public String getSequence(String word) {
+     4
+     5	        char[] cvArray = new char[word.length()];
+     6
+     7	        boolean prevIsVowel = true;
+     8
+     9	        for (int i = 0; i < word.length(); i++)  {
+    10	            cvArray[i] = (prevIsVowel = isVowel(word.charAt(i), prevIsVowel)) ? 'V' : 'C';
+    11	        }
+    12
+    13	        // Remove duplicate characters
+    14	        return new String(cvArray).replaceAll("([CV])\\1+", "$1");
+    15		}
+    16
+    17	    private static boolean isVowel(Character c, boolean prevIsVowel)  {
+    18
+    19	        c = Character.toUpperCase(c);
+    20
+    21	        if ((c.equals('A')) || (c.equals('E')) ||
+    22	                (c.equals('I')) || (c.equals('O')) ||
+    23	                (c.equals('U'))) return true;
+    24
+    25	        if (!c.equals('Y')) return false;
+    26
+    27	        return !prevIsVowel;
+    28	    }
+    29	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The problem can be solved by breaking it up into two pieces.  First, obviously we're going
+        to need a method to determine if a character is a consonant or vowel.  This is
+        handled by isVowel().  isVowel() first converts the character to upper-case, and then
+        compares it to the standard vowels A, E, I, O, and U.  If it matches one of these, or if
+        it doesn't and also is not a 'Y' then we're done.  'Y's are the only tricky letter.
+    </p>
+
+    <p>
+        To determine if 'Y' is a vowel or not, isVowel() requires a boolean denoting whether
+        the previous character was a vowel or not.  We can set prevIsVowel's initial value to true
+        since the behavior of a 'Y' at the beginning of a string is the same as a 'Y' following
+        a vowel.
+    </p>
+
+    <p>
+        With a reliable method of determining consonants and vowels, we just need to construct
+        the return String, and the only challenge there is eliminating duplicates.  One way
+        to do this would be to keep track of the last character, and only append the next
+        character if it differed.  An easier way is to just add all the characters, and
+        then use a regular expression to remove the duplicates.  This is done in the
+        replaceAll() method of the return statement.
+    </p>
+
+    <p>
+        If you're not familiar with the assignment on line 10, all this does is assign the
+        result of isVowel() to both prevIsVowel and cvArray[i] in one line.  First, isVowel()
+        is evaluated and the result is assigned to prevIsVowel.  The result of this assignment,
+        which is either true or false, is then assigned to cvArray[i].  With that, we've
+        put the correct character (either a 'V' or a 'C') into the array, and set prevIsVowel
+        to the correct value for the next call into isVowel().
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
