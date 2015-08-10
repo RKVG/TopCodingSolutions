@@ -1,0 +1,139 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1877"
+                       target="_blank">TopCoder Problem Statement - MineField</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 169 Round 1 - Division I, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Given a set of coordinates representing bombs, generate a board suitable for playing MineField.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	import java.util.*;
+     2	import java.math.*;
+     3	import static java.lang.Math.*;
+     4
+     5	public class MineField {
+     6
+     7		private static final int SIZE = 9;
+     8		private static final char MINE_CHAR = 'M';
+     9
+    10		char[][] mineField = new char[SIZE][SIZE];
+    11
+    12		public String[] getMineField(String mineLocations) {
+    13
+    14			// Initialize the mine Field
+    15			for (int row = 0; row < SIZE; row++)  {
+    16				for (int col = 0; col < SIZE; col++)  {
+    17					mineField[row][col] = '0';
+    18				}
+    19			}
+    20
+    21			// Converts all parenthesis and commas to spaces.
+    22			String input = mineLocations
+    23							.replaceAll("\\(", " ")
+    24							.replaceAll("\\)", " ")
+    25							.replaceAll(",", " ");
+    26
+    27			// A scanner that uses spaces as the delimiter
+    28			Scanner sc = new Scanner(input);
+    29			sc.useDelimiter("\\s+");
+    30
+    31			// Read all the coordinates and add the mines.
+    32			while (sc.hasNextInt())  {
+    33				int row = sc.nextInt();
+    34				int col = sc.nextInt();
+    35				addMine(row,col);
+    36			}
+    37
+    38			// Create the return value.
+    39			String[] result = new String[SIZE];
+    40
+    41			for (int i = 0; i < SIZE; i++)  {
+    42				result[i] = new String(mineField[i]);
+    43			}
+    44
+    45			return result;
+    46		}
+    47
+    48		private void addMine(int row, int col)  {
+    49
+    50			mineField[row][col] = MINE_CHAR;
+    51
+    52			/*
+    53			* Increment the value in all surrounding squares
+    54			* checking to ensure that we stay within the bounds
+    55			* of the board, and that the other square is not
+    56			* already marked as a mine.
+    57			*/
+    58			for (int r = row - 1; r <= row + 1; r++)  {
+    59				for (int c = col - 1; c <= col + 1; c++)  {
+    60
+    61					if ((r >= 0) && (r < SIZE) &&
+    62							(c >= 0) && (c < SIZE) &&
+    63							(mineField[r][c] != MINE_CHAR))  {
+    64
+    65						// Increase the value of the neighbor.
+    66						mineField[r][c]++;
+    67					}
+    68				}
+    69			}
+    70
+    71		}
+    72	}
+      </pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+	  This is a pretty easy Divison 1 problem, with just a few tricks to overcome.  First, I'll
+	  begin by saying I was tripped up by the ordering of the coordinates.  I assumed that the
+	  numbers were in the form (x, y).  They're not.  The description says they're given as (row, col).
+	  In other words (y, x).  After seeing my output sideways, I tracked the error down and fixed it.
+	</p>
+	
+	<p>
+	  The first problem to solve is parsing the input.  For this, first I replaced all parenthesis and
+	  commas with spaces.  Then I created a scanner that uses whitespace as the delimeter.  With that,
+	  I can just use a pair of nextInt() calls to get the coordinates until they run out.
+	</p>
+	
+	<p>
+	  I find these problems much easier to work with using char arrays.  I'll often convert the
+	  given String[] into a char[][] just to simplify.  In this case, I represent the mineField
+	  as a char[][] and then convert it to a String[] when returning the result.
+	 </p>
+	 
+	 <p>
+	   With the coordinates, and the mineField, the next problem is to add the mine to the
+	   current board.  That's just a matter of setting that location to 'M', and then updating
+	   all the neighbors.  I use a nested for loop to visit all the neighbors of the given location
+	   working top to bottom and left to right.  For each location, check to ensure that we're
+	   not outside the boundaries of the array, and that the square is not already marked as
+	   a mine.  If that test passes, then increment the value stored there.  Since we can
+	   treat chars as ints here, mineField[r][c]++ will work nicely.
+	 </p>
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
