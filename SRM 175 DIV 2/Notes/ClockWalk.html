@@ -1,0 +1,66 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2241"
+                       target="_blank">TopCoder Problem Statement - ClockWalk</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 175 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the ending time after a series of jumps forward and back.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class ClockWalk {
+     2
+     3		public int finalPosition(String flips) {
+     4			int result = 0;
+     5
+     6			for (int i = 0; i < flips.length(); i++)  {
+     7				if (flips.charAt(i) == 'h')  result += i + 1;
+     8				else result -= i + 1;
+     9			}
+    10
+    11			result %= 12;
+    12
+    13			return (result <= 0) ? (result + 12) : result;
+    14		}
+    15
+    16	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        For each character in flips we want to either move forward or backward around a clock face.  The number
+        of steps is 1 plus the index of the current character.  1 for position 0, 2 for position 1, etc.
+    </p>
+    <p>
+        If the character is 'h', we use += to advance forward.  Otherwise -= to move backward.
+    </p>
+    <p>
+        After all the moves have been made, we mod the result by 12, and if the result is less than or equal to 0,
+        we add 12.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>

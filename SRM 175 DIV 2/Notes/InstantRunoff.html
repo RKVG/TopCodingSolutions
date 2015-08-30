@@ -1,0 +1,132 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2244"
+                       target="_blank">TopCoder Problem Statement - InstantRunoff</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 175 Round 1 - Division I, Level One </td></tr>
+            <tr><td>Single Round Match 175 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Determine the winner of a run off election by following the given rules.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1
+     1	import java.util.HashMap;
+     2	import java.util.HashSet;
+     3	import java.util.Map;
+     4	import java.util.Set;
+     5
+     6	public class InstantRunoff {
+     7
+     8	    public String outcome(String candidates, String[] ballots) {
+     9
+    10	        Set<Character> activeCandidates = new HashSet<>();
+    11
+    12	        for (Character c : candidates.toCharArray()) {
+    13	            activeCandidates.add(c);
+    14	        }
+    15
+    16	        while (true) {
+    17
+    18	            // Count the number of first place votes for each candidate.
+    19	            Map<Character, Integer> firstPlaceVotes = new HashMap<>();
+    20
+    21	            for (Character c : activeCandidates) {
+    22	                firstPlaceVotes.put(c, 0);
+    23	            }
+    24
+    25	            for (String b : ballots) {
+    26	                Character c;
+    27
+    28	                c = b.charAt(0);
+    29	                firstPlaceVotes.put(c, firstPlaceVotes.get(c) + 1);
+    30	            }
+    31
+    32	            // Do we have a clear winner?
+    33	            for (Character c : activeCandidates) {
+    34	                if (firstPlaceVotes.get(c) >=
+    35	                        ((ballots.length / 2) + 1)) {
+    36	                    return "" + c;
+    37	                }
+    38	            }
+    39
+    40	            // Get the least first place votes
+    41	            int minFirstPlaceVotes = Integer.MAX_VALUE;
+    42
+    43	            for (Character c : activeCandidates) {
+    44	                minFirstPlaceVotes = Math.min(minFirstPlaceVotes,
+    45	                        firstPlaceVotes.get(c));
+    46	            }
+    47
+    48	            // Remove all candidates with the most last place votes
+    49	            Set<Character> toRemove = new HashSet<>();
+    50	            for (Character c : activeCandidates) {
+    51	                if (firstPlaceVotes.get(c) == minFirstPlaceVotes)
+    52	                    toRemove.add(c);
+    53	            }
+    54
+    55	            for (Character c : toRemove) {
+    56	                activeCandidates.remove(c);
+    57	                for (int i = 0; i < ballots.length; i++) {
+    58	                    ballots[i] = ballots[i].replaceFirst("" + c, "");
+    59	                }
+    60	            }
+    61
+    62	            if (activeCandidates.size() == 0) return "";
+    63	        }
+    64
+    65	    }
+    66
+    67	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        This solution basically just follows the rules for the election as given in the problem statement.
+        First, it creates a set of remaining candidates, then it enters a while loop which will not terminate
+        until either a winner is found, or the set of remaining candidates becomes empty.
+    </p>
+
+    <p>
+        For each iteration of the loop, we count up the number of first place votes that each active candidate
+        has received.  If any of the candidates receives more than half of the possible votes, then they are
+        declared the winner.  Be careful in checking for a majority, the equation on lines 34 and 35 is easy
+        to get wrong.
+    </p>
+
+    <p>
+        If there is no clear winner, then we look for the least number of first place votes, and remove any
+        candidate that has that number of first place votes.  Here, we remove those candidates from both
+        the active candidates set, as well as from all the ballots.  The easiest, although perhaps not the most
+        efficient way is to do the replacement on line 58.
+    </p>
+
+    <p>
+        Finally, if there are no more active candidates, then we return the empty string.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
