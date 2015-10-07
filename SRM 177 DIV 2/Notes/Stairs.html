@@ -1,0 +1,93 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+    <table>
+        <tr>
+            <td>
+                <a href="http://community.topcoder.com/stat?c=problem_statement&pm="
+                   target="_blank">TopCoder Problem Statement - Stairs</a>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+    </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Count the number of combinations of risers and treads that can lead to a staircase of the given dimensions.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class Stairs {
+     2
+     3	    public int designs(int maxHeight, int minWidth, int totalHeight, int totalWidth) {
+     4
+     5	        int count = 0;
+     6
+     7	        for (int riserHeight = 1; (riserHeight <= maxHeight); riserHeight++) {
+     8	            if ((totalHeight % riserHeight) != 0) continue;
+     9
+    10	            int numTreads = (totalHeight / riserHeight) - 1;
+    11
+    12	            if ((numTreads == 0) ||
+    13	                    ((totalWidth % numTreads) != 0) ||
+    14	                    ((totalWidth / numTreads) < minWidth)) continue;
+    15	            count++;
+    16	        }
+    17
+    18	        return count;
+    19	    }
+    20	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        Note that the size of both the risers and treads must be integers, and that they are at most 1,000. This means
+        that a brute force search is certainly possible. We'll loop through all possible heights and count the number
+        of configurations that are possible.
+    </p>
+
+    <p>
+        For each riser height, we first check to see if it evenly divides the total height. If not, then we can
+        continue on with the next height. If so, then we'll look at the treads.
+    </p>
+
+    <p>
+        The number of treads will be one less than the number of risers. We can compute the number of risers with
+        (totalHeight / riserHeight). Then just subtract one from that result to get the number of treads.
+    </p>
+
+    <p>
+        Next, we look for ways to discount the current number of risers and treads.  The problem statement says that
+        their must be at least one tread (and riser), so we can throw out any cases where the number of treads is
+        0.  Again, just like with the risers, the total width must be evenly divided by the number of treads, so we can
+        skip any case where that isn't true.  And finally, any case where the width of each tread
+        (totalWidth / numTreads) is smaller than the minimum allowed can also be skipped.
+    </p>
+
+    <p>
+        Passing each of those tests, leaves us with a valid configuration, so increment the counter.  After looping
+        throug all possibilities, return the value in the counter.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
