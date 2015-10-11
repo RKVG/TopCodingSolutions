@@ -1,0 +1,94 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1973"
+                       target="_blank">TopCoder Problem Statement - Removal</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 177 Round 1 - Division I, Level Two</td></tr>
+            <tr><td>Single Round Match 177 Round 1 - Division II, Level Three</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Remove items from a list filling in the space by shifting all following elements up one.  Return
+        the item at the given position after all the removals.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class Removal {
+     2
+     3		public int finalPos(int n, int k, String[] remove) {
+     4
+     5			for (int i = remove.length - 1; i >= 0; i--)  {
+     6
+     7				String[] hilo = remove[i].split("-");
+     8				int lo = Integer.parseInt(hilo[0]);
+     9				int hi = Integer.parseInt(hilo[1]);
+    10
+    11				if (k >= lo)  {
+    12					k += (hi - lo + 1);
+    13				}
+    14
+    15				// If k < 0, then we've overflowed, return a -1.
+    16				if ((k > n) || (k < 0)) return -1;
+    17			}
+    18
+    19			return k;
+    20		}
+    21
+    22	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        You might assume that you could use a built-in data structure, such as a linked list to solve the problem.
+        Just initialize the list, and then let it do the removals for you.  However, it pays to take a look at
+        the constraints first.  The number of elements can be up to 2,000,000,000 which is way too much to fit into
+        the allotted 64MB.
+    </p>
+
+    <p>
+        The solution is to think about how k's position changes as elements in front of it are removed.  Elements
+        that are greater than k don't matter when they're removed since these won't affect k's position.
+    </p>
+
+    <p>
+        We start at the end work backwards through each String in remove.  First, parse out the lo and hi elements of
+        the string.  Then, if lo is less than k, we'll adjust k's position accordingly.  The number of elements removed
+        is given by (hi - lo + 1).  So, we increase k's value by that amount to get it's position before
+        the removals.
+    </p>
+
+    <p>
+        After working backward through all the elements in remove, the value of k will be it's original starting
+        position which is the value we want to return.
+    </p>
+
+    <p>
+        Be careful to check the value of k after each addition.  If it's ever greater than n, we'll return -1.  The
+        addition could also cause an overflow.  You could convert k to a long to prevent this, or just check the
+        value to see if it becomes negative.  Since the value of hi will be 2 billion or less, it will fit into
+        an int.  Adding 2 billion to a positive int and causing an overflow will always result in a negative number.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
