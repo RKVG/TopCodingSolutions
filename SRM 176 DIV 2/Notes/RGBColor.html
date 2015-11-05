@@ -1,0 +1,89 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2251"
+                       target="_blank">TopCoder Problem Statement - RGBColor</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 176 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Compute the compliment of the given RGB color.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	import java.util.*;
+     2	import java.math.*;
+     3	import static java.lang.Math.*;
+     4
+     5	public class RGBColor {
+     6
+     7	    private static final int RGB_MAX = 255;
+     8	    private static final int GREY_TOLERANCE = 32;
+     9
+    10		public int[] getComplement(int[] rgb) {
+    11
+    12			int[] compliment = new int[rgb.length];
+    13
+    14	        boolean isGrey = true;
+    15
+    16	        for (int i = 0; i < rgb.length; i++)  {
+    17	            compliment[i] = RGB_MAX - rgb[i];
+    18	            if (Math.abs(rgb[i] - compliment[i]) > GREY_TOLERANCE) isGrey = false;
+    19	        }
+    20
+    21	        if (isGrey)  {
+    22	            for (int i = 0; i < rgb.length; i++)  {
+    23	                compliment[i] = (rgb[i] >= 128) ? rgb[i] - 128 : rgb[i] + 128;
+    24	            }
+    25	        }
+    26
+    27	        return compliment;
+    28
+    29		}
+    30	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        We need to deal with two separate cases here: the color may meet the given definition of grey, or it may not.
+        The trouble is, we won't know if it's considered grey or not until we've examined all three colors.  We'll
+        start by assuming that the color is grey, and then flip the isGrey flag to false if we find a red, green,
+        or blue value whose compliment exceeds GREY_TOLERANCE.
+    </p>
+
+    <p>
+        We start by creating the output array named compliment.  Then for each value in rgb, we calculate the
+        corresponding compliment by subtracting the color in the current position of rgb from RGB_MAX.  If the
+        difference between a color and its compliment exceeds GREY_TOLERANCE, then we'll set isGrey to false.
+    </p>
+
+    <p>
+        After red, green, and blue have all been evaluated, if isGrey is still true then we need to handle it according
+        to the instructions for a grey color.  For each position in rgb, if the value is greater than or equal to 128,
+        we subtract 128, otherwise add 128.  This value will overwrite the value in compliment[] that was stored
+        earlier.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+

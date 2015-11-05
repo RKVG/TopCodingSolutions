@@ -1,0 +1,80 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1848"
+                       target="_blank">TopCoder Problem Statement - BirthdayOdds</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 174 Round 1 - Division I, Level One</td></tr>
+            <tr><td>Single Round Match 174 Round 1 - Division II, Level Two</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Calculate the mininum number of people required to assure that the probability of two people sharing a
+        birthday meets the given threshold.  The number of days in a year may vary.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1
+     2
+     3	public class BirthdayOdds {
+     4
+     5		public int minPeople(int minOdds, int daysInYear) {
+     6
+     7			double pA = 1.0;
+     8			double days = (double) daysInYear;
+     9			double cutOff = 1.0 - (minOdds / 100.0);
+    10
+    11			int numPeople = 1;
+    12
+    13			while (pA > cutOff)  {
+    14				pA *= ((double) (daysInYear - numPeople) / days);
+    15				numPeople++;
+    16			}
+    17
+    18			return numPeople;
+    19
+    20		}
+    21	}</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        For a detailed discussion of the Birthday Problem, see the wikipedia entry
+        <a href="https://en.wikipedia.org/wiki/Birthday_problem">here</a>.  This solution is based
+        on the formula given in the "Calculating the probability" section.
+    </p>
+
+    <p>
+        Essentially we're calculating the probability that there is <strong>not</strong> a match, and then adding more
+        and more people thus reducing that probability until a certain threshold is met.  That threshold
+        is (1 - minOdds) since we're calculating the probability of not matching whereas minOdds is the
+        probability of a match.
+    </p>
+
+    <p>
+        pA begins at 1 (i.e. daysInYear / daysInYear), then is multiplied by (daysInYear - 1 / daysInYear),
+        (daysInYear - 2 / daysInYear), (daysInYear - 3 / daysInYear), ...  With each multiplication pA gets smaller
+        until it falls under the cutoff.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+

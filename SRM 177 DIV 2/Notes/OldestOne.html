@@ -1,0 +1,101 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm="
+                       target="_blank">TopCoder Problem Statement - OldestOne</a>
+                </td>
+            </tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Return the name of the oldest student.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class OldestOne {
+     2
+     3		public String oldest(String[] data) {
+     4
+     5			int oldestAge = 0;
+     6			String oldestName = "";
+     7
+     8			for (String s : data)  {
+     9				int i = 0;
+    10
+    11				// Skip all chars until we find a digit
+    12				while (!Character.isDigit(s.charAt(i)))  i++;
+    13
+    14				int age = 0;
+    15
+    16				/*
+    17				* We'll need the value of i later (it's the end
+    18				* of the name string) so start a new index.
+    19				*/
+    20				int j = i;
+    21
+    22				// Read in the age.
+    23				while(Character.isDigit(s.charAt(j)))  {
+    24					age *= 10;
+    25					age += '0' + s.charAt(j);
+    26					j++;
+    27				}
+    28
+    29				if (age > oldestAge)  {
+    30					oldestAge = age;
+    31					oldestName = s.substring(0, i);
+    32				}
+    33			}
+    34
+    35			// Don't forget to remove trailing spaces.
+    36			return oldestName.trim();
+    37		}
+    38	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        I found this to be easier than the Level 1 problem Stairs.  Nothing difficult at all here.  One approach might
+        be to use a scanner to try to read in words and numbers, but it's just as easy to walk through the strings
+        a character at a time.
+    </p>
+
+    <p>
+        What we really want to get at is the student's age.  So we first skip through all characters until we find
+        a digit.  The name is guaranteed not to contain digits which helps.  Once we find a digit, we need to save
+        that starting location.  The name will be the substring of s starting a 0 with a length given by this location.
+    </p>
+
+    <p>
+        To parse the age, just start age at 0 and for each digit, multiply the age by 10 and add the digit.  There's
+        many other ways to do this, but I believe this is the easiest.  You could, for exampel, use Integer.parseInt(),
+        but then you'd need to calculate the starting and ending indexes and pass in the appropriate substring of s.
+    </p>
+
+    <p>
+        Then it's just a matter of comparing the age to the oldest found so far, and updating the oldest name and
+        associted name if necessary.  Finally, don't forget to trim the spaces off the name.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
