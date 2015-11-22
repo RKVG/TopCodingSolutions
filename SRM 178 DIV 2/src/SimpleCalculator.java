@@ -2,7 +2,7 @@ public class SimpleCalculator {
 	
 	public int calculate(String input) {
 
-		String[] ints = input.split("[+|\\-|\\*|/]");
+        String[] ints = input.split("[+\\-\\*\\/]");
 
 		char op = input.charAt(ints[0].length());
 

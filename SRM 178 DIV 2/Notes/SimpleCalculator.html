@@ -1,0 +1,74 @@
+<div class="solution">
+
+    <div class="header">Problem:</div>
+    <p>
+        <table>
+            <tr>
+                <td>
+                    <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2272"
+                       target="_blank">TopCoder Problem Statement - SimpleCalculator</a>
+                </td>
+            </tr>
+            <tr><td>Single Round Match 178 Round 1 - Division II, Level One</td></tr>
+        </table>
+    </p>
+
+    <div class="header">Overview:</div>
+    <p>
+        Implement a simple calculator that can handle addition, subtraction, multiplications, and division.
+    </p>
+
+
+    <div class="header">Java Source:</div>
+    <div class="code">
+<pre>
+     1	public class SimpleCalculator {
+     2
+     3		public int calculate(String input) {
+     4
+     5			String[] ints = input.split("[+\\-\\*\\/]");
+     6
+     7			char op = input.charAt(ints[0].length());
+     8
+     9			int i1 = Integer.parseInt(ints[0]);
+    10			int i2 = Integer.parseInt(ints[1]);
+    11
+    12			if ('+' == op) return i1 + i2;
+    13			if ('-' == op) return i1 - i2;
+    14			if ('*' == op) return i1 * i2;
+    15			return i1 / i2;
+    16
+    17		}
+    18
+    19	}
+</pre>
+    </div>
+
+    <div class="header">Notes:</div>
+    <p>
+        The only tricky part here is parsing the input to obtain the two integers and the operand.  We can
+        use the regular expression on line 5 for this.  This will look for any of the characters (+, -, *, or /)
+        and split the input into the integer that comes before and after the operator.  When constructing the
+        regular expression, you'll need to use \\ to escape some of the characters.
+    </p>
+
+    <p>
+        int[0] will hold the first number.  Thus, we can obtain the operator buy using the length of int[0].  This
+        is done on line 7.  We can use Integer.parseInt() to get the integer values from the strings.
+    </p>
+
+    <p>
+        Then it's a simple matter of checking the value of the operator and performing the correct operation.
+    </p>
+
+
+    <div class="footer">
+        <p><i>Thank you</i> for taking the time to read this solution. I welcome
+            any feedback you may have.</p>
+        <p>
+            All Solutions and descriptions are now available on GitHub at
+            <a href="https://github.com/pmonkelban/TopCodingSolutions">https://github.com/pmonkelban/TopCodingSolutions</a>
+        </p>
+    </div>
+</div>
+
